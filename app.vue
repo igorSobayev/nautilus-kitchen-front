@@ -1,9 +1,18 @@
 <template>
-  <div class="flex items-center justify-center h-screen bg-[#001e26] dark flex-col">
-    <x-button color="primary">Filled</x-button>
-    <x-button color="secondary">Filled</x-button>
-    <x-button color="success">Filled</x-button>
-    <x-button color="warning">Filled</x-button>
-    <x-button color="error">Filled</x-button>
+  <div class="bg-[#eeeeee] h-screen flex flex-col overflow-x-hidden">
+    <NavBar />
+    <div class="flex justify-center pt-20 mb-auto">
+      <NuxtPage class="w-2/3" />
+    </div>
+    <Footer />
   </div>
 </template>
+
+
+<script setup>
+import NavBar from './components/layout/NavBar.vue'
+import Footer from './components/layout/Footer.vue'
+</script>
+
+<style>
+</style>
