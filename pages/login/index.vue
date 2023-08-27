@@ -1,5 +1,9 @@
 <script setup>
+import { useAuthStore } from '../../store/auth'
 import { ref } from 'vue'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const username = ref('')
 const password = ref('')
@@ -7,8 +11,15 @@ const rules = {
   isRequired: (v) => !!v  || 'Field is required',
 }
 
-function onSubmit(isValid) {
-
+const onSubmit = async () => {
+    const loginForm = {
+        username: username.value,
+        password: password.value
+    }
+    authStore
+        .login(loginForm)
+        .then((_response) => router.push("/"))
+        .catch((error) => console.log("API error", error));
 }
 </script>
 
