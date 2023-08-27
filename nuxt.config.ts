@@ -19,6 +19,7 @@ export default defineNuxtConfig({
         },
       }
     }],
+    '@pinia/nuxt'
   ],
   css: ['~/assets/tailwind.css'],
   build: {
