@@ -59,6 +59,10 @@ function onSubmit(isValid) {
             <div class="grid grid-col-1 gap-4 mt-4">
                 <x-checkbox v-model="conditions" :rules="[rules.isRequired]" name="conditions" label="Aceptar terminos y condiciones"/>
                 <x-button block color="primary" type="submit">Registrarse</x-button>
+                <x-button block class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" type="submit">Registrarse</x-button>
+                <button @click="loadRecipes" class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+                    Save changes
+                </button>
             </div>
         </x-form>
     </div>
