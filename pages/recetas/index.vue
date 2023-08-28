@@ -2,9 +2,7 @@
 
 import { ref, } from 'vue'
 import { useAuthStore } from './../../store/auth'
-import { onMounted, onNuxtReady } from './../../.nuxt/imports'
-// import { onNuxtReady } from 'nuxt'
-// import { onNuxtReady } from nuxt
+import { onNuxtReady } from './../../.nuxt/imports'
 
 const recetas = ref([])
 
@@ -15,18 +13,15 @@ const loadRecipes = async () => {
     const token = authStore.token
     const { data, error } = await useFetch(url, {
         method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
         credentials: 'include'
     })
     recetas.value = data.value
 }
 
 onNuxtReady(() => {
-    // setTimeout(() => {
+    if (authStore.isLoggedIn) {
         loadRecipes()
-    // }, 1000)
+    }
 })
 </script>
 

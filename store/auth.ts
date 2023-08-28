@@ -22,18 +22,50 @@ export const useAuthStore = defineStore({
           this.user = response
           this.token = this.user.jwt_token
           this.isLoggedIn = true
+          const cookieToken = useCookie('isLogged')
+          cookieToken.value = 'true'
           /* Store user in local storage to keep them logged in between page refreshes */
           localStorage.setItem('user', JSON.stringify(this.user))
           localStorage.setItem('token', JSON.stringify(this.token))
         })
         .catch(error => { throw error })
     },
+
     logout() {
+      const cookieToken = useCookie('isLogged')
+      const tokenCookie = useCookie('token')
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
+
+      cookieToken.value = null
+      tokenCookie.value = null
       this.user = null
       this.token = null
       this.isLoggedIn = false
-      localStorage.removeItem('user')
-      localStorage.removeItem('token')
+    },
+
+    manageLoginSession() {
+      const isLoggedCookie = useCookie('isLogged')
+      this.isLoggedIn = !!isLoggedCookie.value
+      if (!this.isLoggedIn) {
+          const tokenCookie = useCookie('token')
+          tokenCookie.value = null
+      }
+    },
+
+    manageLoginSessionClient() {
+      if (this.isLoggedIn) {
+        const savedData = localStorage.getItem('user')
+        const token = localStorage.getItem('token')
+    
+        if(token && savedData) {
+            const cookieToken = useCookie('isLogged')
+            cookieToken.value = 'true'
+            this.user = savedData
+            this.token = token
+            this.isLoggedIn = !!savedData
+        }
+      }
     }
   },
   getters: {

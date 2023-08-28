@@ -1,69 +1,57 @@
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 
+const state = ref({
+  username: '',
+  email: '',
+  password: '',
+  password2: ''
+})
 
-const email = ref('')
-const password = ref('')
-const passwordRepeated = ref('')
-const username = ref('')
-const conditions = ref(false)
-const rules = {
-  isEmail: (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail no valido',
-  isRequired: (v) => !!v  || 'El campo es obligatorio',
+const validate = (state: any): FormError[] => {
+  const errors = []
+  if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
+  if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
+  if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
+  if (state.password !== state.password2) errors.push({ path: 'password', message: 'Las contraseñas no coinciden' })
+  return errors
 }
 
-function onSubmit(isValid) {
+const form = ref()
 
+async function submit () {
+  await form.value!.validate()
+  // Do something with state.value
 }
 </script>
 
 <template>
     <div class="flex items-center justify-center h-[80vh]">
-        <x-form @submit="onSubmit">
-            <div class="grid gap-4">
-                <x-input
-                    v-model="username"
-                    :rules="[rules.isRequired]"
-                    name="username"
-                    label="Usuario"
-                    class="w-full"
-                />
+        <UForm
+            ref="form"
+            :validate="validate"
+            :state="state"
+            @submit.prevent="submit"
+        >
+            <UFormGroup name="username" label="Usuario" class="mt-3">
+                <UInput v-model="state.username" />
+            </UFormGroup>
+
+            <UFormGroup name="email" label="Email" class="mt-3">
+                <UInput v-model="state.email" placeholder="you@example.com" icon="i-heroicons-envelope" />
+            </UFormGroup>
+
+            <div class="grid md:grid-cols-2 grid-cols-1 gap-4 mt-3">
+                <UFormGroup label="Contraseña">
+                    <UInput v-model="state.password" type="password" />
+                </UFormGroup>
+
+                <UFormGroup label="Repetir contraseña" name="password">
+                    <UInput v-model="state.password2" type="password" />
+                </UFormGroup>
             </div>
-            <div class="grid gap-4">
-                <x-input
-                v-model="email"
-                :rules="[rules.isRequired, rules.isEmail]"
-                name="email"
-                label="Email"
-                class="w-full"
-                />
-            </div>
-            <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
-                <x-input
-                v-model="password"
-                type="password"
-                :rules="[rules.isRequired]"
-                name="password"
-                label="Contraseña"
-                class="w-full"
-                />
-                <x-input
-                v-model="passwordRepeated"
-                type="password"
-                :rules="[rules.isRequired]"
-                name="passwordRepeated"
-                label="Repetir contraseña"
-                class="w-full"
-                />
-            </div>
-            <div class="grid grid-col-1 gap-4 mt-4">
-                <x-checkbox v-model="conditions" :rules="[rules.isRequired]" name="conditions" label="Aceptar terminos y condiciones"/>
-                <x-button block color="primary" type="submit">Registrarse</x-button>
-                <x-button block class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" type="submit">Registrarse</x-button>
-                <button @click="loadRecipes" class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-                    Save changes
-                </button>
-            </div>
-        </x-form>
+
+            <UButton block type="submit" class="mt-5" label="Registrarse" />
+        </UForm>
     </div>
 </template>

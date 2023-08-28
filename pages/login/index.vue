@@ -1,49 +1,55 @@
-<script setup>
+<script setup lang="ts">
+import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import { ref } from 'vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-const username = ref('')
-const password = ref('')
-const rules = {
-  isRequired: (v) => !!v  || 'Field is required',
+const state = ref({
+  username: '',
+  password: ''
+})
+
+const validate = (state: any): FormError[] => {
+  const errors = []
+  if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
+  if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
+  return errors
 }
 
-const onSubmit = async () => {
-    const loginForm = {
-        username: username.value,
-        password: password.value
-    }
+const form = ref()
+
+async function submit () {
+  await form.value!.validate()
     authStore
-        .login(loginForm)
+        .login(state.value)
         .then((_response) => router.push("/"))
-        .catch((error) => console.log("API error", error));
+        .catch((error) => console.log("API error", error))
 }
 </script>
 
 <template>
     <div class="flex justify-center items-center h-[80vh]">
-        <x-form @submit="onSubmit">
-            <div class="gap-4">
-                <x-input
-                    v-model="username"
-                    :rules="[rules.isRequired]"
-                    name="username"
-                    label="Usuario"
-                    class="w-full"
-                />
-                <x-input
-                    v-model="password"
-                    type="password"
-                    :rules="[rules.isRequired]"
-                    name="password"
-                    label="Contraseña"
-                    class="w-full"
-                />
-            </div>
-            <x-button block color="primary" class="mt-4" type="submit">Iniciar sesión</x-button>
-        </x-form>
+        <div>
+            <UForm
+            ref="form"
+            :validate="validate"
+            :state="state"
+            @submit.prevent="submit"
+            >
+            <UFormGroup label="Email" name="email">
+                <UInput v-model="state.username" />
+            </UFormGroup>
+        
+            <UFormGroup label="Password" name="password" class="mt-4">
+                <UInput v-model="state.password" type="password" />
+            </UFormGroup>
+        
+            <UButton type="submit" class="mt-4" block>
+                Iniciar sesión
+            </UButton>
+            </UForm>
+        </div>
     </div>
 </template>

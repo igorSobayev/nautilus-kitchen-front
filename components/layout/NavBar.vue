@@ -12,10 +12,10 @@
                 </ul>
             </div>
             <div class="flex items-center gap-6">
-                <x-button color="primary" v-if="authStore.isLoggedIn" size="sm" @click="logout" icon="broken"><span class="sm:block hidden">Logout</span></x-button>
-                <x-button color="primary" v-else size="sm" to="/login" icon="login"><span class="sm:block hidden">Login</span></x-button>
-                <x-button color="secondary" size="sm" to="/signup" icon="register"><span class="sm:block hidden">Registrarse</span></x-button>
-                <x-icon @click="onToggleMenu" class="text-3xl cursor-pointer md:hidden" :icon="menuOpenned ? 'close' : 'menu'" />
+                <UButton v-if="authStore.isLoggedIn" @click="logout" icon="i-icon-park-outline-login" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Logout</span></UButton>
+                <UButton v-else to="/login" icon="i-material-symbols-login-sharp" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Login</span></UButton>
+                <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">Registrarse</span></UButton>
+                <UIcon @click="onToggleMenu" class="text-3xl cursor-pointer md:hidden" :name="menuOpenned ? 'i-material-symbols-close' : 'i-material-symbols-menu'" />
             </div>
         </nav>
     </header>
@@ -37,17 +37,13 @@ const logout = () => {
 }
 
 
+// Manage login in server 
+authStore.manageLoginSession()
+
+// Manage login data on client
 onMounted(() => {
   if(!process.client) return
-
-  const savedData = localStorage.getItem('user')
-  const token = localStorage.getItem('token')
-
-  if(token && savedData) {
-    authStore.user = savedData
-    authStore.token = token
-    authStore.isLoggedIn = !!savedData
-  }
+  authStore.manageLoginSessionClient()
 })
 </script>
   
