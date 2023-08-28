@@ -1,37 +1,17 @@
 // import { defineNuxtConfig } from 'nuxt'
-import { colors } from '@indielayer/ui'
-import icons from './icons'
+// import icons from './icons'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   modules: [
-    // ['@indielayer/ui/nuxt', {
-    //   icons,
-    //   prefix: 'X',
-    //   theme: {
-    //     classPrefix: 'x-',
-    //     colors: {
-    //       primary: colors.indigo,
-    //       secondary: colors.sky,
-    //       success: colors.lime,
-    //       warning: colors.yellow,
-    //       error: colors.red,
-    //     },
-    //   }
-    // }],
-    '@indielayer/ui/nuxt',
+    '@nuxthq/ui',
     '@pinia/nuxt'
   ],
-  css: ['~/assets/tailwind.css'],
-  // build: {
-    postcss: {
-      // postcssOptions: {
-        plugins: {
-          'tailwindcss/nesting': {},
-          tailwindcss: {},
-          autoprefixer: {},
-        },
-      },
-    // },
-  // },
+  ui: {
+    icons: ['material-symbols', 'icon-park', 'icon-park-outline', 'mingcute', ]
+  },
+  css: ['~/assets/css/custom.css'],
+  colorMode: {
+    preference: 'light'
+  }
 })
