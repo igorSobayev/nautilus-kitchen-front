@@ -12,9 +12,13 @@
                 </ul>
             </div>
             <div class="flex items-center gap-6">
-                <UButton v-if="authStore.isLoggedIn" @click="logout" icon="i-icon-park-outline-login" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Logout</span></UButton>
-                <UButton v-else to="/login" icon="i-material-symbols-login-sharp" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Login</span></UButton>
-                <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">Registrarse</span></UButton>
+                <span v-if="!authStore.isLoggedIn" class="flex items-center gap-6">
+                    <UButton to="/login" icon="i-material-symbols-login-sharp" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Login</span></UButton>
+                    <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">Registrarse</span></UButton>
+                </span>
+                <span v-else class="flex items-center gap-6">
+                    <ProfileNav />
+                </span>
                 <UIcon @click="onToggleMenu" class="text-3xl cursor-pointer md:hidden" :name="menuOpenned ? 'i-material-symbols-close' : 'i-material-symbols-menu'" />
             </div>
         </nav>
@@ -22,6 +26,7 @@
   </template>
 
 <script setup>
+import ProfileNav from './../custom/ProfileNav.vue'
 import { useAuthStore } from './../../store/auth'
 import { onMounted } from './../../.nuxt/imports'
 
@@ -31,11 +36,6 @@ const onToggleMenu = (e) => {
 }
 
 const authStore = useAuthStore()
-
-const logout = () => {
-    authStore.logout()
-}
-
 
 // Manage login in server 
 authStore.manageLoginSession()
