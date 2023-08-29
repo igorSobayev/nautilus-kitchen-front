@@ -2,16 +2,35 @@ import { defineStore } from 'pinia'
 
 const baseUrl = 'http://localhost:8080/api'
 
+interface loginForm {
+  username: string
+  password: string
+}
+
+interface user {
+  id: string
+  username: string
+  email: string
+  role: string
+  jwt_token: string
+}
+
+interface registerData {
+  username: string
+  email: string
+  password: string
+}
+
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     /* Initialize state from local storage to enable user to stay logged in */
-    user: process.server ? '' : JSON.parse(localStorage.getItem('user')),
-    token: process.server ? '' : JSON.parse(localStorage.getItem('token')),
+    user: {} as user,
+    token: process.server ? '' : localStorage.getItem('token'),
     isLoggedIn: process.server ? false : !!localStorage.getItem('user'),
   }),
   actions: {
-    async login(loginForm) {
+    async login(loginForm: loginForm) {
       await $fetch(`${baseUrl}/auth/signin`, {
         method: 'POST',
         body: loginForm,
@@ -19,7 +38,7 @@ export const useAuthStore = defineStore({
       })
         .then(response => {
           /* Update Pinia state */
-          this.user = response
+          this.user = response as user
           this.token = this.user.jwt_token
           this.isLoggedIn = true
           const cookieToken = useCookie('isLogged')
@@ -39,7 +58,7 @@ export const useAuthStore = defineStore({
 
       cookieToken.value = null
       tokenCookie.value = null
-      this.user = null
+      this.user = {} as user
       this.token = null
       this.isLoggedIn = false
     },
@@ -55,17 +74,38 @@ export const useAuthStore = defineStore({
 
     manageLoginSessionClient() {
       if (this.isLoggedIn) {
-        const savedData = localStorage.getItem('user')
+        let savedData: user
+        const stringSavedData = localStorage.getItem('user')
         const token = localStorage.getItem('token')
+
+        if (stringSavedData) {
+          savedData = JSON.parse(stringSavedData)
+        } else {
+          return
+        }
     
         if(token && savedData) {
             const cookieToken = useCookie('isLogged')
             cookieToken.value = 'true'
-            this.user = savedData
+            this.user = {
+              id: savedData.id,
+              username: savedData.username,
+              email: savedData.email,
+              role: savedData.role,
+              jwt_token: token,
+            }
             this.token = token
             this.isLoggedIn = !!savedData
         }
       }
+    },
+
+    async signup(registerData: registerData) {
+      await $fetch(`${baseUrl}/auth/signup`, {
+        method: 'POST',
+        body: registerData
+      })
+        .catch(error => { throw error })
     }
   },
   getters: {

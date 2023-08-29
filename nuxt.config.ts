@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
   ui: {
-    icons: ['material-symbols', 'icon-park', 'icon-park-outline', 'mingcute', ]
+    icons: ['material-symbols', 'icon-park', 'icon-park-outline', 'mingcute', 'emojione-v1']
   },
   css: ['~/assets/css/custom.css'],
   colorMode: {

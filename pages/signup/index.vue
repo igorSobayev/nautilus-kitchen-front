@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxthq/ui/dist/runtime/types'
+import { useAuthStore } from '../../store/auth'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const state = ref({
   username: '',
   email: '',
   password: '',
-  password2: ''
+  password2: '',
+  userRegistered: false,
+  alertTitle: '¡Te has registrado con éxito!',
 })
 
 const validate = (state: any): FormError[] => {
@@ -21,12 +27,27 @@ const form = ref()
 
 async function submit () {
   await form.value!.validate()
-  // Do something with state.value
+    authStore
+        .signup({
+            username: state.value.username,
+            email: state.value.email,
+            password: state.value.password,
+        })
+        .then(() => {
+            state.value.userRegistered = true
+        })
+        .catch((error) => console.log("API error", error))
 }
+
+onNuxtReady(() => {
+    if (authStore.isLoggedIn) {
+        router.push('/recetas')
+    }
+})
 </script>
 
 <template>
-    <div class="flex items-center justify-center h-[80vh]">
+    <div v-if="!state.userRegistered" class="flex items-center justify-center h-[80vh]">
         <UForm
             ref="form"
             :validate="validate"
@@ -53,5 +74,12 @@ async function submit () {
 
             <UButton block type="submit" class="mt-5" label="Registrarse" />
         </UForm>
+    </div>
+    <div v-else class="flex items-center justify-center h-[80vh]">
+        <UAlert icon="i-emojione-v1-party-popper" color="primary" variant="solid" :title="state.alertTitle">
+            <template #description>
+                <span>Ahora ya puedes empezar a crear recetas geniales, ¡echale un vistazo a la sección de <NuxtLink class="font-bold underline" to="/recetas">recetas</NuxtLink> para coger algunas ideas!</span>
+            </template>
+        </UAlert>
     </div>
 </template>
