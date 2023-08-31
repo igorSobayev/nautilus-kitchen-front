@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
 
-const baseUrl = 'http://localhost:8080/api'
-
 interface loginForm {
   username: string
   password: string
@@ -24,6 +22,7 @@ interface registerData {
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
+    baseUrl: useRuntimeConfig().public.API_BASE_URL,
     /* Initialize state from local storage to enable user to stay logged in */
     user: {} as user,
     token: process.server ? '' : localStorage.getItem('token'),
@@ -31,7 +30,7 @@ export const useAuthStore = defineStore({
   }),
   actions: {
     async login(loginForm: loginForm) {
-      await $fetch(`${baseUrl}/auth/signin`, {
+      await $fetch(`${this.baseUrl}/auth/signin`, {
         method: 'POST',
         body: loginForm,
         credentials: 'include',
@@ -101,7 +100,7 @@ export const useAuthStore = defineStore({
     },
 
     async signup(registerData: registerData) {
-      await $fetch(`${baseUrl}/auth/signup`, {
+      await $fetch(`${this.baseUrl}/auth/signup`, {
         method: 'POST',
         body: registerData
       })
