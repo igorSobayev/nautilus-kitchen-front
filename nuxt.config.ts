@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxthq/ui',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    'nuxt-rating',
   ],
   ui: {
     icons: ['material-symbols', 'icon-park', 'icon-park-outline', 'mingcute', 'emojione-v1']
