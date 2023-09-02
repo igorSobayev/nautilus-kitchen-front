@@ -26,13 +26,104 @@ onNuxtReady(() => {
 </script>
 
 <template>
-    <div class="">
-        Recetitas
-        <button @click="loadRecipes" class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-            Save changes
-        </button>
-        <div v-for="receta in recetas">
-            {{ receta.title }}
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://elikaeskola.com/wp-content/uploads/me-siento-culpable-por-comer.png" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center min-h-[40px]">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
+        </div>
+        <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/11/fotografia-de-una-tortilla-de-patata.jpeg" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center min-h-[40px">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
+        </div>
+       <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://elikaeskola.com/wp-content/uploads/me-siento-culpable-por-comer.png" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
+        </div>
+        <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://elikaeskola.com/wp-content/uploads/me-siento-culpable-por-comer.png" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
+        </div>
+        <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/11/fotografia-de-una-tortilla-de-patata.jpeg" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
+        </div>
+        <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/11/fotografia-de-una-tortilla-de-patata.jpeg" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
+        </div>
+        <div class="border rounded-md bg-white">
+            <div class="w-full">
+                <img class="rounded-t-md" src="https://elikaeskola.com/wp-content/uploads/me-siento-culpable-por-comer.png" />
+            </div>
+            <div class="border-b p-2 pt-4 pb-4 font-medium text-sm">
+                Tortilla de patata con cebolla caramelizada
+            </div>
+            <div class="p-2 flex items-center">
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-star" /><span>4'4</span></div>
+                <div class="flex items-center gap-1 mr-3"><UIcon name="i-heroicons-clock" /><span>60 min</span></div>
+                <div class="flex items-center gap-1"><UIcon name="i-heroicons-chart-bar" /><span>Fácil</span></div>
+
+            </div>
         </div>
     </div>
 </template>
