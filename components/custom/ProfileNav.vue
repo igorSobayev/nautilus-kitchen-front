@@ -12,7 +12,7 @@ const items = ref([
   }], [{
     label: 'Perfil',
     icon: 'i-heroicons-cog-8-tooth',
-    link: '/perfil'
+    link: '/profile'
   }], [{
     label: 'Mis recetas',
     icon: 'i-heroicons-book-open',

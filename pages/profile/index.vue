@@ -1,0 +1,73 @@
+<script setup lang="ts">
+const items = [{
+  label: 'Recetas',
+  key: 'recipes',
+  icon: 'i-heroicons-queue-list',
+  content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
+}, {
+  label: 'Comentarios',
+  key: 'comments',
+  icon: 'i-heroicons-chat-bubble-left-right',
+  content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
+}]
+</script>
+
+<template>
+    <div class="flex justify-center flex-col gap-5 pt-5">
+        <!-- Rectangulo con info del user -->
+        <div class="bg-white grid grid-cols-1  xl:grid-cols-3 w-full h-auto py-14 px-6">
+            <div class="flex justify-center align-center">
+                <img src="https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg" class="rounded-full max-h-64" />
+            </div>
+            <div class="flex flex-col gap-4 xl:border-r border-[#e5e7eb]">
+                <h2 class="text-4xl mb-4">Gordom Ramsay</h2>
+                <div class="flex items-center gap-3"><span class="">Recetas</span> <UBadge color="primary" variant="solid" label="33" /></div>
+                <div>Valoracón media: <span class="font-bold">4/5</span></div>
+                <div>Activo desde: <span class="font-bold">2 de septiembre del 2023</span></div>
+            </div>
+            <div class="flex border-t border-[#e5e7eb] xl:border-t-0 xl:m5-0 xl:pt-0 xl:pl-5 mt-6 pt-6">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.
+            </div>
+        </div>
+        <!-- Tabs con otras partes interesantes de momento recetas y comentarios destacados -->
+        <UTabs :items="items" class="w-full mt-5">
+            <template #default="{ item, index, selected }">
+                <div class="flex items-center gap-2 relative truncate">
+                    <UIcon :name="item.icon" class="w-4 h-4 flex-shrink-0" />
+                    <span class="truncate">{{ index + 1 }}. {{ item.label }}</span>
+                    <span v-if="selected" class="absolute -right-4 w-2 h-2 rounded-full bg-primary-500 dark:bg-primary-400" />
+                </div>
+            </template>
+            <template #item="{ item }">
+                <div v-if="item.key === 'recipes'">
+                    <div class="flex flex-col w-full bg-white">
+                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
+                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
+                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
+                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
+                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
+                        </div>
+                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
+                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
+                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
+                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
+                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
+                        </div>
+                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
+                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
+                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
+                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
+                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
+                        </div>
+                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
+                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
+                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
+                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
+                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </UTabs>
+    </div>
+</template>
