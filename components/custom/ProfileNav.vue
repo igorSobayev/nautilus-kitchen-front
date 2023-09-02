@@ -5,27 +5,44 @@ const authStore = useAuthStore()
 const userMail = ref('')
 
 const items = ref([
-  [{
-    label: userMail,
-    slot: 'account',
-    disabled: true
-  }], [{
-    label: 'Perfil',
-    icon: 'i-heroicons-cog-8-tooth',
-    link: '/profile'
-  }], [{
-    label: 'Mis recetas',
-    icon: 'i-heroicons-book-open',
-    link: '/recetas'
-  }, {
-    label: 'Crear receta',
-    icon: 'i-heroicons-megaphone',
-    link: '/recetas/crear-receta'
-  }], [{
-    label: 'Desconectar',
-    slot: 'logout',
-    icon: 'i-heroicons-arrow-left-on-rectangle'
-  }]
+  [
+    {
+      label: userMail,
+      slot: 'account',
+      disabled: true
+    }
+  ],
+  [
+    {
+      label: 'Configuración',
+      icon: 'i-heroicons-cog-8-tooth',
+      link: '/recetas'
+    },
+  ],
+  [
+    {
+      label: 'Mi perfil',
+      icon: 'i-heroicons-user',
+      link: '/profile'
+    },
+    {
+      label: 'Mis recetas',
+      icon: 'i-heroicons-book-open',
+      link: '/recetas'
+    },
+    {
+      label: 'Crear receta',
+      icon: 'i-heroicons-folder-plus',
+      link: '/recetas/crear-receta'
+    }
+  ],
+  [
+    {
+      label: 'Desconectar',
+      slot: 'logout',
+      icon: 'i-heroicons-arrow-left-on-rectangle'
+    }
+  ]
 ])
 
 const logout = () => {
