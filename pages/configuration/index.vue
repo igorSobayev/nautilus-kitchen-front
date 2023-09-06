@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
+import { useUserStore } from './../../store/user'
 import { useFetch, onNuxtReady, ref, useRouter } from '../../.nuxt/imports'
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 const state = ref({
+  username: 'k0sac',
+  email: 'isobayev@gmail.com',
   name: 'Igor',
   surname: 'Sobayev',
   avatar: 'https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg',
@@ -16,8 +20,6 @@ const state = ref({
 })
 
 const originalValues = ref({
-  username: 'k0sac',
-  email: 'isobayev@gmail.com',
   name: 'Igor',
   surname: 'Sobayev',
   avatar: 'https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg',
@@ -26,25 +28,26 @@ const originalValues = ref({
 
 const validate = (state: any): FormError[] => {
   const errors = []
-  if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
-  if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
+  if (!state.name) errors.push({ path: 'name', message: 'Requerido' })
+  if (!state.surname) errors.push({ path: 'surname', message: 'Requerido' })
   return errors
 }
 
 const form = ref()
 
 async function submit () {
-//   await form.value!.validate()
-//     authStore
-//         .signup({
-//             username: state.value.username,
-//             email: state.value.email,
-//             password: state.value.password,
-//         })
-//         .then(() => {
-//             state.value.userRegistered = true
-//         })
-//         .catch((error) => console.log("API error", error))
+  await form.value!.validate()
+  userStore
+        .edit({
+            name: state.value.name,
+            surname: state.value.surname,
+            description: state.value.description,
+            id: authStore.user.id,
+        })
+        .then(() => {
+            updatedSuccesfully()
+        })
+        .catch((error) => console.log("API error", error))
 }
 
 async function edit () {
@@ -68,12 +71,29 @@ async function changedAvatar (event) {
     state.value.avatar = URL.createObjectURL(fileObj[0])
 }
 
+async function updatedSuccesfully () {
+    await loadUserData()
+    state.value.editing = false
+    // TODO avatar
+}
+
+async function loadUserData () {
+    const user = await userStore.loadUserData()
+    originalValues.value.name = user.name
+    originalValues.value.surname = user.surname
+    originalValues.value.description = user.description
+    originalValues.value.avatar = user.description
+
+    state.value.name = user.name
+    state.value.surname = user.surname
+    state.value.description = user.description
+    state.value.avatar = user.avatar
+    state.value.surname
+    console.log(user)
+}
+
 onNuxtReady(async () => {
-    const url = 'http://localhost:8080/api/user'
-    const { data, error } = await useFetch(url, {
-        method: 'GET',
-        credentials: 'include'
-    })
+    await loadUserData()
 })
 </script>
 
@@ -103,11 +123,11 @@ onNuxtReady(async () => {
                 </div>
                 <div class="col-span-2">
                     <UFormGroup name="username" label="Usuario" class="mt-3">
-                        <UInput disabled v-model="originalValues.username" />
+                        <UInput disabled v-model="state.username" />
                     </UFormGroup>
 
                     <UFormGroup name="email" label="Email" class="mt-3">
-                        <UInput type="email" disabled v-model="originalValues.email" placeholder="you@example.com" icon="i-heroicons-envelope" />
+                        <UInput type="email" disabled v-model="state.email" placeholder="you@example.com" icon="i-heroicons-envelope" />
                     </UFormGroup>        
                 </div>
             </div>
