@@ -2,28 +2,28 @@
 import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import { useUserStore } from './../../store/user'
-import { useFetch, onNuxtReady, ref, useRouter } from '../../.nuxt/imports'
+import { onNuxtReady, ref } from '../../.nuxt/imports'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
-const router = useRouter()
 
 const state = ref({
-  username: 'k0sac',
-  email: 'isobayev@gmail.com',
-  name: 'Igor',
-  surname: 'Sobayev',
-  avatar: 'https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg',
-  description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.',
+  username: '',
+  email: '',
+  name: '',
+  surname: '',
+  avatar: '',
+  description: '',
   editing: false,
-  newAvatar: ''
+  newAvatar: undefined,
+  newAvatarPreview: ''
 })
 
 const originalValues = ref({
-  name: 'Igor',
-  surname: 'Sobayev',
-  avatar: 'https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg',
-  description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.',
+  name: '',
+  surname: '',
+  avatar: '',
+  description: '',
 })
 
 const validate = (state: any): FormError[] => {
@@ -37,17 +37,26 @@ const form = ref()
 
 async function submit () {
   await form.value!.validate()
+
+  let newAvatar
+
+  if (state.value.newAvatar) {
+    newAvatar = state.value.newAvatar
+  }
+
   userStore
         .edit({
             name: state.value.name,
             surname: state.value.surname,
             description: state.value.description,
             id: authStore.user.id,
+            newAvatar,
         })
         .then(() => {
             updatedSuccesfully()
         })
         .catch((error) => console.log("API error", error))
+
 }
 
 async function edit () {
@@ -63,18 +72,23 @@ async function cancelEditing () {
 }
 
 async function changePassword () {
-
+// TODO
 }
 
-async function changedAvatar (event) {
+async function changedAvatar (event: any) {
     const fileObj = event.target.files
-    state.value.avatar = URL.createObjectURL(fileObj[0])
+    // @ts-ignore comment
+    state.value.newAvatar = new FormData() // @ts-ignore comment
+    state.value.newAvatar.append('file', fileObj[0]) // @ts-ignore comment
+    state.value.newAvatar.append('path', '/avatar')
+    
+    // Set preview
+    state.value.newAvatarPreview = URL.createObjectURL(fileObj[0])
 }
 
 async function updatedSuccesfully () {
     await loadUserData()
     state.value.editing = false
-    // TODO avatar
 }
 
 async function loadUserData () {
@@ -84,12 +98,12 @@ async function loadUserData () {
     originalValues.value.description = user.description
     originalValues.value.avatar = user.description
 
+    state.value.username = user.username
+    state.value.email = user.email
     state.value.name = user.name
     state.value.surname = user.surname
     state.value.description = user.description
     state.value.avatar = user.avatar
-    state.value.surname
-    console.log(user)
 }
 
 onNuxtReady(async () => {
@@ -112,13 +126,15 @@ onNuxtReady(async () => {
                 <UButton @click="changePassword" icon="i-heroicons-key" size="md" label="Cambiar contraseña" color="gray" class="ml-3" />
             </div>
             <div class="grid grid-cols-3">
-                <div class="flex justify-center align-center flex-col gap-5">
-                    <div class="flex justify-center">
+                <div class="flex justify-center align-center flex-col gap-5 p-5">
+                    <div v-if="!state.editing" class="flex justify-center">
                         <img :src="state.avatar" class="rounded-full max-h-52" />
                     </div>
                     <div v-if="state.editing">
-                        <UInput @change="changedAvatar" icon="i-heroicons-pencil-square" type="file" />
-                        <img :src="state.newAvatar" />
+                        <img class="rounded-full max-h-52" v-if="state.newAvatarPreview" :src="state.newAvatarPreview" />
+                        <img class="rounded-full max-h-52" v-else :src="state.avatar" />
+                        <UInput @change="changedAvatar" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
+                        <span class="text-slate-800 text-xs">Recomendado 256 x 256</span>
                     </div>
                 </div>
                 <div class="col-span-2">

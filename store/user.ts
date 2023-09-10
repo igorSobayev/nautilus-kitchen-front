@@ -1,30 +1,14 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
-
-interface user {
-  username: string
-  email: string
-  avatar: string
-  name: string
-  surname: string
-  description: string
-  id: string
-}
-
-interface editUserParams {
-  name: string
-  surname: string
-  description: string
-  id: string
-}
+import types from './types'
 
 export const useUserStore = defineStore('user', () => {
   const authStore = useAuthStore()
 
   const baseUrl = useRuntimeConfig().public.API_BASE_URL
 
-  async function loadUserData (): Promise<user> {
-    const user: user = await $fetch(`${baseUrl}/user/${authStore.user.id}`, {
+  async function loadUserData (): Promise<types.User> {
+    const user: types.User = await $fetch(`${baseUrl}/user/${authStore.user.id}`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -32,16 +16,30 @@ export const useUserStore = defineStore('user', () => {
     return user
   }
 
-  async function  edit (userData: editUserParams) {
+  async function  edit (userData: types.EditUserParams) {
+    let avatarUpdated
+
+    if (userData.newAvatar) {
+      avatarUpdated = await uploadAvatarImg(userData.newAvatar, userData.id)
+
+      userData.avatar = avatarUpdated.uploadedImage.Location
+    }
+
     await $fetch(`${baseUrl}/user/edit/${userData.id}`, {
       method: 'PUT',
       body: userData,
       credentials: 'include',
     })
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => { throw error })
+  }
+
+  async function uploadAvatarImg (userImg: FormData, userId: string): Promise<types.ImgObject> {
+    const newImg = await $fetch(`${baseUrl}/user/upload-file/${userId}`, {
+      method: 'POST',
+      body: userImg,
+      credentials: 'include',
+    }) as types.ImgObject
+
+    return newImg
   }
 
 
