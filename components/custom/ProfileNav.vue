@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { useAuthStore } from './../../store/auth'
+import { useUserStore } from '../../store/user';
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const userMail = ref('')
+const userAvatar = ref('')
+const user = ref()
 
 const items = ref([
   [
@@ -49,14 +53,18 @@ const logout = () => {
     authStore.logout()
 }
 
-onNuxtReady(() => {
-    userMail.value = authStore.user.email
+onNuxtReady(async () => {
+    user.value = await userStore.loadUserData()
+
+    userMail.value = user.value.email
+    userAvatar.value = user.value.avatar
 })
 </script>
 
 <template>
   <UDropdown :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }" :popper="{ placement: 'bottom-start' }">
-    <UAvatar src="https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg" />
+    <UAvatar v-if="userAvatar" :src="userAvatar" />
+    <UAvatar v-else src="https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg" />
 
     <template #account="{ item }">
       <div class="text-left">
