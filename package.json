@@ -25,6 +25,14 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.11",
+    "@tiptap/extension-character-count": "^2.1.8",
+    "@tiptap/extension-subscript": "^2.1.8",
+    "@tiptap/extension-superscript": "^2.1.8",
+    "@tiptap/extension-text-align": "^2.1.8",
+    "@tiptap/extension-underline": "^2.1.8",
+    "@tiptap/pm": "^2.1.8",
+    "@tiptap/starter-kit": "^2.1.8",
+    "@tiptap/vue-3": "^2.1.8",
     "@vueuse/core": "^10.4.0",
     "nuxt-rating": "^0.0.15",
     "pinia": "^2.1.6"
