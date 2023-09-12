@@ -49,6 +49,7 @@ onNuxtReady(() => {
 <template>
     <div v-if="!state.userRegistered" class="flex items-center justify-center h-[80vh]">
         <UForm
+            class="bg-white p-5 rounded-md"
             ref="form"
             :validate="validate"
             :state="state"

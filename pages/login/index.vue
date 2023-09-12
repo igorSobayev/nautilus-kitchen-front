@@ -31,15 +31,15 @@ async function submit () {
 
 <template>
     <div class="flex justify-center items-center h-[80vh]">
-        <div>
+        <div class="bg-white p-5 rounded-md">
             <UForm
             ref="form"
             :validate="validate"
             :state="state"
             @submit.prevent="submit"
             >
-            <UFormGroup label="Email" name="email">
-                <UInput v-model="state.username" />
+            <UFormGroup label="Nombre de usuario" name="username">
+                <UInput type="text" v-model="state.username" />
             </UFormGroup>
         
             <UFormGroup label="Password" name="password" class="mt-4">
