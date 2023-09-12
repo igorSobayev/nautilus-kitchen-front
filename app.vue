@@ -5,6 +5,7 @@
       <NuxtPage class="xl:w-2/3 w-[90%]" />
     </div>
     <Footer />
+    <UNotifications />
   </div>
 </template>
 
