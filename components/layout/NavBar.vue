@@ -8,7 +8,7 @@
                 <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
                     <NuxtLink class="hover:text-gray-500" to="/">Home</NuxtLink>
                     <NuxtLink class="hover:text-gray-500" to="/recetas">Recetas</NuxtLink>
-                    <NuxtLink class="hover:text-gray-500" to="/recetas/crear-receta">Crear recetas</NuxtLink>
+                    <NuxtLink class="hover:text-gray-500" @click="addRecipe">Crear recetas</NuxtLink>
                 </ul>
             </div>
             <div class="flex items-center gap-6">
@@ -28,14 +28,16 @@
 <script setup>
 import ProfileNav from './../custom/ProfileNav.vue'
 import { useAuthStore } from './../../store/auth'
-import { onMounted } from './../../.nuxt/imports'
+import { useRecipeStore } from '~/store/recipe'
+
+const router = useRouter()
+const recipeStore = useRecipeStore()
+const authStore = useAuthStore()
 
 const menuOpenned = ref(false)
 const onToggleMenu = (e) => {
     menuOpenned.value = !menuOpenned.value
 }
-
-const authStore = useAuthStore()
 
 // Manage login in server 
 authStore.manageLoginSession()
@@ -45,5 +47,13 @@ onMounted(() => {
   if(!process.client) return
   authStore.manageLoginSessionClient()
 })
+
+// Recipe management
+// On click to add new recipe, we create one clean in the backend and push the route to edit it, doing this we can
+// edit the recipe all the time
+async function addRecipe () {
+    const newRecipe = await recipeStore.createClean()
+    router.push(`/recetas/edit/${newRecipe._id}`)
+}
 </script>
   
