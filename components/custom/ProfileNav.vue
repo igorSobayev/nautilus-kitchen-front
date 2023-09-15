@@ -20,7 +20,7 @@ const items = ref([
     {
       label: 'Configuración',
       icon: 'i-heroicons-cog-8-tooth',
-      link: '/recetas'
+      link: '/configuration'
     },
   ],
   [
