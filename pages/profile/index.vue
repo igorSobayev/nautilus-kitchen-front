@@ -1,15 +1,22 @@
 <script setup lang="ts">
-const items = [{
-  label: 'Recetas',
-  key: 'recipes',
-  icon: 'i-heroicons-queue-list',
-  content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
-}, {
-  label: 'Comentarios',
-  key: 'comments',
-  icon: 'i-heroicons-chat-bubble-left-right',
-  content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
-}]
+const items = [
+    {
+        label: 'Recetas en curso',
+        key: 'recipes-wip',
+        icon: 'i-heroicons-queue-list',
+    },
+    {
+        label: 'Recetas publicas',
+        key: 'recipes-published',
+        icon: 'i-heroicons-queue-list',
+    },
+    {
+        label: 'Comentarios',
+        key: 'comments',
+        icon: 'i-heroicons-chat-bubble-left-right',
+        content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
+    }
+]
 </script>
 
 <template>
@@ -39,7 +46,7 @@ const items = [{
                 </div>
             </template>
             <template #item="{ item }">
-                <div v-if="item.key === 'recipes'">
+                <div v-if="item.key === 'recipes-published'">
                     <div class="flex flex-col w-full bg-white">
                         <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
                             <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
@@ -47,23 +54,15 @@ const items = [{
                             <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
                             <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
                         </div>
+                    </div>
+                </div>
+                <div v-if="item.key === 'recipes-wip'">
+                    <div class="flex flex-col w-full bg-white">
                         <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
                             <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
                             <div class="flex justify-center">Kombucha de jengibre y limón</div>
                             <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
-                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
-                        </div>
-                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
-                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
-                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
-                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
-                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
-                        </div>
-                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
-                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
-                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
-                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
-                            <div class="flex justify-center"><UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton></div>
+                            <div class="flex justify-center"><UButton icon="i-heroicons-pencil-square" size="sm" color="primary" square variant="solid">Editar</UButton></div>
                         </div>
                     </div>
                 </div>
