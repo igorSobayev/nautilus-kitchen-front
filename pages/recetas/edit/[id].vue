@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../../store/auth'
-import { onNuxtReady, ref } from '../../../.nuxt/imports'
+import { onNuxtReady, ref, useRoute } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import RichEditor from './../../../components/custom/RichEditor.vue' // TODO WIP
 
 const authStore = useAuthStore()
 const recipeStore = useRecipeStore()
+const route = useRoute()
 
-const prueba = ref('<p>A Vue.js wrapper component for tiptap to use <code>v-model</code>.</p>')
-
-const state = ref({})
+const state = ref({
+    title: '',
+    description: '',
+    notes: '',
+    avgTime: '',
+    difficulty: 2,
+    isCombination: false,
+    published: false,
+    onProgress: true,
+    combinations: [],
+    featuredImg: '',
+    media: []
+})
 
 const validate = (state: any): FormError[] => {
-  const errors = []
-  if (!state.name) errors.push({ path: 'name', message: 'Requerido' })
-  if (!state.surname) errors.push({ path: 'surname', message: 'Requerido' })
+  const errors: FormError[] = []
+  if (state.avgTime && state.avgTime.length >= 15) errors.push({ path: 'avgTime', message: 'The average time is to long' })
+//   if (!state.surname) errors.push({ path: 'surname', message: 'Requerido' })
   return errors
 }
 
@@ -25,58 +36,66 @@ async function submit () {
   await form.value!.validate()
 }
 
-onNuxtReady(async () => {
+async function changeFeaturedImg () {
+    // TODO
+}
 
+onNuxtReady(async () => {
+    const recipeId = route.params.id
+    const recipe = await recipeStore.loadRecipeData(recipeId)
+
+    console.log(recipe)
 })
 </script>
 
 <template>
     <div class="flex items-center justify-center">
-        <h1>{{ $route.params.id }}</h1>
-        <RichEditor v-model="prueba" />
-        <!-- <hr>
         <UForm
             ref="form"
             :validate="validate"
             :state="state"
             @submit.prevent="submit"
-            class="bg-white p-12 rounded-lg border-2"
+            class="bg-white p-12 rounded-lg border-2 w-[80%]"
         >
-            <div class="grid grid-cols-3">
+            <div class="grid grid-cols-3 gap-5">
+                <div>
+                    <UFormGroup name="username" label="Título" class="mt-3">
+                        <UInput v-model="state.title" />
+                    </UFormGroup> 
+                </div>
+                <div>
+                    <UFormGroup name="avgTime" label="Tiempo medio" class="mt-3">
+                        <UInput v-model="state.avgTime" placeholder="1h 30min" />
+                    </UFormGroup> 
+                </div>
+                <div>
+                    <UFormGroup name="difficulty" label="Dificultad" class="mt-3">
+                        <UInput disabled v-model="state.difficulty" class="hidden" />
+                        <NuxtRating :read-only="false" ratingContent="🍴" activeColor="#6366f1" :ratingValue="state.difficulty" />
+                    </UFormGroup> 
+                </div>
+            </div>
+            <div class="mt-5">
+                <UFormGroup name="description" label="Descripción y pasos a seguir">
+                    <RichEditor v-model="state.description" />
+                </UFormGroup>
+            </div>
+
+            <div class="mt-5 grid grid-cols-2 gap-5">
                 <div class="flex justify-center align-center flex-col gap-5 p-5">
                     <div>
-                        <img class="rounded-full max-h-52" v-if="state.newAvatarPreview" :src="state.newAvatarPreview" />
+                        <img class="rounded-full max-h-52" v-if="state.featuredImg" :src="state.featuredImg" />
                         <UFormGroup name="username" label="Imagen destacada" class="mt-3">
-                            <UInput @change="changedAvatar" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
+                            <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
                         </UFormGroup>
                     </div>
                 </div>
-                <div class="col-span-2">
-                    <UFormGroup name="username" label="Título" class="mt-3">
-                        <UInput disabled v-model="state.username" />
-                    </UFormGroup>
-
-                    <UFormGroup name="description" class="mt-3" label="Descripción">
-                        <UTextarea :disabled="!state.editing" :rows="8" variant="outline" v-model="state.description" />
-                    </UFormGroup>     
-                </div>
-            </div>
-            <div class="flex gap-4">
-                <UFormGroup name="name" label="Nombre" class="mt-3 w-[50%]">
-                    <UInput :disabled="!state.editing" v-model="state.name" />
-                </UFormGroup>
-
-                <UFormGroup name="surname" label="Apellido" class="mt-3 w-[50%]">
-                    <UInput :disabled="!state.editing" v-model="state.surname" />
-                </UFormGroup>
-            </div>
-            <div class="mt-3">
-                <UFormGroup name="description" label="Descripción">
-                    <UTextarea :disabled="!state.editing" :rows="8" variant="outline" v-model="state.description" />
+                <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
+                    <UTextarea :rows="3" variant="outline" v-model="state.notes" />
                 </UFormGroup>
             </div>
 
-            <UButton v-if="state.editing" block type="submit" class="mt-5" label="Guardar" />
-        </UForm> -->
+            <UButton block type="submit" class="mt-5" label="Guardar" />
+        </UForm>
     </div>
 </template>

@@ -27,8 +27,16 @@ export const useRecipeStore = defineStore('recipe', () => {
     })
   }
 
+  async function loadRecipeData (recipeId: String) {
+    return $fetch(`${baseUrl}/recipes/${recipeId}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+  } 
+
   return {
     ingredients,
     createClean,
+    loadRecipeData,
   }
 })
