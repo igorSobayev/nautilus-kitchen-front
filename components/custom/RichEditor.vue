@@ -157,7 +157,7 @@ export default {
 
 <style scoped>
 #text-editor {
-  border: 1px solid #808080;
+  border: 1px solid rgb(59 130 246 / 0.5);
   background-color: white;
 }
 
@@ -165,7 +165,7 @@ export default {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  border-bottom: 1px solid #808080;
+  border-bottom: 1px solid rgb(59 130 246 / 0.5);
 }
 
 #text-editor .toolbar>button {
@@ -242,7 +242,7 @@ export default {
 }
 
 #text-editor .footer {
-  color: #808080;
+  color: rgb(59 130 246 / 0.5);
   font-size: 14px;
   text-align: right;
   padding: 6px;
