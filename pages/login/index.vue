@@ -22,10 +22,10 @@ const form = ref()
 
 async function submit () {
   await form.value!.validate()
-    authStore
-        .login(state.value)
-        .then((_response) => router.push("/"))
-        .catch((error) => console.log("API error", error))
+  authStore
+    .login(state.value)
+    .then((_response) => router.push("/"))
+    .catch((error) => console.log("API error", error))
 }
 </script>
 
