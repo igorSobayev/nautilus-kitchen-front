@@ -77,7 +77,7 @@ onNuxtReady(async () => {
             ref="form"
             :validate="validate"
             :state="state"
-            @submit.prevent="submit"
+            @submit.prevent=""
             class="bg-white p-12 rounded-lg border-2 w-[80%]"
         >
             <div class="grid grid-cols-3 gap-5">
@@ -99,9 +99,9 @@ onNuxtReady(async () => {
                 </div>
             </div>
             <div class="mt-5">
-                <!-- <UFormGroup name="description" label="Descripción y pasos a seguir">
-                    <RichEditor v-model="state.description" />
-                </UFormGroup> -->
+                <UFormGroup name="description" label="Descripción y pasos a seguir">
+                    <RichEditor :content="state.description" />
+                </UFormGroup>
             </div>
 
             <div class="mt-5 grid grid-cols-2 gap-5">
@@ -118,7 +118,7 @@ onNuxtReady(async () => {
                 </UFormGroup>
             </div>
 
-            <UButton block type="submit" class="mt-5" label="Guardar" />
+            <UButton block class="mt-5" label="Guardar" @click="submit" />
         </UForm>
     </div>
 </template>
