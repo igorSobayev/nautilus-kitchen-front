@@ -27,16 +27,28 @@ export const useRecipeStore = defineStore('recipe', () => {
     })
   }
 
-  async function loadRecipeData (recipeId: String) {
+  async function loadRecipeData (recipeId: String): Promise<types.Recipe> {
     return $fetch(`${baseUrl}/recipes/${recipeId}`, {
       method: 'GET',
       credentials: 'include',
     })
   } 
 
+  async function  edit (recipeData: types.EditRecipeParams) {
+    // Append the user
+    recipeData.userId = authStore.user.id
+    console.log(recipeData)
+    await $fetch(`${baseUrl}/recipes/edit/${recipeData._id}`, {
+      method: 'PUT',
+      body: recipeData,
+      credentials: 'include',
+    })
+  }
+
   return {
     ingredients,
     createClean,
     loadRecipeData,
+    edit,
   }
 })

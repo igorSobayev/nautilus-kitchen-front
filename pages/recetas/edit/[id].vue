@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../../store/auth'
-import { onNuxtReady, ref, useRoute } from '../../../.nuxt/imports'
+import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import RichEditor from './../../../components/custom/RichEditor.vue' // TODO WIP
 
+const toast = useToast()
 const authStore = useAuthStore()
 const recipeStore = useRecipeStore()
 const route = useRoute()
 
 const state = ref({
+    _id: '',
     title: '',
     description: '',
     notes: '',
@@ -20,7 +22,7 @@ const state = ref({
     onProgress: true,
     combinations: [],
     featuredImg: '',
-    media: []
+    media: [],
 })
 
 const validate = (state: any): FormError[] => {
@@ -34,6 +36,11 @@ const form = ref()
 
 async function submit () {
   await form.value!.validate()
+  recipeStore
+    .edit(state.value)
+    .then(() => {
+        toast.add({ title: 'Recipe updated successfully' })
+    })
 }
 
 async function changeFeaturedImg () {
@@ -44,7 +51,23 @@ onNuxtReady(async () => {
     const recipeId = route.params.id
     const recipe = await recipeStore.loadRecipeData(recipeId)
 
+    // TODO move to function
+    state.value._id = recipe._id
+    state.value.title = recipe.title
+    state.value.description = recipe.description
+    state.value.notes = recipe.notes
+    state.value.avgTime = recipe.avgTime
+    state.value.difficulty = recipe.difficulty
+    state.value.isCombination = recipe.isCombination
+    state.value.published = recipe.published
+    state.value.onProgress = recipe.onProgress
+    state.value.combinations = recipe.combinations
+    state.value.featuredImg = recipe.featuredImg
+    state.value.media = recipe.media
+    
     console.log(recipe)
+
+    state.value._id = recipeId
 })
 </script>
 
@@ -76,9 +99,9 @@ onNuxtReady(async () => {
                 </div>
             </div>
             <div class="mt-5">
-                <UFormGroup name="description" label="Descripción y pasos a seguir">
+                <!-- <UFormGroup name="description" label="Descripción y pasos a seguir">
                     <RichEditor v-model="state.description" />
-                </UFormGroup>
+                </UFormGroup> -->
             </div>
 
             <div class="mt-5 grid grid-cols-2 gap-5">
