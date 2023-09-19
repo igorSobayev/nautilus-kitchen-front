@@ -38,6 +38,8 @@ import Underline from '@tiptap/extension-underline';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import CharacterCount from '@tiptap/extension-character-count';
+import BulletList from '@tiptap/extension-bullet-list'
+import OrderedList from '@tiptap/extension-ordered-list'
 
 export default {
   name: 'RickEditor',
@@ -142,6 +144,16 @@ export default {
         }),
         TextAlign.configure({
           types: ['heading', 'paragraph'],
+        }),
+        BulletList.configure({
+          HTMLAttributes: {
+            class: 'list-disc pl-10',
+          },
+        }),
+        OrderedList.configure({
+          HTMLAttributes: {
+            class: 'list-decimal pl-10',
+          },
         }),
       ],
       onUpdate: () => {
