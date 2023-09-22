@@ -24,10 +24,18 @@ const state = ref({
     combinations: [],
     featuredImg: '',
     media: [],
-    ingredients: [{
-        name: '',
-        quantity: '',
-    }]
+    ingredients: [
+        {
+            name: '',
+            quantity: '',
+        }
+    ],
+    steps: [
+        {
+            order: 1,
+            description: ''
+        }
+    ]
 })
 
 const formManagement = ref({
@@ -56,6 +64,8 @@ async function changeFeaturedImg () {
     // TODO
 }
 
+
+// Ingredients
 function addIngredientRow () {
     state.value.ingredients.push({
         name: '',
@@ -68,6 +78,36 @@ function removeIngredientRow (ingredientToRemove: String) {
     const ingredientPosition = state.value.ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
 
     state.value.ingredients.splice(ingredientPosition, 1)
+}
+
+// Steps
+function addStepRow () {
+    let order
+    if (state.value.steps.length) {
+        const lastStep = state.value.steps[state.value.steps.length - 1]
+        order = lastStep.order + 1
+    } else {
+        order = 1
+    }
+    
+    state.value.steps.push({
+        order,
+        description: '',
+    })
+}
+
+function removeStepRow (stepToRemove: Number) {
+    
+    const stepPosition = state.value.steps.findIndex(step => step.order === stepToRemove)
+    state.value.steps.splice(stepPosition, 1)
+
+    orderSteps()
+}
+
+function orderSteps () {
+    state.value.steps.forEach((step, index) => {
+        step.order = index + 1
+    })
 }
 
 function setInitialRecipeData (recipe: types.Recipe) {
@@ -129,18 +169,33 @@ onNuxtReady(async () => {
                 <UTextarea v-else :rows="8" variant="outline" v-model="state.description" />
             </div>
 
-            <div class="mt-5">
-                <div class="flex gap-3 items-center pb-2">
-                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
-                    <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="solid" />
-                </div>
+            <div class="mt-5 grid grid-cols-2">
                 <div>
-                    <ul>
-                        <li v-for="ingredient in state.ingredients">
-                            {{ ingredient }} <UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="primary" square variant="solid" />
-                        </li>
-                    </ul>
-                </div>
+                    <div class="flex gap-3 items-center pb-2">
+                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
+                        <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="solid" />
+                    </div>
+                    <div>
+                        <ul>
+                            <li v-for="ingredient in state.ingredients">
+                                {{ ingredient }} <UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="primary" square variant="solid" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>  
+                <div>
+                    <div class="flex gap-3 items-center pb-2">
+                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Pasos</label>
+                        <UButton @click="addStepRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="solid" />
+                    </div>
+                    <div>
+                        <ul>
+                            <li v-for="step in state.steps">
+                                {{ step }} <UButton @click="removeStepRow(step.order)" icon="i-heroicons-minus" size="xs" color="primary" square variant="solid" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>  
             </div>
 
             <div class="mt-5 grid grid-cols-2 gap-5">
