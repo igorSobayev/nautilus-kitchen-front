@@ -4,6 +4,7 @@ import { useAuthStore } from '../../../store/auth'
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import RichEditor from './../../../components/custom/RichEditor.vue' // TODO WIP
+import types from './../../../store/types'
 
 const toast = useToast()
 const authStore = useAuthStore()
@@ -23,6 +24,14 @@ const state = ref({
     combinations: [],
     featuredImg: '',
     media: [],
+    ingredients: [{
+        name: '',
+        quantity: '',
+    }]
+})
+
+const formManagement = ref({
+    advanceDescription: false
 })
 
 const validate = (state: any): FormError[] => {
@@ -47,11 +56,21 @@ async function changeFeaturedImg () {
     // TODO
 }
 
-onNuxtReady(async () => {
-    const recipeId = route.params.id
-    const recipe = await recipeStore.loadRecipeData(recipeId)
+function addIngredientRow () {
+    state.value.ingredients.push({
+        name: '',
+        quantity: '',
+    })
+}
 
-    // TODO move to function
+function removeIngredientRow (ingredientToRemove: String) {
+    
+    const ingredientPosition = state.value.ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
+
+    state.value.ingredients.splice(ingredientPosition, 1)
+}
+
+function setInitialRecipeData (recipe: types.Recipe) {
     state.value._id = recipe._id
     state.value.title = recipe.title
     state.value.description = recipe.description
@@ -64,10 +83,13 @@ onNuxtReady(async () => {
     state.value.combinations = recipe.combinations
     state.value.featuredImg = recipe.featuredImg
     state.value.media = recipe.media
-    
-    console.log(recipe)
+    state.value._id = recipe._id
+}
 
-    state.value._id = recipeId
+onNuxtReady(async () => {
+    const recipeId = route.params.id as String
+    const recipe = await recipeStore.loadRecipeData(recipeId)
+    setInitialRecipeData(recipe)
 })
 </script>
 
@@ -99,9 +121,26 @@ onNuxtReady(async () => {
                 </div>
             </div>
             <div class="mt-5">
-                <UFormGroup name="description" label="Descripción y pasos a seguir">
-                    <RichEditor :content="state.description" />
-                </UFormGroup>
+                <div class="flex gap-3 items-center pb-2">
+                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
+                    <UToggle v-model="formManagement.advanceDescription" on-icon="i-heroicons-check-20-solid" off-icon="i-heroicons-x-mark-20-solid" />
+                </div>
+                <RichEditor v-if="formManagement.advanceDescription" v-model="state.description" />
+                <UTextarea v-else :rows="8" variant="outline" v-model="state.description" />
+            </div>
+
+            <div class="mt-5">
+                <div class="flex gap-3 items-center pb-2">
+                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
+                    <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="solid" />
+                </div>
+                <div>
+                    <ul>
+                        <li v-for="ingredient in state.ingredients">
+                            {{ ingredient }} <UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="primary" square variant="solid" />
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="mt-5 grid grid-cols-2 gap-5">
