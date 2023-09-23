@@ -24,12 +24,23 @@ export type Recipe = {
     notes: string
     avgTime: string
     difficulty: number
-    isCombination: boolean
     published: boolean
     onProgress: boolean
-    combinations: []
+    versions: []
     featuredImg: string
     media: []
+    ingredients: Ingredient[]
+    steps: Step[]
+}
+
+export type Ingredient = {
+    name: string
+    quantity: string
+}
+
+export type Step = {
+    order: number
+    description: string
 }
 
 export type EditRecipeParams = {
@@ -39,13 +50,14 @@ export type EditRecipeParams = {
     notes: string
     avgTime: string
     difficulty: number
-    isCombination: boolean
     published: boolean
     onProgress: boolean
-    combinations: array
+    versions: array
     featuredImg: string
     media: array
     userId?: string
+    ingredients: Ingredient[]
+    steps: Step[]
 }
 
 export type ImgObject = {

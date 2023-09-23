@@ -19,10 +19,9 @@ const state = ref({
     notes: '',
     avgTime: '',
     difficulty: 2,
-    isCombination: false,
     published: false,
     onProgress: true,
-    combinations: [],
+    versions: [],
     featuredImg: '',
     media: [],
     ingredients: [
@@ -53,12 +52,25 @@ const validate = (state: any): FormError[] => {
 const form = ref()
 
 async function submit () {
-  await form.value!.validate()
-  recipeStore
-    .edit(state.value)
-    .then(() => {
-        toast.add({ title: 'Recipe updated successfully' })
-    })
+    await form.value!.validate()
+
+    cleanEmptyElements()
+
+    recipeStore
+        .edit(state.value)
+        .then(() => {
+            toast.add({ title: 'Recipe updated successfully' })
+        })
+}
+
+function cleanEmptyElements () {
+    if (state.value.ingredients.length && state.value.ingredients[0].name === '') {
+        state.value.ingredients = []
+    }
+
+    if (state.value.steps.length && state.value.steps[0].description === '') {
+        state.value.steps = []
+    }
 }
 
 async function changeFeaturedImg () {
@@ -118,18 +130,26 @@ function setInitialRecipeData (recipe: types.Recipe) {
     state.value.notes = recipe.notes
     state.value.avgTime = recipe.avgTime
     state.value.difficulty = recipe.difficulty
-    state.value.isCombination = recipe.isCombination
     state.value.published = recipe.published
     state.value.onProgress = recipe.onProgress
-    state.value.combinations = recipe.combinations
     state.value.featuredImg = recipe.featuredImg
     state.value.media = recipe.media
     state.value._id = recipe._id
+    state.value.versions = recipe.versions
+    
+    if (recipe.ingredients && recipe.ingredients.length > 0) {
+        state.value.ingredients = recipe.ingredients
+    }
+    
+    if (recipe.steps && recipe.steps.length > 0) {
+        state.value.steps = recipe.steps
+    }
 }
 
 onNuxtReady(async () => {
     const recipeId = route.params.id as String
     const recipe = await recipeStore.loadRecipeData(recipeId)
+    console.log(recipe)
     setInitialRecipeData(recipe)
 })
 </script>
