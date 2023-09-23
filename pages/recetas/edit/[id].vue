@@ -4,6 +4,7 @@ import { useAuthStore } from '../../../store/auth'
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import RichEditor from './../../../components/custom/RichEditor.vue' // TODO WIP
+import { VueDraggableNext } from 'vue-draggable-next'
 import types from './../../../store/types'
 
 const toast = useToast()
@@ -173,27 +174,29 @@ onNuxtReady(async () => {
                 <div>
                     <div class="flex gap-3 items-center pb-2">
                         <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
-                        <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="solid" />
+                        <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                     </div>
                     <div>
-                        <ul>
-                            <li v-for="ingredient in state.ingredients">
-                                {{ ingredient }} <UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="primary" square variant="solid" />
-                            </li>
-                        </ul>
+                        <div class="border flex align-center flex-row gap-3 justify-start p-1 mb-2 rounded-md w-[80%]" v-for="ingredient in state.ingredients">
+                            <div><UInput icon="i-material-symbols-kitchen-outline" placeholder="Tomates" v-model="ingredient.name" color="gray" variant="outline" /></div>
+                            <div><UInput icon="i-icon-park-outline-weight" placeholder="200 g" color="gray" v-model="ingredient.quantity" variant="outline" /></div>
+                            <div class="h-full my-auto"><UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
+                        </div>
                     </div>
                 </div>  
                 <div>
                     <div class="flex gap-3 items-center pb-2">
                         <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Pasos</label>
-                        <UButton @click="addStepRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="solid" />
+                        <UButton @click="addStepRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                     </div>
                     <div>
-                        <ul>
-                            <li v-for="step in state.steps">
-                                {{ step }} <UButton @click="removeStepRow(step.order)" icon="i-heroicons-minus" size="xs" color="primary" square variant="solid" />
-                            </li>
-                        </ul>
+                        <VueDraggableNext :list="state.steps" @change="orderSteps">
+                            <div class="border flex align-center flex-row gap-4 justify-start p-2 mb-2 rounded-md w-[100%]" v-for="step in state.steps">
+                                <div class="h-full my-auto text-gray-400">{{ step.order }}</div>
+                                <div class="w-full"><UTextarea :rows="2" variant="outline" placeholder="Cortamos los tomates en rodajas de unos 2 cm de ...." v-model="step.description" /></div>
+                                <div class="h-full my-auto"><UButton @click="removeStepRow(step.order)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
+                            </div>
+                        </VueDraggableNext>
                     </div>
                 </div>  
             </div>
