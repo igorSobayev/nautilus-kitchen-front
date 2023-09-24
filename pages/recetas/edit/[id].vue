@@ -21,7 +21,20 @@ const state = ref({
     difficulty: 2,
     published: false,
     onProgress: true,
-    versions: [],
+    versions: [
+        {
+            name: '',
+            description: '',
+            avgTime: '',
+            difficulty: 0,
+            ingredients: [
+                {
+                    name: '',
+                    quantity: '',
+                }
+            ]
+        }
+    ],
     featuredImg: '',
     media: [],
     ingredients: [
@@ -42,6 +55,22 @@ const formManagement = ref({
     advanceDescription: false
 })
 
+const accordionVersions = ref([
+    {
+        label: 'Nombre',
+        advanceDescription: false,
+        description: '',
+        avgTime: '',
+        difficulty: 0,
+        ingredients: [
+            {
+                name: '',
+                quantity: '',
+            }
+        ]
+    },
+])
+
 const validate = (state: any): FormError[] => {
   const errors: FormError[] = []
   if (state.avgTime && state.avgTime.length >= 15) errors.push({ path: 'avgTime', message: 'The average time is to long' })
@@ -53,6 +82,8 @@ const form = ref()
 
 async function submit () {
     await form.value!.validate()
+
+    setVersionData()
 
     cleanEmptyElements()
 
@@ -70,6 +101,23 @@ function cleanEmptyElements () {
 
     if (state.value.steps.length && state.value.steps[0].description === '') {
         state.value.steps = []
+    }
+}
+
+function setVersionData () {
+    if (accordionVersions.value.length > 0) {
+        state.value.versions = []
+        accordionVersions.value.forEach(version => {
+            const cleanVersion = {
+                name: version.label,
+                description: version.description,
+                avgTime: version.avgTime,
+                difficulty: version.difficulty,
+                ingredients: version.ingredients
+            }
+
+            state.value.versions.push(cleanVersion)
+        })
     }
 }
 
@@ -91,6 +139,39 @@ function removeIngredientRow (ingredientToRemove: String) {
     const ingredientPosition = state.value.ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
 
     state.value.ingredients.splice(ingredientPosition, 1)
+}
+
+// Versions
+function addVersionRow () {
+    accordionVersions.value.push(
+        {
+        label: 'Nombre',
+        advanceDescription: false,
+        description: '',
+        avgTime: '',
+        difficulty: 0,
+        ingredients: [
+            {
+                name: '',
+                quantity: '',
+            }
+        ]
+    }
+    )
+}
+
+function addVersionIngredientRow (versionPosition: number) {
+    accordionVersions.value[versionPosition].ingredients.push({
+        name: '',
+        quantity: '',
+    })
+}
+
+function removeVersionIngredientRow (ingredientToRemove: String, versionPosition: number) {
+
+    const ingredientPosition = accordionVersions.value[versionPosition].ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
+
+    accordionVersions.value[versionPosition].ingredients.splice(ingredientPosition, 1)
 }
 
 // Steps
@@ -135,7 +216,6 @@ function setInitialRecipeData (recipe: types.Recipe) {
     state.value.featuredImg = recipe.featuredImg
     state.value.media = recipe.media
     state.value._id = recipe._id
-    state.value.versions = recipe.versions
     
     if (recipe.ingredients && recipe.ingredients.length > 0) {
         state.value.ingredients = recipe.ingredients
@@ -144,6 +224,28 @@ function setInitialRecipeData (recipe: types.Recipe) {
     if (recipe.steps && recipe.steps.length > 0) {
         state.value.steps = recipe.steps
     }
+
+    if (recipe.versions && recipe.versions.length > 0) {
+        state.value.versions = recipe.versions
+        setAccordionVersionsData(recipe.versions)
+    }
+}
+
+function setAccordionVersionsData (versions: types.Version[]) {
+    accordionVersions.value = []
+    
+    versions.forEach(version => {
+        const formatedVersion = {
+            label: version.name,
+            advanceDescription: false,
+            description: version.description,
+            avgTime: version.avgTime,
+            difficulty: version.difficulty,
+            ingredients: version.ingredients
+        }
+
+        accordionVersions.value.push(formatedVersion)
+    })
 }
 
 onNuxtReady(async () => {
@@ -190,6 +292,22 @@ onNuxtReady(async () => {
                 <UTextarea v-else :rows="8" variant="outline" v-model="state.description" />
             </div>
 
+            <div class="mt-5 grid grid-cols-2 gap-5">
+                <div class="flex justify-center align-center flex-col gap-5 p-5">
+                    <div>
+                        <img class="rounded-full max-h-52" v-if="state.featuredImg" :src="state.featuredImg" />
+                        <UFormGroup name="username" label="Imagen destacada" class="mt-3">
+                            <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
+                        </UFormGroup>
+                    </div>
+                </div>
+                <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
+                    <UTextarea :rows="3" variant="outline" v-model="state.notes" />
+                </UFormGroup>
+            </div>
+
+            <hr class="mt-5 mb-5">
+
             <div class="mt-5 grid grid-cols-2">
                 <div>
                     <div class="flex gap-3 items-center pb-2">
@@ -221,18 +339,52 @@ onNuxtReady(async () => {
                 </div>  
             </div>
 
-            <div class="mt-5 grid grid-cols-2 gap-5">
-                <div class="flex justify-center align-center flex-col gap-5 p-5">
-                    <div>
-                        <img class="rounded-full max-h-52" v-if="state.featuredImg" :src="state.featuredImg" />
-                        <UFormGroup name="username" label="Imagen destacada" class="mt-3">
-                            <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
-                        </UFormGroup>
-                    </div>
+            <hr class="mt-5 mb-5">
+
+            <div class="mt-5">
+                <div class="flex gap-3 items-center pb-2">
+                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="versions">Versiones</label>
+                    <UButton @click="addVersionRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                 </div>
-                <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
-                    <UTextarea :rows="3" variant="outline" v-model="state.notes" />
-                </UFormGroup>
+                <UAccordion :items="accordionVersions">
+                    <template #item="{ item, index }">
+                        <div>
+                            <div class="grid grid-cols-3 gap-5">
+                                <div>
+                                    <UFormGroup name="username" label="Nombre versión" class="mt-3">
+                                        <UInput v-model="item.label" />
+                                    </UFormGroup> 
+                                </div>
+                                <div class="items-end flex">
+                                    <UButton label="Importar original" variant="outline" @click="submit" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-5 mt-5">
+                                <div>
+                                    <div class="flex gap-3 items-center pb-2">
+                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
+                                        <UToggle v-model="item.advanceDescription" on-icon="i-heroicons-check-20-solid" off-icon="i-heroicons-x-mark-20-solid" />
+                                    </div>
+                                    <RichEditor v-if="item.advanceDescription" v-model="item.description" />
+                                    <UTextarea v-else :rows="8" variant="outline" v-model="item.description" />
+                                </div>
+                                <div>
+                                    <div class="flex gap-3 items-center pb-2">
+                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
+                                        <UButton @click="addVersionIngredientRow(index)" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
+                                    </div>
+                                    <div>
+                                        <div class="border flex align-center flex-row gap-3 justify-start p-1 mb-2 rounded-md w-[80%]" v-for="ingredient in item.ingredients">
+                                            <div><UInput icon="i-material-symbols-kitchen-outline" placeholder="Tomates" v-model="ingredient.name" color="gray" variant="outline" /></div>
+                                            <div><UInput icon="i-icon-park-outline-weight" placeholder="200 g" color="gray" v-model="ingredient.quantity" variant="outline" /></div>
+                                            <div class="h-full my-auto"><UButton @click="removeVersionIngredientRow(ingredient.name, index)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </UAccordion>
             </div>
 
             <UButton block class="mt-5" label="Guardar" @click="submit" />

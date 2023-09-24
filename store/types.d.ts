@@ -26,7 +26,7 @@ export type Recipe = {
     difficulty: number
     published: boolean
     onProgress: boolean
-    versions: []
+    versions: Version[]
     featuredImg: string
     media: []
     ingredients: Ingredient[]
@@ -43,6 +43,14 @@ export type Step = {
     description: string
 }
 
+export type Version = {
+    name: string
+    description: string
+    avgTime: string
+    difficulty: number
+    ingredients: Ingredient[]
+}
+
 export type EditRecipeParams = {
     _id: string
     title: string
@@ -52,7 +60,7 @@ export type EditRecipeParams = {
     difficulty: number
     published: boolean
     onProgress: boolean
-    versions: array
+    versions: Version[]
     featuredImg: string
     media: array
     userId?: string
