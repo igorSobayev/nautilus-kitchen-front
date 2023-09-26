@@ -3,7 +3,7 @@ import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../../store/auth'
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
-import RichEditor from './../../../components/custom/RichEditor.vue' // TODO WIP
+import RichEditor from './../../../components/custom/RichEditor.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import types from './../../../store/types'
 
@@ -50,6 +50,9 @@ const state = ref({
         }
     ]
 })
+
+const newFeaturedImage = ref()
+const newFeaturedImagePreview = ref()
 
 const formManagement = ref({
     advanceDescription: false
@@ -121,8 +124,15 @@ function setVersionData () {
     }
 }
 
-async function changeFeaturedImg () {
-    // TODO
+async function changeFeaturedImg (event: any) {
+    const fileObj = event.target.files
+    // @ts-ignore comment
+    newFeaturedImage.value.newAvatar = new FormData() // @ts-ignore comment
+    newFeaturedImage.value.newAvatar.append('file', fileObj[0]) // @ts-ignore comment
+    newFeaturedImage.value.newAvatar.append('path', '/avatar')
+    
+    // Set preview
+    newFeaturedImage.value.newAvatarPreview = URL.createObjectURL(fileObj[0])
 }
 
 
@@ -172,6 +182,15 @@ function removeVersionIngredientRow (ingredientToRemove: String, versionPosition
     const ingredientPosition = accordionVersions.value[versionPosition].ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
 
     accordionVersions.value[versionPosition].ingredients.splice(ingredientPosition, 1)
+}
+
+function removeVersionRow (versionPosition: number) {
+    accordionVersions.value.splice(versionPosition, 1)
+}
+
+function importOriginalInfo (versionPosition: number) {
+    accordionVersions.value[versionPosition].label = state.value.title
+    accordionVersions.value[versionPosition].ingredients = state.value.ingredients
 }
 
 // Steps
@@ -349,6 +368,9 @@ onNuxtReady(async () => {
                 <UAccordion :items="accordionVersions">
                     <template #item="{ item, index }">
                         <div>
+                            <div class="flex justify-end">
+                                <UButton label="Eliminar versión" variant="outline" @click="removeVersionRow(index)" />
+                            </div>
                             <div class="grid grid-cols-3 gap-5">
                                 <div>
                                     <UFormGroup name="username" label="Nombre versión" class="mt-3">
@@ -356,7 +378,7 @@ onNuxtReady(async () => {
                                     </UFormGroup> 
                                 </div>
                                 <div class="items-end flex">
-                                    <UButton label="Importar original" variant="outline" @click="submit" />
+                                    <UButton label="Importar nombre e ingredientes" variant="outline" @click="importOriginalInfo(index)" />
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-5 mt-5">
