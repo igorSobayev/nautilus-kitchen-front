@@ -51,7 +51,7 @@ const state = ref({
     ]
 })
 
-const newFeaturedImage = ref()
+const newFeaturedImage = ref(new FormData())
 const newFeaturedImagePreview = ref()
 
 const formManagement = ref({
@@ -93,7 +93,7 @@ async function submit () {
     recipeStore
         .edit(state.value)
         .then(() => {
-            toast.add({ title: 'Recipe updated successfully' })
+            toast.add({ title: '¡Receta actualizada con éxito!' })
         })
 }
 
@@ -124,15 +124,28 @@ function setVersionData () {
     }
 }
 
-async function changeFeaturedImg (event: any) {
+function changeFeaturedImg (event: any) {
     const fileObj = event.target.files
     // @ts-ignore comment
-    newFeaturedImage.value.newAvatar = new FormData() // @ts-ignore comment
-    newFeaturedImage.value.newAvatar.append('file', fileObj[0]) // @ts-ignore comment
-    newFeaturedImage.value.newAvatar.append('path', '/avatar')
+    newFeaturedImage.value = new FormData() // @ts-ignore comment
+    newFeaturedImage.value.append('file', fileObj[0]) // @ts-ignore comment
+    newFeaturedImage.value.append('path', `/recipes/${state.value._id}/featured-img`)
     
     // Set preview
-    newFeaturedImage.value.newAvatarPreview = URL.createObjectURL(fileObj[0])
+    newFeaturedImagePreview.value = URL.createObjectURL(fileObj[0])
+}
+
+async function replaceFeaturedImage () {
+    const featuredImage = await recipeStore.uploadFeaturedImage(newFeaturedImage.value)
+    state.value.featuredImg = featuredImage.uploadedImage.Location
+    await submit()
+
+    cancelNewFeaturedImage()
+}
+
+function cancelNewFeaturedImage () {
+    newFeaturedImage.value = new FormData()
+    newFeaturedImagePreview.value = ''
 }
 
 
@@ -313,12 +326,15 @@ onNuxtReady(async () => {
 
             <div class="mt-5 grid grid-cols-2 gap-5">
                 <div class="flex justify-center align-center flex-col gap-5 p-5">
-                    <div>
-                        <img class="rounded-full max-h-52" v-if="state.featuredImg" :src="state.featuredImg" />
-                        <UFormGroup name="username" label="Imagen destacada" class="mt-3">
-                            <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
-                        </UFormGroup>
-                    </div>
+                    <UFormGroup name="username" label="Imagen destacada" class="mt-3">
+                        <div class="bg-contain bg-center bg-no-repeat h-52 my-5" v-if="!newFeaturedImagePreview" :style="'background-image: url(' + state.featuredImg + ');'"></div>
+                        <div class="bg-contain bg-center bg-no-repeat h-52 my-5" v-else :style="'background-image: url(' + newFeaturedImagePreview + ');'"></div>
+                        <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
+                        <div v-if="newFeaturedImagePreview" class="flex justify-center mt-5 gap-3">
+                            <UButton label="Actualizar imagen destacada" @click="replaceFeaturedImage" icon="i-heroicons-pencil" size="sm" color="primary" square variant="outline" />
+                            <UButton @click="cancelNewFeaturedImage" icon="i-heroicons-x-mark" size="sm" color="red" square variant="outline" />
+                        </div>
+                    </UFormGroup>
                 </div>
                 <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
                     <UTextarea :rows="3" variant="outline" v-model="state.notes" />
@@ -369,7 +385,7 @@ onNuxtReady(async () => {
                     <template #item="{ item, index }">
                         <div>
                             <div class="flex justify-end">
-                                <UButton label="Eliminar versión" variant="outline" @click="removeVersionRow(index)" />
+                                <UButton label="Eliminar versión" color="red" variant="outline" @click="removeVersionRow(index)" />
                             </div>
                             <div class="grid grid-cols-3 gap-5">
                                 <div>
