@@ -54,6 +54,9 @@ const state = ref({
 const newFeaturedImage = ref(new FormData())
 const newFeaturedImagePreview = ref()
 
+const newAdditionalImages = ref([])
+const newAdditionalImagesPreview = ref([])
+
 const formManagement = ref({
     advanceDescription: false
 })
@@ -148,6 +151,44 @@ function cancelNewFeaturedImage () {
     newFeaturedImagePreview.value = ''
 }
 
+
+async function changeAdditionalImages (event: any) {
+    console.log(event)
+    const fileObj = await event.target.files
+
+    console.log(fileObj.length)
+
+    for (let index = 0; index < fileObj.length; index++) {
+        // @ts-ignore comment
+        newAdditionalImages.value.push(new FormData())
+        // @ts-ignore comment
+        newAdditionalImages.value[index].append('file', fileObj[index])
+        // @ts-ignore comment
+        newAdditionalImages.value[index].append('path', `/recipes/${state.value._id}/media`)
+
+        const imageUrl = URL.createObjectURL(fileObj[index])
+        // @ts-ignore comment
+        newAdditionalImagesPreview.value.push(imageUrl)
+    }
+}
+
+function removeNewAdditionalImage (imageToRemove: number) {
+    newAdditionalImages.value.splice(imageToRemove)
+    newAdditionalImagesPreview.value.splice(imageToRemove, 1)
+}
+
+function cancelNewAdditionalImages () {
+    newAdditionalImages.value = []
+    newAdditionalImagesPreview.value = []
+}
+
+async function replaceAdditionalImages () {
+    // const newAdditionalImages = await recipeStore.uploadFeaturedImage(newFeaturedImage.value)
+    // state.value.featuredImg = featuredImage.uploadedImage.Location
+    // await submit()
+
+    // cancelNewAdditionalImages()
+}
 
 // Ingredients
 function addIngredientRow () {
@@ -336,9 +377,39 @@ onNuxtReady(async () => {
                         </div>
                     </UFormGroup>
                 </div>
-                <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
-                    <UTextarea :rows="3" variant="outline" v-model="state.notes" />
-                </UFormGroup>
+                <div class="grid grid-cols-1">
+                    <div>
+                        <div class="flex align-center items-center gap-4 mb-4">
+                            <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes adicionales</label>
+                            <UInput @change="changeAdditionalImages" :multiple="true" icon="i-heroicons-pencil-square" type="file" />
+                        </div>
+                        <div>
+                            <div v-if="state.media.length > 0" class="mt-4">
+                                <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes actuales</label>
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="bg-contain bg-center bg-no-repeat h-12 border my-5" v-for="media in state.media" :style="'background-image: url(' + media + ');'"></div>
+                                    <!-- TODO manage images -->
+                                </div>
+                            </div>
+                            <div v-if="newAdditionalImagesPreview.length > 0" class="mt-4">
+                                <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes nuevas</label>
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="preview img relative" v-for="(preview, index) in newAdditionalImagesPreview">
+                                        <div class="bg-contain bg-center bg-no-repeat h-12 border my-5" :style="'background-image: url(' + preview + ');'"></div>
+                                        <UButton @click="removeNewAdditionalImage(index)" icon="i-heroicons-x-circle" size="sm" class="absolute top-3 right-[-8px] bg-white" color="primary" :padded="false" variant="ghost" />
+                                    </div>
+                                </div>
+                                <div v-if="newAdditionalImagesPreview.length > 0" class="flex justify-center mt-5 gap-3">
+                                    <UButton label="Actualizar imagenes" @click="replaceAdditionalImages" icon="i-heroicons-pencil" size="sm" color="primary" square variant="outline" />
+                                    <UButton @click="cancelNewAdditionalImages" icon="i-heroicons-x-mark" size="sm" color="red" square variant="outline" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
+                        <UTextarea :rows="3" variant="outline" v-model="state.notes" />
+                    </UFormGroup>
+                </div>
             </div>
 
             <hr class="mt-5 mb-5">
