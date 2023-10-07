@@ -53,7 +53,7 @@ export const useRecipeStore = defineStore('recipe', () => {
 
   async function uploadFeaturedImage (image: FormData): Promise<types.ImgObject> {
     const userId = authStore.user.id
-    
+
     const newImg = await $fetch(`${baseUrl}/user/upload-file/${userId}`, {
       method: 'POST',
       body: image,
@@ -63,11 +63,24 @@ export const useRecipeStore = defineStore('recipe', () => {
     return newImg
   }
 
+  async function uploadAdditionalImages (images: FormData): Promise<types.ImagesObject> {
+    const userId = authStore.user.id
+
+    const newImages = await $fetch(`${baseUrl}/user/upload-multiple-files/${userId}`, {
+      method: 'POST',
+      body: images,
+      credentials: 'include',
+    }) as types.ImagesObject
+
+    return newImages
+  }
+
   return {
     ingredients,
     createClean,
     loadRecipeData,
     edit,
     uploadFeaturedImage,
+    uploadAdditionalImages,
   }
 })

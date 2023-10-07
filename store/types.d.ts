@@ -78,3 +78,12 @@ export type ImgObject = {
     }
 }
 
+export type ImagesObject = {
+    uploadedImages: [{
+        ETag: string
+        ServerSideEncryption: string
+        Location: string
+        Bucket: string
+        Key: string
+    }]
+}

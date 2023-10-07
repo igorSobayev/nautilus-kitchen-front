@@ -36,7 +36,7 @@ const state = ref({
         }
     ],
     featuredImg: '',
-    media: [],
+    media: [] as string[],
     ingredients: [
         {
             name: '',
@@ -54,8 +54,9 @@ const state = ref({
 const newFeaturedImage = ref(new FormData())
 const newFeaturedImagePreview = ref()
 
-const newAdditionalImages = ref([])
+const newAdditionalImages = ref(new FormData())
 const newAdditionalImagesPreview = ref([])
+const rawAdditionalImages = ref()
 
 const formManagement = ref({
     advanceDescription: false
@@ -153,19 +154,11 @@ function cancelNewFeaturedImage () {
 
 
 async function changeAdditionalImages (event: any) {
-    console.log(event)
+
+    rawAdditionalImages.value = Array.from(event.target.files)
     const fileObj = await event.target.files
 
-    console.log(fileObj.length)
-
     for (let index = 0; index < fileObj.length; index++) {
-        // @ts-ignore comment
-        newAdditionalImages.value.push(new FormData())
-        // @ts-ignore comment
-        newAdditionalImages.value[index].append('file', fileObj[index])
-        // @ts-ignore comment
-        newAdditionalImages.value[index].append('path', `/recipes/${state.value._id}/media`)
-
         const imageUrl = URL.createObjectURL(fileObj[index])
         // @ts-ignore comment
         newAdditionalImagesPreview.value.push(imageUrl)
@@ -173,21 +166,31 @@ async function changeAdditionalImages (event: any) {
 }
 
 function removeNewAdditionalImage (imageToRemove: number) {
-    newAdditionalImages.value.splice(imageToRemove)
+    rawAdditionalImages.value.splice(imageToRemove, 1)
     newAdditionalImagesPreview.value.splice(imageToRemove, 1)
 }
 
 function cancelNewAdditionalImages () {
-    newAdditionalImages.value = []
+    newAdditionalImages.value = new FormData()
     newAdditionalImagesPreview.value = []
 }
 
 async function replaceAdditionalImages () {
-    // const newAdditionalImages = await recipeStore.uploadFeaturedImage(newFeaturedImage.value)
-    // state.value.featuredImg = featuredImage.uploadedImage.Location
-    // await submit()
+    // Add the path
+    newAdditionalImages.value.append('path', `/recipes/${state.value._id}/media`)
 
-    // cancelNewAdditionalImages()
+    for (let index = 0; index < rawAdditionalImages.value.length; index++) {
+        // @ts-ignore comment
+        newAdditionalImages.value.append('file[]', rawAdditionalImages.value[index])
+    }
+
+    const newImages = await recipeStore.uploadAdditionalImages(newAdditionalImages.value)
+    const additionalImages = newImages.uploadedImages.map(image => image.Location)
+
+    state.value.media = additionalImages as string[]
+    await submit()
+
+    cancelNewAdditionalImages()
 }
 
 // Ingredients
