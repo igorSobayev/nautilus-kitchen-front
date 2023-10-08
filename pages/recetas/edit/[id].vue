@@ -187,7 +187,7 @@ async function replaceAdditionalImages () {
     const newImages = await recipeStore.uploadAdditionalImages(newAdditionalImages.value)
     const additionalImages = newImages.uploadedImages.map(image => image.Location)
 
-    state.value.media = additionalImages as string[]
+    state.value.media.push(...additionalImages)
     await submit()
 
     cancelNewAdditionalImages()
