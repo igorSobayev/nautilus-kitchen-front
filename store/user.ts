@@ -42,9 +42,20 @@ export const useUserStore = defineStore('user', () => {
     return newImg
   }
 
+  async function deleteFiles (filesRoutes: string[]): Promise<void> {
+    const userId = authStore.user.id
+
+    await $fetch(`${baseUrl}/user/delete-files/${userId}`, {
+      method: 'POST',
+      body: { filesRoutes },
+      credentials: 'include',
+    })
+  }
+
 
   return {
     loadUserData,
     edit,
+    deleteFiles,
   }
 })

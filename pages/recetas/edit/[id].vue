@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxthq/ui/dist/runtime/types'
-import { useAuthStore } from '../../../store/auth'
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
+import { useUserStore } from '../../../store/user'
 import RichEditor from './../../../components/custom/RichEditor.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import types from './../../../store/types'
 
 const toast = useToast()
-const authStore = useAuthStore()
+const userStore = useUserStore()
 const recipeStore = useRecipeStore()
 const route = useRoute()
 
@@ -57,6 +57,7 @@ const newFeaturedImagePreview = ref()
 const newAdditionalImages = ref(new FormData())
 const newAdditionalImagesPreview = ref([])
 const rawAdditionalImages = ref()
+const additionalImagesToDelete = ref([] as string[])
 
 const formManagement = ref({
     advanceDescription: false
@@ -93,6 +94,8 @@ async function submit () {
     setVersionData()
 
     cleanEmptyElements()
+
+    deleteAdditionalImages()
 
     recipeStore
         .edit(state.value)
@@ -170,6 +173,11 @@ function removeNewAdditionalImage (imageToRemove: number) {
     newAdditionalImagesPreview.value.splice(imageToRemove, 1)
 }
 
+function removeAdditionalImage (imageToRemove: number) {
+    const removedImage = state.value.media.splice(imageToRemove, 1)
+    additionalImagesToDelete.value.push(...removedImage)
+}
+
 function cancelNewAdditionalImages () {
     newAdditionalImages.value = new FormData()
     newAdditionalImagesPreview.value = []
@@ -191,6 +199,13 @@ async function replaceAdditionalImages () {
     await submit()
 
     cancelNewAdditionalImages()
+}
+
+/**
+ * Delete the images, we dont need to wait for this and is done asyncronously
+ */
+function deleteAdditionalImages () {
+    userStore.deleteFiles(additionalImagesToDelete.value)
 }
 
 // Ingredients
@@ -390,8 +405,10 @@ onNuxtReady(async () => {
                             <div v-if="state.media.length > 0" class="mt-4">
                                 <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes actuales</label>
                                 <div class="grid grid-cols-4 gap-4">
-                                    <div class="bg-contain bg-center bg-no-repeat h-12 border my-5" v-for="media in state.media" :style="'background-image: url(' + media + ');'"></div>
-                                    <!-- TODO manage images -->
+                                    <div class="preview img relative" v-for="(media, index) in state.media">
+                                        <div class="bg-contain bg-center bg-no-repeat h-12 border my-5" :style="'background-image: url(' + media + ');'"></div>
+                                        <UButton @click="removeAdditionalImage(index)" icon="i-heroicons-x-circle" size="sm" class="absolute top-3 right-[-8px] bg-white" color="primary" :padded="false" variant="ghost" />
+                                    </div>
                                 </div>
                             </div>
                             <div v-if="newAdditionalImagesPreview.length > 0" class="mt-4">
