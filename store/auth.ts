@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 interface loginForm {
-  username: string
+  email: string
   password: string
 }
 

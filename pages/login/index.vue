@@ -7,13 +7,13 @@ const authStore = useAuthStore()
 const router = useRouter()
 
 const state = ref({
-  username: '',
+  email: '',
   password: ''
 })
 
 const validate = (state: any): FormError[] => {
   const errors = []
-  if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
+  if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
   if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
   return errors
 }
@@ -38,8 +38,8 @@ async function submit () {
             :state="state"
             @submit.prevent="submit"
             >
-            <UFormGroup label="Nombre de usuario" name="username">
-                <UInput type="text" v-model="state.username" />
+            <UFormGroup label="Email" name="email">
+                <UInput type="email" name="email" v-model="state.email" />
             </UFormGroup>
         
             <UFormGroup label="Password" name="password" class="mt-4">
