@@ -126,13 +126,11 @@ onNuxtReady(async () => {
                 <UButton @click="changePassword" icon="i-heroicons-key" size="md" label="Cambiar contraseña" color="gray" class="ml-3" />
             </div>
             <div class="grid grid-cols-3">
-                <div class="flex justify-center align-center flex-col gap-5 p-5">
-                    <div v-if="!state.editing" class="flex justify-center">
-                        <img :src="state.avatar" class="rounded-full max-h-52" />
-                    </div>
-                    <div v-if="state.editing">
-                        <img class="rounded-full max-h-52" v-if="state.newAvatarPreview" :src="state.newAvatarPreview" />
-                        <img class="rounded-full max-h-52" v-else :src="state.avatar" />
+                <div class="flex justify-center align-center flex-col items-center gap-5 p-5">
+                    <div v-if="!state.editing" :style="'background-image: url(' + state.avatar + ');'" class="bg-cover bg-center bg-no-repeat rounded-full h-36 w-36"></div>
+                    <div v-if="state.editing" class="flex flex-col align-center items-center justify-center gap-3">
+                        <div v-if="state.newAvatarPreview" :style="'background-image: url(' + state.newAvatarPreview + ');'" class="bg-cover bg-center bg-no-repeat rounded-full h-36 w-36"></div>
+                        <div v-else :style="'background-image: url(' + state.avatar + ');'" class="bg-cover bg-center bg-no-repeat rounded-full h-36 w-36"></div>
                         <UInput @change="changedAvatar" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
                         <span class="text-slate-800 text-xs">Recomendado 256 x 256</span>
                     </div>
