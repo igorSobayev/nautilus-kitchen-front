@@ -49,7 +49,7 @@ export const useAuthStore = defineStore({
         .catch(error => { throw error })
     },
 
-    logout() {
+    async logout() {
       const cookieToken = useCookie('isLogged')
       const tokenCookie = useCookie('token')
       localStorage.removeItem('user')
@@ -60,6 +60,18 @@ export const useAuthStore = defineStore({
       this.user = {} as user
       this.token = null
       this.isLoggedIn = false
+
+      await $fetch(`${this.baseUrl}/auth/signout`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+    },
+
+    async redirectLogin() {
+      const router = useRouter()
+
+      await this.logout()
+      router.push('/login')
     },
 
     manageLoginSession() {

@@ -7,10 +7,12 @@ export const useUserStore = defineStore('user', () => {
 
   const baseUrl = useRuntimeConfig().public.API_BASE_URL
 
-  async function loadUserData (): Promise<types.User> {
-    const user: types.User = await $fetch(`${baseUrl}/user/${authStore.user.id}`, {
+  async function loadUserData (): Promise<types.User | unknown> {
+    const user: types.User | unknown = await $fetch(`${baseUrl}/user/${authStore.user.id}`, {
       method: 'GET',
       credentials: 'include',
+    }).catch(async () => {
+      await authStore.redirectLogin()
     })
 
     return user
