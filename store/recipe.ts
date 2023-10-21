@@ -6,6 +6,8 @@ import { ingredients } from './../utils/shared.js'
 export const useRecipeStore = defineStore('recipe', () => {
   const authStore = useAuthStore()
 
+  const router = useRouter()
+
   const baseUrl = useRuntimeConfig().public.API_BASE_URL
 
   async function loadWipRecipes () {
@@ -19,7 +21,7 @@ export const useRecipeStore = defineStore('recipe', () => {
     return user
   }
 
-  async function createClean () {
+  async function createClean (): Promise<types.Recipe> {
     const userId = authStore.user.id
 
     return $fetch(`${baseUrl}/recipes/create-clean`, {
@@ -29,6 +31,11 @@ export const useRecipeStore = defineStore('recipe', () => {
       },
       credentials: 'include',
     })
+  }
+
+  async function addRecipe () {
+    const newRecipe = await createClean()
+    router.push(`/recetas/edit/${newRecipe._id}`)
   }
 
   async function loadRecipeData (recipeId: String): Promise<types.Recipe> {
@@ -82,5 +89,6 @@ export const useRecipeStore = defineStore('recipe', () => {
     edit,
     uploadFeaturedImage,
     uploadAdditionalImages,
+    addRecipe,
   }
 })

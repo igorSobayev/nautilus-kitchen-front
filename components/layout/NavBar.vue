@@ -30,7 +30,6 @@ import ProfileNav from './../custom/ProfileNav.vue'
 import { useAuthStore } from './../../store/auth'
 import { useRecipeStore } from '~/store/recipe'
 
-const router = useRouter()
 const recipeStore = useRecipeStore()
 const authStore = useAuthStore()
 
@@ -52,8 +51,7 @@ onMounted(() => {
 // On click to add new recipe, we create one clean in the backend and push the route to edit it, doing this we can
 // edit the recipe all the time
 async function addRecipe () {
-    const newRecipe = await recipeStore.createClean()
-    router.push(`/recetas/edit/${newRecipe._id}`)
+    await recipeStore.addRecipe()
 }
 </script>
   
