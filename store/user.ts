@@ -18,6 +18,15 @@ export const useUserStore = defineStore('user', () => {
     return user
   }
 
+  async function loadUserRecipes (): Promise<types.Recipe[] | unknown> {
+    const userRecipes: types.Recipe[] | unknown = await $fetch(`${baseUrl}/user/all-recipes/${authStore.user.id}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+
+    return userRecipes
+  }
+
   async function  edit (userData: types.EditUserParams) {
     let avatarUpdated
 
@@ -59,5 +68,6 @@ export const useUserStore = defineStore('user', () => {
     loadUserData,
     edit,
     deleteFiles,
+    loadUserRecipes,
   }
 })

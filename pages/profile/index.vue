@@ -1,4 +1,6 @@
-<script setup lang="ts">
+<script setup>
+import { useUserStore } from '../../store/user';
+
 const items = [
     {
         label: 'Recetas en curso',
@@ -17,6 +19,15 @@ const items = [
         content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
     }
 ]
+
+const userStore = useUserStore()
+
+const recipes = ref([])
+
+onNuxtReady(async () => {
+    recipes.value = await userStore.loadUserRecipes()
+    console.log(recipes)
+})
 </script>
 
 <template>
@@ -57,12 +68,14 @@ const items = [
                     </div>
                 </div>
                 <div v-if="item.key === 'recipes-wip'">
-                    <div class="flex flex-col w-full bg-white">
-                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center border border-gray">
-                            <div class="flex justify-center"><img src="https://www.cocinatis.com/archivos/202207/kombucha.jpg" class="rounded-md max-h-16" /></div>
-                            <div class="flex justify-center">Kombucha de jengibre y limón</div>
-                            <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="5" /></div>
-                            <div class="flex justify-center"><UButton icon="i-heroicons-pencil-square" size="sm" color="primary" square variant="solid">Editar</UButton></div>
+                    <div v-for="recipe in recipes" :key="recipe._id" class="flex flex-col w-full bg-white gap p-2 gap-2">
+                        <div class="w-full grid grid-cols-4 min-h-24 p-2 items-center rounded-sm border border-gray">
+                            <div class="flex justify-center"><img :src="recipe.featuredImg" class="rounded-md max-h-16" /></div>
+                            <div class="flex justify-center">{{ recipe.title ?? '-'  }}</div>
+                            <div class="flex justify-center">
+                                <NuxtRating :read-only="true" ratingContent="🍴" activeColor="#6366f1" :ratingValue="recipe.difficulty ?? 0" />
+                            </div>
+                            <div class="flex justify-center"><UButton icon="i-heroicons-pencil-square" :to="`/recetas/edit/${recipe._id}`" size="sm" color="primary" square variant="solid">Editar</UButton></div>
                         </div>
                     </div>
                 </div>
