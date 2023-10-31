@@ -20,10 +20,80 @@ const items = [
     }
 ]
 
+const optionsUnpublishedItems = [
+[
+    {
+        label: 'Preview Recipe',
+        action: 'previewRecipe',
+        icon: 'i-heroicons-eye',
+    },
+    {
+        label: 'Publish Recipe',
+        action: 'publishRecipe',
+        icon: 'i-heroicons-arrow-up-on-square-stack',
+    },
+    {
+        label: 'Delete Recipe',
+        action: 'deleteRecipe',
+        icon: 'i-heroicons-archive-box-x-mark',
+    },
+]
+]
+
+const optionsPublishedItems = [
+[
+    {
+        label: 'Preview Recipe',
+        action: 'previewRecipe',
+        icon: 'i-heroicons-eye',
+    },
+    {
+        label: 'Unpublish Recipe',
+        action: 'unpublishRecipe',
+        icon: 'i-heroicons-arrow-down-on-square-stack',
+    },
+    {
+        label: 'Delete Recipe',
+        action: 'deleteRecipe',
+        icon: 'i-heroicons-archive-box-x-mark',
+    },
+]
+]
+
 const userStore = useUserStore()
 
 const recipes = ref([])
 const publishedRecipes = ref([])
+
+async function handleOptionsClick (action, recipeId) {
+    switch(action) {
+        case 'previewRecipe': 
+            return previewRecipe(recipeId)
+        case 'publishRecipe': 
+            return publishRecipe(recipeId)
+        case 'unpublishRecipe': 
+            return unpublishRecipe(recipeId)
+        case 'deleteRecipe': 
+            return deleteRecipe(recipeId)
+        default:
+            break
+    }
+}
+async function previewRecipe (recipeId) {
+    console.log("previewRecipe", recipeId)
+}
+
+async function publishRecipe (recipeId) {
+    console.log("publishRecipe", recipeId)
+}
+
+async function unpublishRecipe (recipeId) {
+    console.log("unpublishRecipe", recipeId)
+}
+
+async function deleteRecipe (recipeId) {
+    console.log("deleteRecipe", recipeId)
+}
 
 onNuxtReady(async () => {
     recipes.value = await userStore.loadUserRecipes()
@@ -79,7 +149,19 @@ onNuxtReady(async () => {
                             <div class="flex justify-center">
                                 <NuxtRating :read-only="true" ratingContent="🍴" activeColor="#6366f1" :ratingValue="recipe.difficulty ?? 0" />
                             </div>
-                            <div class="flex justify-center"><UButton icon="i-heroicons-pencil-square" :to="`/recetas/edit/${recipe._id}`" size="sm" color="primary" square variant="solid">Editar</UButton></div>
+                            <div class="flex justify-center">
+                                <UButton icon="i-heroicons-pencil-square" :to="`/recetas/edit/${recipe._id}`" size="sm" color="primary" square variant="solid">Editar</UButton>
+                                <UDropdown :items="optionsUnpublishedItems" :popper="{ placement: 'bottom-start' }">
+                                    <UButton color="white" class="ml-2" trailing-icon="i-heroicons-chevron-down-20-solid" />
+
+                                    <template #item="{ item }">
+                                        <div class="flex justify-between w-full" @click="handleOptionsClick(item.action, recipe._id)">
+                                            <span class="truncate">{{ item.label }}</span>
+                                            <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
+                                        </div>
+                                    </template>
+                                </UDropdown>
+                            </div>
                         </div>
                     </div>
                 </div>
