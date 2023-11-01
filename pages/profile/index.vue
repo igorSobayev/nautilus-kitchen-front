@@ -103,7 +103,9 @@ async function unpublishRecipe (recipeId) {
 }
 
 async function deleteRecipe (recipeId) {
-    console.log("deleteRecipe", recipeId)
+    await recipeStore.deleteRecipe(recipeId)
+    await loadRecipesData()
+    toast.add({ title: '¡Receta eliminada!' })
 }
 
 onNuxtReady(async () => {

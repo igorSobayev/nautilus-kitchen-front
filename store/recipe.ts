@@ -48,6 +48,16 @@ export const useRecipeStore = defineStore('recipe', () => {
     })
   }
 
+  async function deleteRecipe (recipeId: string) {
+    const userId = authStore.user.id
+
+    return $fetch(`${baseUrl}/recipes/delete/${recipeId}`, {
+      method: 'PUT',
+      body: { userId: userId },
+      credentials: 'include',
+    })
+  }
+
   async function loadRecipeData (recipeId: String): Promise<types.Recipe> {
     return $fetch(`${baseUrl}/recipes/${recipeId}`, {
       method: 'GET',
@@ -101,5 +111,6 @@ export const useRecipeStore = defineStore('recipe', () => {
     uploadAdditionalImages,
     addRecipe,
     publishRecipe,
+    deleteRecipe,
   }
 })
