@@ -24,6 +24,11 @@ const items = [
 const optionsUnpublishedItems = [
 [
     {
+        label: 'Edit Recipe',
+        action: 'editRecipe',
+        icon: 'i-heroicons-pencil-square',
+    },
+    {
         label: 'Preview Recipe',
         action: 'previewRecipe',
         icon: 'i-heroicons-eye',
@@ -43,6 +48,11 @@ const optionsUnpublishedItems = [
 
 const optionsPublishedItems = [
 [
+    {
+        label: 'Edit Recipe',
+        action: 'editRecipe',
+        icon: 'i-heroicons-pencil-square',
+    },
     {
         label: 'Preview Recipe',
         action: 'previewRecipe',
@@ -64,6 +74,7 @@ const optionsPublishedItems = [
 const userStore = useUserStore()
 const recipeStore = useRecipeStore()
 const toast = useToast()
+const router = useRouter()
 
 const recipes = ref([])
 const publishedRecipes = ref([])
@@ -76,6 +87,8 @@ async function loadRecipesData () {
 
 async function handleOptionsClick (action, recipeId) {
     switch(action) {
+        case 'editRecipe':
+            return editRecipe(recipeId)
         case 'previewRecipe': 
             return previewRecipe(recipeId)
         case 'publishRecipe': 
@@ -90,6 +103,10 @@ async function handleOptionsClick (action, recipeId) {
 }
 async function previewRecipe (recipeId) {
     console.log("previewRecipe", recipeId)
+}
+
+function editRecipe (recipeId) {
+    router.push(`/recetas/edit/${recipeId}`)
 }
 
 async function publishRecipe (recipeId) {
@@ -149,8 +166,6 @@ onNuxtReady(async () => {
                             <div class="flex justify-center">{{ recipe.title ?? '-'  }}</div>
                             <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="recipe.rating ?? 0" /></div>
                             <div class="flex justify-center">
-                                <!-- TODO pending recipe page -->
-                                <UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton> 
                                 <UDropdown :items="optionsPublishedItems" :popper="{ placement: 'bottom-start' }">
                                     <UButton color="white" class="ml-2" trailing-icon="i-heroicons-chevron-down-20-solid" />
 
@@ -174,7 +189,6 @@ onNuxtReady(async () => {
                                 <NuxtRating :read-only="true" ratingContent="🍴" activeColor="#6366f1" :ratingValue="recipe.difficulty ?? 0" />
                             </div>
                             <div class="flex justify-center">
-                                <UButton icon="i-heroicons-pencil-square" :to="`/recetas/edit/${recipe._id}`" size="sm" color="primary" square variant="solid">Editar</UButton>
                                 <UDropdown :items="optionsUnpublishedItems" :popper="{ placement: 'bottom-start' }">
                                     <UButton color="white" class="ml-2" trailing-icon="i-heroicons-chevron-down-20-solid" />
 
