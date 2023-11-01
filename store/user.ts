@@ -27,6 +27,15 @@ export const useUserStore = defineStore('user', () => {
     return userRecipes
   }
 
+  async function loadUserWipRecipes (): Promise<types.Recipe[] | unknown> {
+    const userRecipes: types.Recipe[] | unknown = await $fetch(`${baseUrl}/user/wip-recipes/${authStore.user.id}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+
+    return userRecipes
+  }
+
   async function loadUserPublishedRecipes (): Promise<types.Recipe[] | unknown> {
     const userPublishedRecipes: types.Recipe[] | unknown = await $fetch(`${baseUrl}/user/published-recipes/${authStore.user.id}`, {
       method: 'GET',
@@ -79,5 +88,6 @@ export const useUserStore = defineStore('user', () => {
     deleteFiles,
     loadUserRecipes,
     loadUserPublishedRecipes,
+    loadUserWipRecipes,
   }
 })

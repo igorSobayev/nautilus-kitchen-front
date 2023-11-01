@@ -1,5 +1,6 @@
 <script setup>
-import { useUserStore } from '../../store/user';
+import { useUserStore } from '../../store/user'
+import { useRecipeStore } from '../../store/recipe'
 
 const items = [
     {
@@ -61,9 +62,17 @@ const optionsPublishedItems = [
 ]
 
 const userStore = useUserStore()
+const recipeStore = useRecipeStore()
+const toast = useToast()
 
 const recipes = ref([])
 const publishedRecipes = ref([])
+
+
+async function loadRecipesData () {
+    recipes.value = await userStore.loadUserWipRecipes()
+    publishedRecipes.value = await userStore.loadUserPublishedRecipes()
+}
 
 async function handleOptionsClick (action, recipeId) {
     switch(action) {
@@ -84,7 +93,9 @@ async function previewRecipe (recipeId) {
 }
 
 async function publishRecipe (recipeId) {
-    console.log("publishRecipe", recipeId)
+    await recipeStore.publishRecipe(recipeId)
+    await loadRecipesData()
+    toast.add({ title: '¡Receta publicada!' })
 }
 
 async function unpublishRecipe (recipeId) {
@@ -96,8 +107,7 @@ async function deleteRecipe (recipeId) {
 }
 
 onNuxtReady(async () => {
-    recipes.value = await userStore.loadUserRecipes()
-    publishedRecipes.value = await userStore.loadUserPublishedRecipes()
+    await loadRecipesData()
 })
 </script>
 

@@ -38,6 +38,16 @@ export const useRecipeStore = defineStore('recipe', () => {
     router.push(`/recetas/edit/${newRecipe._id}`)
   }
 
+  async function publishRecipe (recipeId: string) {
+    const userId = authStore.user.id
+
+    return $fetch(`${baseUrl}/recipes/publish/${recipeId}`, {
+      method: 'PUT',
+      body: { userId: userId },
+      credentials: 'include',
+    })
+  }
+
   async function loadRecipeData (recipeId: String): Promise<types.Recipe> {
     return $fetch(`${baseUrl}/recipes/${recipeId}`, {
       method: 'GET',
@@ -90,5 +100,6 @@ export const useRecipeStore = defineStore('recipe', () => {
     uploadFeaturedImage,
     uploadAdditionalImages,
     addRecipe,
+    publishRecipe,
   }
 })
