@@ -99,7 +99,9 @@ async function publishRecipe (recipeId) {
 }
 
 async function unpublishRecipe (recipeId) {
-    console.log("unpublishRecipe", recipeId)
+    await recipeStore.unpublishRecipe(recipeId)
+    await loadRecipesData()
+    toast.add({ title: '¡Receta despublicada!' })
 }
 
 async function deleteRecipe (recipeId) {
@@ -149,6 +151,16 @@ onNuxtReady(async () => {
                             <div class="flex justify-center">
                                 <!-- TODO pending recipe page -->
                                 <UButton icon="i-heroicons-eye" size="sm" color="primary" square variant="solid">Ver</UButton> 
+                                <UDropdown :items="optionsPublishedItems" :popper="{ placement: 'bottom-start' }">
+                                    <UButton color="white" class="ml-2" trailing-icon="i-heroicons-chevron-down-20-solid" />
+
+                                    <template #item="{ item }">
+                                        <div class="flex justify-between w-full" @click="handleOptionsClick(item.action, recipe._id)">
+                                            <span class="truncate">{{ item.label }}</span>
+                                            <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
+                                        </div>
+                                    </template>
+                                </UDropdown>
                             </div>
                         </div>
                     </div>

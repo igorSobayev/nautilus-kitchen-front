@@ -48,6 +48,16 @@ export const useRecipeStore = defineStore('recipe', () => {
     })
   }
 
+  async function unpublishRecipe (recipeId: string) {
+    const userId = authStore.user.id
+
+    return $fetch(`${baseUrl}/recipes/unpublish/${recipeId}`, {
+      method: 'PUT',
+      body: { userId: userId },
+      credentials: 'include',
+    })
+  }
+
   async function deleteRecipe (recipeId: string) {
     const userId = authStore.user.id
 
@@ -112,5 +122,6 @@ export const useRecipeStore = defineStore('recipe', () => {
     addRecipe,
     publishRecipe,
     deleteRecipe,
+    unpublishRecipe,
   }
 })
