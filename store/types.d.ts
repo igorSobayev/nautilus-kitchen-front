@@ -6,6 +6,9 @@ export type User = {
     surname: string
     description: string
     id: string
+    creationDate: date
+    avgRating: number
+    recipesNumber: string
 }
   
 export type EditUserParams = {

@@ -3,6 +3,7 @@ import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import { useUserStore } from './../../store/user'
 import { onNuxtReady, ref } from '../../.nuxt/imports'
+import { User } from '../../store/types';
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
@@ -92,7 +93,7 @@ async function updatedSuccesfully () {
 }
 
 async function loadUserData () {
-    const user = await userStore.loadUserData()
+    const user = await userStore.loadUserData() as User
     originalValues.value.name = user.name
     originalValues.value.surname = user.surname
     originalValues.value.description = user.description

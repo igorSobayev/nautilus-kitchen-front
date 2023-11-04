@@ -1,6 +1,7 @@
 <script setup>
 import { useUserStore } from '../../store/user'
-import NKRecipesOptionsDropdown from '~/components/custom/NKRecipesOptionsDropdown.vue';
+import NKRecipesOptionsDropdown from '~/components/custom/NKRecipesOptionsDropdown.vue'
+import NKUserProfileInfo from '~/components/custom/NKUserProfileInfo.vue'
 
 const items = [
     {
@@ -26,7 +27,6 @@ const userStore = useUserStore()
 const recipes = ref([])
 const publishedRecipes = ref([])
 
-
 async function loadRecipesData () {
     recipes.value = await userStore.loadUserWipRecipes()
     publishedRecipes.value = await userStore.loadUserPublishedRecipes()
@@ -40,20 +40,7 @@ onNuxtReady(async () => {
 <template>
     <div class="flex justify-center flex-col gap-5 pt-5">
         <!-- Rectangulo con info del user -->
-        <div class="bg-white grid grid-cols-1  xl:grid-cols-3 w-full h-auto py-14 px-6">
-            <div class="flex justify-center align-center">
-                <img src="https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg" class="rounded-full max-h-64" />
-            </div>
-            <div class="flex flex-col gap-4 xl:border-r border-[#e5e7eb]">
-                <h2 class="text-4xl mb-4">Gordom Ramsay</h2>
-                <div class="flex items-center gap-3"><span class="">Recetas</span> <UBadge color="primary" variant="solid" label="33" /></div>
-                <div>Valoracón media: <span class="font-bold">4/5</span></div>
-                <div>Activo desde: <span class="font-bold">2 de septiembre del 2023</span></div>
-            </div>
-            <div class="flex border-t border-[#e5e7eb] xl:border-t-0 xl:m5-0 xl:pt-0 xl:pl-5 mt-6 pt-6">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.
-            </div>
-        </div>
+        <NKUserProfileInfo />
         <!-- Tabs con otras partes interesantes de momento recetas y comentarios destacados -->
         <UTabs :items="items" class="w-full mt-5">
             <template #default="{ item, index, selected }">
