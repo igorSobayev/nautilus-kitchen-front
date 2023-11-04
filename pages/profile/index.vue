@@ -1,6 +1,6 @@
 <script setup>
 import { useUserStore } from '../../store/user'
-import RecipesOptionsDropdown from '~/components/custom/RecipesOptionsDropdown.vue';
+import NKRecipesOptionsDropdown from '~/components/custom/NKRecipesOptionsDropdown.vue';
 
 const items = [
     {
@@ -71,7 +71,7 @@ onNuxtReady(async () => {
                             <div class="flex justify-center">{{ recipe.title ?? '-'  }}</div>
                             <div class="flex justify-center"><NuxtRating :read-only="true" :ratingValue="recipe.rating ?? 0" /></div>
                             <div class="flex justify-center">
-                                <RecipesOptionsDropdown :published-options="true" :recipe-id="recipe._id" @action-done="loadRecipesData" />
+                                <NKRecipesOptionsDropdown :published-options="true" :recipe-id="recipe._id" @action-done="loadRecipesData" />
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@ onNuxtReady(async () => {
                                 <NuxtRating :read-only="true" ratingContent="🍴" activeColor="#6366f1" :ratingValue="recipe.difficulty ?? 0" />
                             </div>
                             <div class="flex justify-center">
-                                <RecipesOptionsDropdown :published-options="false" :recipe-id="recipe._id" @action-done="loadRecipesData" />
+                                <NKRecipesOptionsDropdown :published-options="false" :recipe-id="recipe._id" @action-done="loadRecipesData" />
                             </div>
                         </div>
                     </div>

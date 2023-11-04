@@ -17,7 +17,7 @@
                     <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">Registrarse</span></UButton>
                 </span>
                 <span v-else class="flex items-center gap-6">
-                    <ProfileNav />
+                    <NKProfileNav />
                 </span>
                 <UIcon @click="onToggleMenu" class="text-3xl cursor-pointer md:hidden" :name="menuOpenned ? 'i-material-symbols-close' : 'i-material-symbols-menu'" />
             </div>
@@ -26,7 +26,7 @@
   </template>
 
 <script setup>
-import ProfileNav from './../custom/ProfileNav.vue'
+import NKProfileNav from './../custom/NKProfileNav.vue'
 import { useAuthStore } from './../../store/auth'
 import { useRecipeStore } from '~/store/recipe'
 

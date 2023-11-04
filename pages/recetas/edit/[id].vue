@@ -3,7 +3,7 @@ import type { FormError } from '@nuxthq/ui/dist/runtime/types'
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import { useUserStore } from '../../../store/user'
-import RichEditor from './../../../components/custom/RichEditor.vue'
+import NKRichEditor from './../../../components/custom/NKRichEditor.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import types from './../../../store/types'
 
@@ -379,7 +379,7 @@ onNuxtReady(async () => {
                     <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
                     <UToggle v-model="formManagement.advanceDescription" on-icon="i-heroicons-check-20-solid" off-icon="i-heroicons-x-mark-20-solid" />
                 </div>
-                <RichEditor v-if="formManagement.advanceDescription" v-model="state.description" />
+                <NKRichEditor v-if="formManagement.advanceDescription" v-model="state.description" />
                 <UTextarea v-else :rows="8" variant="outline" v-model="state.description" />
             </div>
 
@@ -494,7 +494,7 @@ onNuxtReady(async () => {
                                         <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
                                         <UToggle v-model="item.advanceDescription" on-icon="i-heroicons-check-20-solid" off-icon="i-heroicons-x-mark-20-solid" />
                                     </div>
-                                    <RichEditor v-if="item.advanceDescription" v-model="item.description" />
+                                    <NKRichEditor v-if="item.advanceDescription" v-model="item.description" />
                                     <UTextarea v-else :rows="8" variant="outline" v-model="item.description" />
                                 </div>
                                 <div>
