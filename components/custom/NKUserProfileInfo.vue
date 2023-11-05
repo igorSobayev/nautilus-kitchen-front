@@ -7,7 +7,7 @@ const user = ref({} as User)
 const userCreationDate = ref('')
 
 onNuxtReady(async () => {
-  user.value = await userStore.loadUserData() as User
+  user.value = await userStore.loadUserData() as User // TODO use other userData
   const date = new Date(user.value.creationDate)
   userCreationDate.value = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 })
