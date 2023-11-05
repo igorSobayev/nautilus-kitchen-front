@@ -18,6 +18,16 @@ export const useUserStore = defineStore('user', () => {
     return user
   }
 
+  async function loadPublicUserData (username: string): Promise<types.User | unknown> {
+    // TODO manage error
+    const user: types.User | unknown = await $fetch(`${baseUrl}/user/public/${username}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+
+    return user
+  }
+
   async function loadUserRecipes (): Promise<types.Recipe[] | unknown> {
     const userRecipes: types.Recipe[] | unknown = await $fetch(`${baseUrl}/user/all-recipes/${authStore.user.id}`, {
       method: 'GET',
@@ -84,6 +94,7 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     loadUserData,
+    loadPublicUserData,
     edit,
     deleteFiles,
     loadUserRecipes,

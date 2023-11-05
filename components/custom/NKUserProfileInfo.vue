@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { User } from '../../store/types'
 import { useUserStore } from '../../store/user'
+import { onNuxtReady, ref, useRoute } from '../../.nuxt/imports'
 
 const userStore = useUserStore()
+const route = useRoute()
 const user = ref({} as User)
 const userCreationDate = ref('')
 
 onNuxtReady(async () => {
-  user.value = await userStore.loadUserData() as User // TODO use other userData
+  const userName = route.params.username as string
+  user.value = await userStore.loadPublicUserData(userName) as User
+
   const date = new Date(user.value.creationDate)
   userCreationDate.value = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 })
