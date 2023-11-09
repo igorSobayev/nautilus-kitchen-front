@@ -19,10 +19,12 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function loadPublicUserData (username: string): Promise<types.User | unknown> {
+    if (!username) {
+      return 'Missing username'
+    }
     // TODO manage error
     const user: types.User | unknown = await $fetch(`${baseUrl}/user/public/${username}`, {
-      method: 'GET',
-      credentials: 'include',
+      method: 'GET'
     })
 
     return user
