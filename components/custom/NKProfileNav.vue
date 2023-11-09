@@ -8,46 +8,7 @@ const userMail = ref('')
 const userAvatar = ref('')
 const user = ref()
 
-const items = ref([
-  [
-    {
-      label: userMail,
-      slot: 'account',
-      disabled: true
-    }
-  ],
-  [
-    {
-      label: 'Configuración',
-      icon: 'i-heroicons-cog-8-tooth',
-      link: '/configuration'
-    },
-  ],
-  [
-    {
-      label: 'Mi perfil',
-      icon: 'i-heroicons-user',
-      link: '/profile'
-    },
-    {
-      label: 'Mis recetas',
-      icon: 'i-heroicons-book-open',
-      link: '/recetas'
-    },
-    {
-      label: 'Crear receta',
-      icon: 'i-heroicons-folder-plus',
-      link: '/recetas/crear-receta'
-    }
-  ],
-  [
-    {
-      label: 'Desconectar',
-      slot: 'logout',
-      icon: 'i-heroicons-arrow-left-on-rectangle'
-    }
-  ]
-])
+const items = ref()
 
 const logout = () => {
     authStore.logout()
@@ -58,6 +19,47 @@ onNuxtReady(async () => {
 
     userMail.value = user.value.email
     userAvatar.value = user.value.avatar
+
+    items.value = [
+    [
+      {
+        label: userMail,
+        slot: 'account',
+        disabled: true
+      }
+    ],
+    [
+      {
+        label: 'Configuración',
+        icon: 'i-heroicons-cog-8-tooth',
+        link: '/configuration'
+      },
+    ],
+    [
+      {
+        label: 'Mi perfil',
+        icon: 'i-heroicons-user',
+        link: '/profile/' + user.value.username
+      },
+      {
+        label: 'Mis recetas',
+        icon: 'i-heroicons-book-open',
+        link: '/recetas'
+      },
+      {
+        label: 'Crear receta',
+        icon: 'i-heroicons-folder-plus',
+        link: '/recetas/crear-receta'
+      }
+    ],
+    [
+      {
+        label: 'Desconectar',
+        slot: 'logout',
+        icon: 'i-heroicons-arrow-left-on-rectangle'
+      }
+    ]
+  ]
 })
 </script>
 
