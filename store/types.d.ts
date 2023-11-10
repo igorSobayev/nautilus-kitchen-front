@@ -26,6 +26,7 @@ export type Recipe = {
     description: string
     notes: string
     avgTime: string
+    rating: number
     difficulty: number
     published: boolean
     onProgress: boolean
