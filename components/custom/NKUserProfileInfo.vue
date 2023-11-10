@@ -9,8 +9,8 @@ const user = ref({} as User)
 const userCreationDate = ref('')
 
 onNuxtReady(async () => {
-  const userName = route.params.username as string
-  user.value = await userStore.loadPublicUserData(userName) as User
+  const username = route.params.username as string
+  user.value = await userStore.loadPublicUserData(username) as User
 
   const date = new Date(user.value.creationDate)
   userCreationDate.value = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
