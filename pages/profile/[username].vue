@@ -23,9 +23,14 @@ const items = [
 ]
 
 const userStore = useUserStore()
+const route = useRoute()
 
 const recipes = ref([])
 const publishedRecipes = ref([])
+
+const userPublicPageRoute = computed(() => {
+  return '/users/' + route.params.username
+})
 
 async function loadRecipesData () {
     recipes.value = await userStore.loadUserWipRecipes()
@@ -39,6 +44,9 @@ onNuxtReady(async () => {
 
 <template>
     <div class="flex justify-center flex-col gap-5 pt-5">
+        <div class="flex justify-end">
+            <UButton color="gray" :to="userPublicPageRoute" label="Ver página publica" />
+        </div>
         <!-- Rectangulo con info del user -->
         <NKUserProfileInfo />
         <!-- Tabs con otras partes interesantes de momento recetas y comentarios destacados -->
