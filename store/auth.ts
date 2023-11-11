@@ -19,6 +19,12 @@ interface registerData {
   password: string
 }
 
+interface changePassowrd {
+  actualPassword: string
+  newPassword: string
+  repeatedNewPassword: string
+}
+
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
@@ -115,6 +121,18 @@ export const useAuthStore = defineStore({
       await $fetch(`${this.baseUrl}/auth/signup`, {
         method: 'POST',
         body: registerData
+      })
+        .catch(error => { throw error })
+    },
+
+    async changePassword(changePassowrdData: changePassowrd) {
+      await $fetch(`${this.baseUrl}/auth/change-password`, {
+        method: 'POST',
+        credentials: 'include',
+        body: {
+          ...changePassowrdData,
+          userId: this.user.id
+        }
       })
         .catch(error => { throw error })
     }
