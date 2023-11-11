@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    '@nuxthq/ui',
+    '@nuxt/ui',
     '@pinia/nuxt',
     'nuxt-rating',
   ],
