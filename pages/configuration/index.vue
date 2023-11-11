@@ -48,7 +48,7 @@ const validatePassword = (state: any): FormError[] => {
   if (!state.actualPassword) errors.push({ path: 'actualPassword', message: 'Requerido' })
   if (!state.newPassword) errors.push({ path: 'newPassword', message: 'Requerido' })
   if (!state.repeatedNewPassword) errors.push({ path: 'repeatedNewPassword', message: 'Requerido' })
-  if (state.newPassword !== state.repeatedNewPassword) errors.push({ path: 'newPassword', message: 'Las contraseñas no coinciden*' })
+  if (state.newPassword !== state.repeatedNewPassword) errors.push({ path: 'newPassword', message: 'Las contraseñas no coinciden!' })
   return errors
 }
 
@@ -92,7 +92,9 @@ async function cancelEditing () {
 }
 
 async function changePassword () {
-    // await formPassword.value!.validate() TODO fix password validation
+
+    await formPassword.value!.validate()
+
     await authStore.changePassword({
         actualPassword: changePasswordState.value.actualPassword,
         newPassword: changePasswordState.value.newPassword,
@@ -201,9 +203,10 @@ onNuxtReady(async () => {
         <!-- Change password form -->
         <UForm
             ref="formPassword"
+            :validate="validatePassword"
             :state="changePasswordState"
-            @submit.prevent="changePassword"
-            validate-on="submit"
+            @submit="changePassword"
+            :validate-on="['submit']"
             class="bg-white p-12 rounded-lg border-2 w-[60%]"
             v-else
         >
