@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
+import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -19,7 +20,7 @@ const validate = (state: any): FormError[] => {
   if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
   if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
   if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
-  if (state.password !== state.password2) errors.push({ path: 'password', message: 'Las contraseñas no coinciden' })
+  if (state.password !== state.password2) errors.push({ path: 'password2', message: 'Las contraseñas no coinciden' })
   return errors
 }
 
@@ -64,13 +65,8 @@ onNuxtReady(() => {
             </UFormGroup>
 
             <div class="grid md:grid-cols-2 grid-cols-1 gap-4 mt-3">
-                <UFormGroup label="Contraseña">
-                    <UInput v-model="state.password" type="password" />
-                </UFormGroup>
-
-                <UFormGroup label="Repetir contraseña" name="password">
-                    <UInput v-model="state.password2" type="password" />
-                </UFormGroup>
+                <NKPasswordInput v-model="state.password" label="Contraseña" name="password" />
+                <NKPasswordInput v-model="state.password2" label="Repetir contraseña" name="password2" />
             </div>
 
             <UButton block type="submit" class="mt-5" label="Registrarse" />

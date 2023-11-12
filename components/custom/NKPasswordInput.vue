@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const props = defineProps<{ modelValue: string }>()
+const props = defineProps<{ 
+    modelValue: string,
+    name: string,
+    label: string
+}>()
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -23,7 +27,7 @@ function updatePassword () {
 </script>
 
 <template>
-    <UFormGroup label="Password" name="password">
+    <UFormGroup :label="label" :name="name">
         <UInput v-model="password" @keyup="updatePassword" :type="passwordInputType" :ui="{ icon: { trailing: { pointer: '' } } }">
             <template #trailing>
                 <UButton

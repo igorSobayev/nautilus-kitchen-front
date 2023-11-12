@@ -3,7 +3,8 @@ import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import { useUserStore } from './../../store/user'
 import { onNuxtReady, ref } from '../../.nuxt/imports'
-import { User } from '../../store/types';
+import { User } from '../../store/types'
+import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
 const toast = useToast()
 const authStore = useAuthStore()
@@ -216,17 +217,9 @@ onNuxtReady(async () => {
                     <UButton @click="cancelChangePassword" icon="i-heroicons-x-mark" size="md" label="Cancelar" color="red" class="ml-3" />
                 </div>
                 <div class="flex justify-center align-center flex-col items-center gap-4">
-                    <UFormGroup name="actualPassword" label="Contraseña actual" class="mt-3 w-full">
-                        <UInput type="password" v-model="changePasswordState.actualPassword" />
-                    </UFormGroup>
-
-                    <UFormGroup name="newPassword" label="Contraseña nueva" class="mt-3 w-full">
-                        <UInput type="password" v-model="changePasswordState.newPassword" />
-                    </UFormGroup>
-
-                    <UFormGroup name="repeatedNewPassword" label="Repetir contraseña nueva" class="mt-3 w-full">
-                        <UInput type="password" v-model="changePasswordState.repeatedNewPassword" />
-                    </UFormGroup>
+                    <NKPasswordInput v-model="changePasswordState.actualPassword" label="Contraseña actual" class="mt-3 w-full" name="actualPassword" />
+                    <NKPasswordInput v-model="changePasswordState.newPassword" label="Nueva contraseña" class="mt-3 w-full" name="newPassword" />
+                    <NKPasswordInput v-model="changePasswordState.repeatedNewPassword" label="Repetir contraseña nueva" class="mt-3 w-full" name="repeatedNewPassword" />
                 </div>
             </div>
         </UForm>
