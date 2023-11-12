@@ -1,7 +1,3 @@
-.nbtn {
-    /* color: white !important; */
-}
-
-body {
-    /* color: black; */
+.average-rating::before {
+    position: static !important;
 }
