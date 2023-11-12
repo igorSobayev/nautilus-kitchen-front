@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormError } from '@nuxthq/ui/dist/runtime/types'
+import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import { useUserStore } from '../../../store/user'
