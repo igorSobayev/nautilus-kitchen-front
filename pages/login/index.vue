@@ -2,6 +2,7 @@
 import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import { ref } from 'vue'
+import NKPasswordInput from '../../components/custom/NKPasswordInput.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -36,15 +37,13 @@ async function submit () {
             ref="form"
             :validate="validate"
             :state="state"
-            @submit.prevent="submit"
+            @submit="submit"
             >
             <UFormGroup label="Email" name="email">
                 <UInput type="email" name="email" v-model="state.email" />
             </UFormGroup>
-        
-            <UFormGroup label="Password" name="password" class="mt-4">
-                <UInput v-model="state.password" type="password" />
-            </UFormGroup>
+
+            <NKPasswordInput v-model="state.password" class="mt-4" />
         
             <UButton type="submit" class="mt-4" block>
                 Iniciar sesión
