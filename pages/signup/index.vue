@@ -53,7 +53,7 @@ onNuxtReady(() => {
             ref="form"
             :validate="validate"
             :state="state"
-            @submit.prevent="submit"
+            @submit="submit"
         >
             <UFormGroup name="username" label="Usuario" class="mt-3">
                 <UInput v-model="state.username" />
