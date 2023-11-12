@@ -154,6 +154,7 @@ onNuxtReady(async () => {
             :validate="validate"
             :state="state"
             @submit="submit"
+            :validate-on="['submit']"
             class="bg-white p-12 rounded-lg border-2 w-[60%]"
             v-if="!changingPassword"
         >

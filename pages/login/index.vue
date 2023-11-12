@@ -37,6 +37,7 @@ async function submit () {
             ref="form"
             :validate="validate"
             :state="state"
+            :validate-on="['submit']"
             @submit="submit"
             >
             <UFormGroup label="Email" name="email">
