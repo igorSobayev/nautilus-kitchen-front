@@ -10,7 +10,7 @@ const state = ref({
   username: '',
   email: '',
   password: '',
-  password2: '',
+  repeatPassword: '',
   userRegistered: false,
   alertTitle: '¡Te has registrado con éxito!',
 })
@@ -20,7 +20,8 @@ const validate = (state: any): FormError[] => {
   if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
   if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
   if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
-  if (state.password !== state.password2) errors.push({ path: 'password2', message: 'Las contraseñas no coinciden' })
+  if (!state.repeatPassword) errors.push({ path: 'repeatPassword', message: 'Requerido' })
+  if (state.password !== state.repeatPassword) errors.push({ path: 'repeatPassword', message: 'Las contraseñas no coinciden!' })
   return errors
 }
 
@@ -54,6 +55,7 @@ onNuxtReady(() => {
             ref="form"
             :validate="validate"
             :state="state"
+            :validate-on="['submit']"
             @submit="submit"
         >
             <UFormGroup name="username" label="Usuario" class="mt-3">
@@ -66,7 +68,7 @@ onNuxtReady(() => {
 
             <div class="grid md:grid-cols-2 grid-cols-1 gap-4 mt-3">
                 <NKPasswordInput v-model="state.password" label="Contraseña" name="password" />
-                <NKPasswordInput v-model="state.password2" label="Repetir contraseña" name="password2" />
+                <NKPasswordInput v-model="state.repeatPassword" label="Repetir contraseña" name="repeatPassword" />
             </div>
 
             <UButton block type="submit" class="mt-5" label="Registrarse" />
