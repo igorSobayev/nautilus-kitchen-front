@@ -28,6 +28,10 @@ async function submit () {
     .then((_response) => router.push("/"))
     .catch((error) => console.log("API error", error))
 }
+
+function forgotPassword () {
+  router.push("/forgot-password")
+}
 </script>
 
 <template>
@@ -46,6 +50,8 @@ async function submit () {
 
             <NKPasswordInput v-model="state.password" label="Contraseña" name="password" class="mt-4" />
         
+            <div class="mt-4 cursor-pointer" @click="forgotPassword">Forgot the password?</div>
+
             <UButton type="submit" class="mt-4" block>
                 Iniciar sesión
             </UButton>

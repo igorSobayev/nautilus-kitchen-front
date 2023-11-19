@@ -135,6 +135,16 @@ export const useAuthStore = defineStore({
         }
       })
         .catch(error => { throw error })
+    },
+
+    async forgotPassword(forgotPasswordEmail: string) {
+      await $fetch(`${this.baseUrl}/auth/forgot-password`, {
+        method: 'POST',
+        body: {
+          email: forgotPasswordEmail,
+        }
+      })
+        .catch(error => { throw error })
     }
   },
   getters: {
