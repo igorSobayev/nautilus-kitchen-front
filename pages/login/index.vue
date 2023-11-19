@@ -50,7 +50,7 @@ function forgotPassword () {
 
             <NKPasswordInput v-model="state.password" label="Contraseña" name="password" class="mt-4" />
         
-            <div class="mt-4 cursor-pointer" @click="forgotPassword">Forgot the password?</div>
+            <div class="mt-4 cursor-pointer text-primary" @click="forgotPassword">Forgot the password?</div>
 
             <UButton type="submit" class="mt-4" block>
                 Iniciar sesión

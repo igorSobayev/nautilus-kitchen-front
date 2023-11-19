@@ -25,6 +25,12 @@ interface changePassowrd {
   repeatedNewPassword: string
 }
 
+interface resetPassword {
+  newPassword: string
+  email: string
+  resetCode: string
+}
+
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
@@ -142,6 +148,16 @@ export const useAuthStore = defineStore({
         method: 'POST',
         body: {
           email: forgotPasswordEmail,
+        }
+      })
+        .catch(error => { throw error })
+    },
+
+    async resetPassword(resetPasswordData: resetPassword) {
+      await $fetch(`${this.baseUrl}/auth/reset-password`, {
+        method: 'POST',
+        body: {
+          ...resetPasswordData
         }
       })
         .catch(error => { throw error })

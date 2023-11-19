@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { FormError } from '@nuxt/ui/dist/runtime/types'
+import { ref, useToast, useRouter } from '../../.nuxt/imports'
 import { useAuthStore } from '../../store/auth'
-import { ref } from 'vue'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
+const toast = useToast()
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -18,16 +19,16 @@ const newPasswordState = ref({
   repeatedNewPassword: '',
 })
 
-const resetCodeSend = ref(true)
+const resetCodeSend = ref(false)
 
 const validate = (state: any): FormError[] => {
-  const errors = []
+  const errors: any = []
   if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
   return errors
 }
 
 const validateResetCode = (state: any): FormError[] => {
-  const errors = []
+  const errors: any = []
   if (!state.email) errors.push({ path: 'userEmail', message: 'Requerido' })
   if (!state.resetCode) errors.push({ path: 'resetCode', message: 'Requerido' })
   if (!state.newPassword) errors.push({ path: 'newPassword', message: 'Requerido' })
@@ -37,6 +38,7 @@ const validateResetCode = (state: any): FormError[] => {
 }
 
 const form = ref()
+const formResetPass = ref()
 
 async function sendResetCode () {
   await form.value!.validate()
@@ -49,11 +51,16 @@ async function sendResetCode () {
 }
 
 async function resetPassword () {
-  await form.value!.validate()
+  await formResetPass.value!.validate()
   authStore
-    .forgotPassword(state.value.email)
+    .resetPassword({
+      email: newPasswordState.value.email,
+      newPassword: newPasswordState.value.newPassword,
+      resetCode: newPasswordState.value.resetCode,
+    })
     .then(() => {
-      resetCodeSend.value = true
+      toast.add({ title: 'Contraseña recuperada con éxito!' })
+      router.push("/login")
     })
     .catch((error) => console.log("API error", error))
 }
@@ -81,9 +88,9 @@ async function resetPassword () {
             </UForm>
 
             <UForm
-            ref="form"
+            ref="formResetPass"
             :validate="validateResetCode"
-            :state="state"
+            :state="newPasswordState"
             :validate-on="['submit']"
             @submit="resetPassword"
             v-else
