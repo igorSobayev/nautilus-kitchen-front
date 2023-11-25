@@ -4,6 +4,16 @@ import { ref, } from 'vue'
 import { useAuthStore } from './../../store/auth'
 import { onNuxtReady } from './../../.nuxt/imports'
 
+useHead({
+  title: 'Recipes',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
 const recetas = ref([])
 
 const authStore = useAuthStore()

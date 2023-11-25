@@ -6,6 +6,17 @@ import { onNuxtReady, ref } from '../../.nuxt/imports'
 import { User } from '../../store/types'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
+useHead({
+  title: 'Configuration',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
+
 const toast = useToast()
 const authStore = useAuthStore()
 const userStore = useUserStore()

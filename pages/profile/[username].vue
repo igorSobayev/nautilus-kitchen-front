@@ -3,6 +3,16 @@ import { useUserStore } from '../../store/user'
 import NKRecipesOptionsDropdown from '~/components/custom/NKRecipesOptionsDropdown.vue'
 import NKUserProfileInfo from '~/components/custom/NKUserProfileInfo.vue'
 
+useHead({
+  title: 'Private profile',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
 const items = [
     {
         label: 'Recetas en curso',

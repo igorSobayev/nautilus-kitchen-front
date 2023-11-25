@@ -4,6 +4,16 @@ import { ref, useToast, useRouter } from '../../.nuxt/imports'
 import { useAuthStore } from '../../store/auth'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
+useHead({
+  title: 'Forgot password',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
 const toast = useToast()
 const authStore = useAuthStore()
 const router = useRouter()

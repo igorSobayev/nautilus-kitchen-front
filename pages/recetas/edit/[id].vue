@@ -7,6 +7,16 @@ import NKRichEditor from './../../../components/custom/NKRichEditor.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import types from './../../../store/types'
 
+useHead({
+  title: 'Edit recipe',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
 const toast = useToast()
 const userStore = useUserStore()
 const recipeStore = useRecipeStore()

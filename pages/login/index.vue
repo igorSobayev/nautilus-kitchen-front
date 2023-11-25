@@ -4,6 +4,17 @@ import { useAuthStore } from '../../store/auth'
 import { ref } from 'vue'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
+useHead({
+  title: 'Login',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
+
 const authStore = useAuthStore()
 const router = useRouter()
 

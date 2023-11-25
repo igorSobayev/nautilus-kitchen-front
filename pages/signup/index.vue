@@ -3,6 +3,16 @@ import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
+useHead({
+  title: 'Sign Up',
+  meta: [
+    {
+      name: 'description',
+      content: 'TODO: SEO' 
+    },
+  ],
+})
+
 const authStore = useAuthStore()
 const router = useRouter()
 
