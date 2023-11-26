@@ -1,11 +1,9 @@
-<script setup lang="ts">
-import type { FormError } from '@nuxt/ui/dist/runtime/types'
+<script setup>
 import { onNuxtReady, ref, useRoute, useToast } from '../../../.nuxt/imports'
 import { useRecipeStore } from '../../../store/recipe'
 import { useUserStore } from '../../../store/user'
 import NKRichEditor from './../../../components/custom/NKRichEditor.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import types from './../../../store/types'
 
 useHead({
   title: 'Edit recipe',
@@ -42,11 +40,17 @@ const state = ref({
                     name: '',
                     quantity: '',
                 }
+            ],
+            steps: [
+                {
+                    order: 1,
+                    description: ''
+                }
             ]
         }
     ],
     featuredImg: '',
-    media: [] as string[],
+    media: [],
     ingredients: [
         {
             name: '',
@@ -67,39 +71,24 @@ const newFeaturedImagePreview = ref()
 const newAdditionalImages = ref(new FormData())
 const newAdditionalImagesPreview = ref([])
 const rawAdditionalImages = ref()
-const additionalImagesToDelete = ref([] as string[])
+const additionalImagesToDelete = ref([])
 
 const formManagement = ref({
     advanceDescription: false
 })
 
-const accordionVersions = ref([
-    {
-        label: 'Nombre',
-        advanceDescription: false,
-        description: '',
-        avgTime: '',
-        difficulty: 0,
-        ingredients: [
-            {
-                name: '',
-                quantity: '',
-            }
-        ]
-    },
-])
+const accordionVersions = ref([])
 
-const validate = (state: any): FormError[] => {
-  const errors: FormError[] = []
+const validate = (state) => {
+  const errors = []
   if (state.avgTime && state.avgTime.length >= 15) errors.push({ path: 'avgTime', message: 'The average time is to long' })
-//   if (!state.surname) errors.push({ path: 'surname', message: 'Requerido' })
   return errors
 }
 
 const form = ref()
 
 async function submit () {
-    await form.value!.validate()
+    await form.value.validate()
 
     setVersionData()
 
@@ -133,7 +122,8 @@ function setVersionData () {
                 description: version.description,
                 avgTime: version.avgTime,
                 difficulty: version.difficulty,
-                ingredients: version.ingredients
+                ingredients: version.ingredients,
+                steps: version.steps,
             }
 
             state.value.versions.push(cleanVersion)
@@ -141,7 +131,7 @@ function setVersionData () {
     }
 }
 
-function changeFeaturedImg (event: any) {
+function changeFeaturedImg (event) {
     const fileObj = event.target.files
     // @ts-ignore comment
     newFeaturedImage.value = new FormData() // @ts-ignore comment
@@ -166,7 +156,7 @@ function cancelNewFeaturedImage () {
 }
 
 
-async function changeAdditionalImages (event: any) {
+async function changeAdditionalImages (event) {
 
     rawAdditionalImages.value = Array.from(event.target.files)
     const fileObj = await event.target.files
@@ -178,12 +168,12 @@ async function changeAdditionalImages (event: any) {
     }
 }
 
-function removeNewAdditionalImage (imageToRemove: number) {
+function removeNewAdditionalImage (imageToRemove) {
     rawAdditionalImages.value.splice(imageToRemove, 1)
     newAdditionalImagesPreview.value.splice(imageToRemove, 1)
 }
 
-function removeAdditionalImage (imageToRemove: number) {
+function removeAdditionalImage (imageToRemove) {
     const removedImage = state.value.media.splice(imageToRemove, 1)
     additionalImagesToDelete.value.push(...removedImage)
 }
@@ -226,7 +216,7 @@ function addIngredientRow () {
     })
 }
 
-function removeIngredientRow (ingredientToRemove: String) {
+function removeIngredientRow (ingredientToRemove) {
     
     const ingredientPosition = state.value.ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
 
@@ -247,32 +237,68 @@ function addVersionRow () {
                 name: '',
                 quantity: '',
             }
+        ],
+        steps: [
+            {
+                order: 1,
+                description: ''
+            }
         ]
     }
     )
 }
 
-function addVersionIngredientRow (versionPosition: number) {
+function addVersionIngredientRow (versionPosition) {
     accordionVersions.value[versionPosition].ingredients.push({
         name: '',
         quantity: '',
     })
 }
 
-function removeVersionIngredientRow (ingredientToRemove: String, versionPosition: number) {
+function removeVersionIngredientRow (ingredientToRemove, versionPosition) {
 
     const ingredientPosition = accordionVersions.value[versionPosition].ingredients.findIndex(ingredient => ingredient.name === ingredientToRemove)
 
     accordionVersions.value[versionPosition].ingredients.splice(ingredientPosition, 1)
 }
 
-function removeVersionRow (versionPosition: number) {
+function removeVersionRow (versionPosition) {
     accordionVersions.value.splice(versionPosition, 1)
 }
 
-function importOriginalInfo (versionPosition: number) {
+function importOriginalInfo (versionPosition) {
     accordionVersions.value[versionPosition].label = state.value.title
     accordionVersions.value[versionPosition].ingredients = state.value.ingredients
+    accordionVersions.value[versionPosition].steps = state.value.steps
+}
+
+function addVersionStepRow (versionPosition) {
+    let order
+    if (accordionVersions.value[versionPosition].steps.length) {
+        const lastStep = accordionVersions.value[versionPosition].steps[accordionVersions.value[versionPosition].steps.length - 1]
+        order = lastStep.order + 1
+    } else {
+        order = 1
+    }
+    
+    accordionVersions.value[versionPosition].steps.push({
+        order,
+        description: '',
+    })
+}
+
+function removeVersionStepRow (stepToRemove, versionPosition) {
+    
+    const stepPosition = accordionVersions.value[versionPosition].steps.findIndex(step => step.order === stepToRemove)
+    accordionVersions.value[versionPosition].steps.splice(stepPosition, 1)
+
+    orderSteps()
+}
+
+function orderVersionSteps (versionPosition) {
+    accordionVersions.value[versionPosition].steps.forEach((step, index) => {
+        step.order = index + 1
+    })
 }
 
 // Steps
@@ -291,7 +317,7 @@ function addStepRow () {
     })
 }
 
-function removeStepRow (stepToRemove: Number) {
+function removeStepRow (stepToRemove) {
     
     const stepPosition = state.value.steps.findIndex(step => step.order === stepToRemove)
     state.value.steps.splice(stepPosition, 1)
@@ -305,7 +331,7 @@ function orderSteps () {
     })
 }
 
-function setInitialRecipeData (recipe: types.Recipe) {
+function setInitialRecipeData (recipe) {
     state.value._id = recipe._id
     state.value.title = recipe.title
     state.value.description = recipe.description
@@ -332,7 +358,7 @@ function setInitialRecipeData (recipe: types.Recipe) {
     }
 }
 
-function setAccordionVersionsData (versions: types.Version[]) {
+function setAccordionVersionsData (versions) {
     accordionVersions.value = []
     
     versions.forEach(version => {
@@ -342,7 +368,8 @@ function setAccordionVersionsData (versions: types.Version[]) {
             description: version.description,
             avgTime: version.avgTime,
             difficulty: version.difficulty,
-            ingredients: version.ingredients
+            ingredients: version.ingredients,
+            steps: version.steps,
         }
 
         accordionVersions.value.push(formatedVersion)
@@ -350,9 +377,8 @@ function setAccordionVersionsData (versions: types.Version[]) {
 }
 
 onNuxtReady(async () => {
-    const recipeId = route.params.id as String
+    const recipeId = route.params.id
     const recipe = await recipeStore.loadRecipeData(recipeId)
-    console.log(recipe)
     setInitialRecipeData(recipe)
 })
 </script>
@@ -451,7 +477,7 @@ onNuxtReady(async () => {
                         <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                     </div>
                     <div>
-                        <div class="border flex align-center flex-row gap-3 justify-start p-1 mb-2 rounded-md w-[80%]" v-for="ingredient in state.ingredients">
+                        <div class="flex align-center flex-row gap-3 justify-start p-1 mb-2 rounded-md w-[80%]" v-for="ingredient in state.ingredients">
                             <div><UInput icon="i-material-symbols-kitchen-outline" placeholder="Tomates" v-model="ingredient.name" color="gray" variant="outline" /></div>
                             <div><UInput icon="i-icon-park-outline-weight" placeholder="200 g" color="gray" v-model="ingredient.quantity" variant="outline" /></div>
                             <div class="h-full my-auto"><UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
@@ -465,7 +491,7 @@ onNuxtReady(async () => {
                     </div>
                     <div>
                         <VueDraggableNext :list="state.steps" @change="orderSteps">
-                            <div class="border flex align-center flex-row gap-4 justify-start p-2 mb-2 rounded-md w-[100%]" v-for="step in state.steps">
+                            <div class="flex align-center flex-row gap-4 justify-start p-2 mb-2 rounded-md w-[100%]" v-for="step in state.steps">
                                 <div class="h-full my-auto text-gray-400">{{ step.order }}</div>
                                 <div class="w-full"><UTextarea :rows="2" variant="outline" placeholder="Cortamos los tomates en rodajas de unos 2 cm de ...." v-model="step.description" /></div>
                                 <div class="h-full my-auto"><UButton @click="removeStepRow(step.order)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
@@ -498,7 +524,7 @@ onNuxtReady(async () => {
                                     <UButton label="Importar nombre e ingredientes" variant="outline" @click="importOriginalInfo(index)" />
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-5 mt-5">
+                            <div class="mt-5">
                                 <div>
                                     <div class="flex gap-3 items-center pb-2">
                                         <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
@@ -507,6 +533,8 @@ onNuxtReady(async () => {
                                     <NKRichEditor v-if="item.advanceDescription" v-model="item.description" />
                                     <UTextarea v-else :rows="8" variant="outline" v-model="item.description" />
                                 </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-5 mt-5">
                                 <div>
                                     <div class="flex gap-3 items-center pb-2">
                                         <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
@@ -518,6 +546,21 @@ onNuxtReady(async () => {
                                             <div><UInput icon="i-icon-park-outline-weight" placeholder="200 g" color="gray" v-model="ingredient.quantity" variant="outline" /></div>
                                             <div class="h-full my-auto"><UButton @click="removeVersionIngredientRow(ingredient.name, index)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex gap-3 items-center pb-2">
+                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Pasos</label>
+                                        <UButton @click="addVersionStepRow(index)" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
+                                    </div>
+                                    <div>
+                                        <VueDraggableNext :list="state.steps" @change="orderVersionSteps">
+                                            <div class="flex align-center flex-row gap-4 justify-start p-2 mb-2 rounded-md w-[100%]" v-for="step in item.steps">
+                                                <div class="h-full my-auto text-gray-400">{{ step.order }}</div>
+                                                <div class="w-full"><UTextarea :rows="2" variant="outline" placeholder="Cortamos los tomates en rodajas de unos 2 cm de ...." v-model="step.description" /></div>
+                                                <div class="h-full my-auto"><UButton @click="removeVersionStepRow(step.order, index)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
+                                            </div>
+                                        </VueDraggableNext>
                                     </div>
                                 </div>
                             </div>

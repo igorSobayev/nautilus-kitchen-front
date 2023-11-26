@@ -53,6 +53,7 @@ export type Version = {
     avgTime: string
     difficulty: number
     ingredients: Ingredient[]
+    steps: Nullable<Step[]>
 }
 
 export type EditRecipeParams = {
