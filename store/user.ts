@@ -105,6 +105,18 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
+  // Followers section
+  async function followUser (username: string): Promise<void> {
+    const userId = authStore.user.id
+
+    await $fetch(`${baseUrl}/user/follow/${username}`, {
+      method: 'PUT',
+      body: {
+        userId: userId,
+      },
+      credentials: 'include',
+    })
+  }
 
   return {
     loadUserData,
@@ -115,5 +127,6 @@ export const useUserStore = defineStore('user', () => {
     loadUserPublishedRecipes,
     loadUserWipRecipes,
     loadPublicUserRecipes,
+    followUser,
   }
 })
