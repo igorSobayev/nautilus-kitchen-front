@@ -22,10 +22,17 @@ export const useUserStore = defineStore('user', () => {
     if (!username) {
       return 'Missing username'
     }
+
+    const authUserId = authStore.user.id
     // TODO manage error
     const user: types.User | unknown = await $fetch(`${baseUrl}/user/public/${username}`, {
-      method: 'GET'
+      method: 'PUT',
+      body: {
+        userId: authUserId
+      }
     })
+
+    console.log(user)
 
     return user
   }
@@ -108,7 +115,6 @@ export const useUserStore = defineStore('user', () => {
   // Followers section
   async function followUser (username: string): Promise<void> {
     const userId = authStore.user.id
-
     await $fetch(`${baseUrl}/user/follow/${username}`, {
       method: 'PUT',
       body: {
