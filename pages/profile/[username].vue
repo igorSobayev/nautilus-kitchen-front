@@ -58,7 +58,7 @@ onNuxtReady(async () => {
             <UButton color="gray" :to="userPublicPageRoute" label="Ver página publica" />
         </div>
         <!-- Rectangulo con info del user -->
-        <NKUserProfileInfo />
+        <NKUserProfileInfo :public="false" />
         <!-- Tabs con otras partes interesantes de momento recetas y comentarios destacados -->
         <UTabs :items="items" class="w-full mt-5">
             <template #default="{ item, index, selected }">
