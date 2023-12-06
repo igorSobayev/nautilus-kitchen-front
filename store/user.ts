@@ -124,6 +124,17 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
+  async function unfollowUser (username: string): Promise<void> {
+    const userId = authStore.user.id
+    await $fetch(`${baseUrl}/user/unfollow/${username}`, {
+      method: 'PUT',
+      body: {
+        userId: userId,
+      },
+      credentials: 'include',
+    })
+  }
+
   return {
     loadUserData,
     loadPublicUserData,
@@ -134,5 +145,6 @@ export const useUserStore = defineStore('user', () => {
     loadUserWipRecipes,
     loadPublicUserRecipes,
     followUser,
+    unfollowUser,
   }
 })

@@ -21,6 +21,15 @@ const followUser = async () => {
   toast.add({ title: `¡Has seguido a ${username}!` })
 }
 
+const unfollowUser = async () => {
+  const username = route.params.username
+  await userStore.unfollowUser(username)
+
+  user.value = await userStore.loadPublicUserData(username)
+
+  toast.add({ title: `¡Has dejado de seguir a ${username}!` })
+}
+
 onNuxtReady(async () => {
   const username = route.params.username
   user.value = await userStore.loadPublicUserData(username)
