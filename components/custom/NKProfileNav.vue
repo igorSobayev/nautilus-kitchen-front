@@ -50,6 +50,11 @@ onNuxtReady(async () => {
         label: 'Crear receta',
         icon: 'i-heroicons-folder-plus',
         link: '/recetas/crear-receta'
+      },
+      {
+        label: 'Siguiendo',
+        icon: 'i-heroicons-users',
+        link: `/users/${user.value.username}/following`
       }
     ],
     [
