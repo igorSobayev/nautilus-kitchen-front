@@ -54,7 +54,7 @@ onNuxtReady(async () => {
       {
         label: 'Siguiendo',
         icon: 'i-heroicons-users',
-        link: `/users/${user.value.username}/following`
+        link: `/users/${user.value.username}/followers`,
       }
     ],
     [
