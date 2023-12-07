@@ -141,6 +141,12 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
+  async function listFollowers (username: string): Promise<void> {
+    return $fetch(`${baseUrl}/user/followers/${username}`, {
+      method: 'GET',
+    })
+  }
+
   return {
     loadUserData,
     loadPublicUserData,
@@ -152,6 +158,7 @@ export const useUserStore = defineStore('user', () => {
     loadPublicUserRecipes,
     followUser,
     unfollowUser,
-    listFollowing
+    listFollowing,
+    listFollowers,
   }
 })
