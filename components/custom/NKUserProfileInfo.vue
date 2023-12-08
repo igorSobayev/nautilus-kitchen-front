@@ -7,32 +7,31 @@ const userStore = useUserStore()
 const route = useRoute()
 const user = ref({})
 const userCreationDate = ref('')
+const username = ref('')
 
 const props = defineProps({
   public: Boolean,
 })
 
 const followUser = async () => {
-  const username = route.params.username
-  await userStore.followUser(username)
+  await userStore.followUser(username.value)
 
-  user.value = await userStore.loadPublicUserData(username)
+  user.value = await userStore.loadPublicUserData(username.value)
 
-  toast.add({ title: `¡Has seguido a ${username}!` })
+  toast.add({ title: `¡Has seguido a ${username.value}!` })
 }
 
 const unfollowUser = async () => {
-  const username = route.params.username
-  await userStore.unfollowUser(username)
+  await userStore.unfollowUser(username.value)
 
-  user.value = await userStore.loadPublicUserData(username)
+  user.value = await userStore.loadPublicUserData(username.value)
 
-  toast.add({ title: `¡Has dejado de seguir a ${username}!` })
+  toast.add({ title: `¡Has dejado de seguir a ${username.value}!` })
 }
 
 onNuxtReady(async () => {
-  const username = route.params.username
-  user.value = await userStore.loadPublicUserData(username)
+  username.value = route.params.username
+  user.value = await userStore.loadPublicUserData(username.value)
 
   const date = new Date(user.value.creationDate)
   userCreationDate.value = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
