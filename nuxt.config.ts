@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@pinia/nuxt',
     'nuxt-rating',
+    '@nuxtjs/i18n',
   ],
   ui: {
     icons: ['material-symbols', 'icon-park', 'icon-park-outline', 'mingcute', 'emojione-v1']
