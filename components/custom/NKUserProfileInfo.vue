@@ -15,26 +15,31 @@ const props = defineProps({
 
 const followUser = async () => {
   await userStore.followUser(username.value)
-
-  user.value = await userStore.loadPublicUserData(username.value)
-
+  await updateUser()
   toast.add({ title: `¡Has seguido a ${username.value}!` })
 }
 
 const unfollowUser = async () => {
   await userStore.unfollowUser(username.value)
-
-  user.value = await userStore.loadPublicUserData(username.value)
-
+  await updateUser()
   toast.add({ title: `¡Has dejado de seguir a ${username.value}!` })
+}
+
+const updateUser = async () => {
+  user.value = await userStore.loadPublicUserData(username.value)
 }
 
 onNuxtReady(async () => {
   username.value = route.params.username
-  user.value = await userStore.loadPublicUserData(username.value)
+
+  await updateUser()
 
   const date = new Date(user.value.creationDate)
   userCreationDate.value = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+})
+
+defineExpose({
+  updateUser,
 })
 </script>
 

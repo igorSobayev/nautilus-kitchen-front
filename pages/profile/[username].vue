@@ -35,6 +35,8 @@ const items = [
 const userStore = useUserStore()
 const route = useRoute()
 
+const userProfileComp = ref(null)
+
 const recipes = ref([])
 const publishedRecipes = ref([])
 
@@ -45,6 +47,8 @@ const userPublicPageRoute = computed(() => {
 async function loadRecipesData () {
     recipes.value = await userStore.loadUserWipRecipes()
     publishedRecipes.value = await userStore.loadUserPublishedRecipes()
+
+    await userProfileComp.value.updateUser()
 }
 
 onNuxtReady(async () => {
@@ -58,7 +62,7 @@ onNuxtReady(async () => {
             <UButton color="gray" :to="userPublicPageRoute" label="Ver página publica" />
         </div>
         <!-- Rectangulo con info del user -->
-        <NKUserProfileInfo :public="false" />
+        <NKUserProfileInfo ref="userProfileComp" :public="false" />
         <!-- Tabs con otras partes interesantes de momento recetas y comentarios destacados -->
         <UTabs :items="items" class="w-full mt-5">
             <template #default="{ item, index, selected }">
