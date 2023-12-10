@@ -11,12 +11,13 @@
                     <NuxtLink class="hover:text-gray-500" @click="addRecipe">Crear recetas</NuxtLink>
                 </ul>
             </div>
-            <div class="flex items-center gap-6">
-                <span v-if="!authStore.isLoggedIn" class="flex items-center gap-6">
+            <div class="flex items-center gap-2">
+                <NKLang />
+                <span v-if="!authStore.isLoggedIn" class="flex items-center gap-2">
                     <UButton to="/login" icon="i-material-symbols-login-sharp" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Login</span></UButton>
                     <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">Registrarse</span></UButton>
                 </span>
-                <span v-else class="flex items-center gap-6">
+                <span v-else class="flex items-center gap-2">
                     <NKProfileNav />
                 </span>
                 <UIcon @click="onToggleMenu" class="text-3xl cursor-pointer md:hidden" :name="menuOpenned ? 'i-material-symbols-close' : 'i-material-symbols-menu'" />
@@ -27,6 +28,7 @@
 
 <script setup>
 import NKProfileNav from './../custom/NKProfileNav.vue'
+import NKLang from '../components/custom/NKLang.vue';
 import { useAuthStore } from './../../store/auth'
 import { useRecipeStore } from '~/store/recipe'
 
