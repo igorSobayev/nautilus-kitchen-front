@@ -2,6 +2,8 @@
 import { useAuthStore } from '../../store/auth'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 
+import { useI18n } from 'vue-i18n'
+
 useHead({
   title: 'Sign Up',
   meta: [
@@ -14,6 +16,8 @@ useHead({
 
 const authStore = useAuthStore()
 const router = useRouter()
+const { t } = useI18n()
+
 
 const state = ref({
   username: '',
@@ -21,16 +25,16 @@ const state = ref({
   password: '',
   repeatPassword: '',
   userRegistered: false,
-  alertTitle: '¡Te has registrado con éxito!',
+  alertTitle: t('succesfullyRegistered'),
 })
 
 const validate = (state) => {
   const errors = []
-  if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
-  if (!state.username) errors.push({ path: 'username', message: 'Requerido' })
-  if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
-  if (!state.repeatPassword) errors.push({ path: 'repeatPassword', message: 'Requerido' })
-  if (state.password !== state.repeatPassword) errors.push({ path: 'repeatPassword', message: 'Las contraseñas no coinciden!' })
+  if (!state.email) errors.push({ path: 'email', message: t('required') })
+  if (!state.username) errors.push({ path: 'username', message: t('required') })
+  if (!state.password) errors.push({ path: 'password', message: t('required') })
+  if (!state.repeatPassword) errors.push({ path: 'repeatPassword', message: t('required') })
+  if (state.password !== state.repeatPassword) errors.push({ path: 'repeatPassword', message: t('passwordsNotMatch') })
   return errors
 }
 
@@ -67,7 +71,7 @@ onNuxtReady(() => {
             :validate-on="['submit']"
             @submit="submit"
         >
-            <UFormGroup name="username" label="Usuario" class="mt-3">
+            <UFormGroup name="username" :label="$t('user')" class="mt-3">
                 <UInput v-model="state.username" />
             </UFormGroup>
 
@@ -76,17 +80,17 @@ onNuxtReady(() => {
             </UFormGroup>
 
             <div class="grid md:grid-cols-2 grid-cols-1 gap-4 mt-3">
-                <NKPasswordInput v-model="state.password" label="Contraseña" name="password" />
-                <NKPasswordInput v-model="state.repeatPassword" label="Repetir contraseña" name="repeatPassword" />
+                <NKPasswordInput v-model="state.password" :label="$t('password')" name="password" />
+                <NKPasswordInput v-model="state.repeatPassword" :label="$t('repeatPassword')" name="repeatPassword" />
             </div>
 
-            <UButton block type="submit" class="mt-5" label="Registrarse" />
+            <UButton block type="submit" class="mt-5" :label="$t('signup')" />
         </UForm>
     </div>
     <div v-else class="flex items-center justify-center h-[80vh]">
         <UAlert icon="i-emojione-v1-party-popper" color="primary" variant="solid" :title="state.alertTitle">
             <template #description>
-                <span>Ahora ya puedes empezar a crear recetas geniales, ¡echale un vistazo a la sección de <NuxtLink class="font-bold underline" to="/recetas">recetas</NuxtLink> para coger algunas ideas!</span>
+                <span>{{ $t('nowYouCanStartCreatingRecipes') }}</span>
             </template>
         </UAlert>
     </div>
