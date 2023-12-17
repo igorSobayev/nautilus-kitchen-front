@@ -1,11 +1,14 @@
 <script setup>
 import { useAuthStore } from '../../store/auth'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
-
 import { useI18n } from 'vue-i18n'
 
+const authStore = useAuthStore()
+const router = useRouter()
+const { t } = useI18n()
+
 useHead({
-  title: 'Sign Up',
+  title: t('signup'),
   meta: [
     {
       name: 'description',
@@ -13,11 +16,6 @@ useHead({
     },
   ],
 })
-
-const authStore = useAuthStore()
-const router = useRouter()
-const { t } = useI18n()
-
 
 const state = ref({
   username: '',
