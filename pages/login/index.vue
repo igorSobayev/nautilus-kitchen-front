@@ -3,9 +3,14 @@ import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { useAuthStore } from '../../store/auth'
 import { ref } from 'vue'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
+import { useI18n } from 'vue-i18n'
+
+const authStore = useAuthStore()
+const router = useRouter()
+const { t } = useI18n()
 
 useHead({
-  title: 'Login',
+  title: t('login'),
   meta: [
     {
       name: 'description',
@@ -14,10 +19,6 @@ useHead({
   ],
 })
 
-
-const authStore = useAuthStore()
-const router = useRouter()
-
 const state = ref({
   email: '',
   password: ''
@@ -25,8 +26,8 @@ const state = ref({
 
 const validate = (state: any): FormError[] => {
   const errors = []
-  if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
-  if (!state.password) errors.push({ path: 'password', message: 'Requerido' })
+  if (!state.email) errors.push({ path: 'email', message: t('required') })
+  if (!state.password) errors.push({ path: 'password', message: t('required') })
   return errors
 }
 
@@ -59,12 +60,12 @@ function forgotPassword () {
                 <UInput type="email" name="email" v-model="state.email" />
             </UFormGroup>
 
-            <NKPasswordInput v-model="state.password" label="Contraseña" name="password" class="mt-4" />
+            <NKPasswordInput v-model="state.password" :label="$t('password')" name="password" class="mt-4" />
         
-            <div class="mt-4 cursor-pointer text-primary" @click="forgotPassword">Forgot the password?</div>
+            <div class="mt-4 cursor-pointer text-primary" @click="forgotPassword">{{ $t('forgotPassword') }}</div>
 
             <UButton type="submit" class="mt-4" block>
-                Iniciar sesión
+                {{ $t('login') }}
             </UButton>
             </UForm>
         </div>
