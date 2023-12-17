@@ -12,6 +12,8 @@ export default defineI18nConfig(() => ({
         repeatPassword: 'Repeat Password',
         signup: 'Register',
         nowYouCanStartCreatingRecipes: `Now you can start creating great recipes, let's get to it!`,
+        login: 'Login',
+        forgotPassword: 'Forgot your password?'
       },
       es: {
         welcome: 'Bienvenido',
@@ -22,7 +24,9 @@ export default defineI18nConfig(() => ({
         password: 'Contraseña',
         repeatPassword: 'Repetir Contraseña',
         signup: 'Registrarse',
-        nowYouCanStartCreatingRecipes: '¡Ahora ya puedes empezar a crear recetas geniales, a por ellas!'
+        nowYouCanStartCreatingRecipes: '¡Ahora ya puedes empezar a crear recetas geniales, a por ellas!',
+        login: 'Iniciar sesión',
+        forgotPassword: '¿Olvidaste la contraseña?'
       }
     }
   }))
