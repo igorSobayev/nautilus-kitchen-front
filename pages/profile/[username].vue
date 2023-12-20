@@ -23,12 +23,6 @@ const items = [
         label: 'Recetas publicas',
         key: 'recipes-published',
         icon: 'i-heroicons-queue-list',
-    },
-    {
-        label: 'Comentarios',
-        key: 'comments',
-        icon: 'i-heroicons-chat-bubble-left-right',
-        content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam itaque animi impedit nemo obcaecati! Labore esse et cum impedit voluptas quos, molestias perferendis magnam molestiae id! Adipisci a natus sed.'
     }
 ]
 
