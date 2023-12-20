@@ -2,22 +2,24 @@
 import { useUserStore } from './../../../store/user'
 import NKFollowersList from '~/components/custom/followers/NKFollowersList.vue'
 import { onNuxtReady, ref, useRoute } from '../../../.nuxt/imports'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const route = useRoute()
+const userStore = useUserStore()
 
 const items = [
     {
-        label: 'Following',
+        label: 'following',
         key: 'following',
         icon: 'i-heroicons-queue-list',
     },
     {
-        label: 'Followers',
+        label: 'followers',
         key: 'followers',
         icon: 'i-heroicons-queue-list',
     },
 ]
-
-const route = useRoute()
-const userStore = useUserStore()
 
 const followingList = ref([])
 const followersList = ref([])
@@ -41,7 +43,7 @@ onNuxtReady(async () => {
             <template #default="{ item, index, selected }">
                 <div class="flex items-center gap-2 relative truncate">
                     <UIcon :name="item.icon" class="w-4 h-4 flex-shrink-0" />
-                    <span class="truncate">{{ index + 1 }}. {{ item.label }}</span>
+                    <span class="truncate">{{ index + 1 }}. {{ $t(item.label) }}</span>
                     <span v-if="selected"
                         class="absolute -right-4 w-2 h-2 rounded-full bg-primary-500 dark:bg-primary-400" />
                 </div>

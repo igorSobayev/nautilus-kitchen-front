@@ -18,6 +18,8 @@ export default defineI18nConfig(() => ({
         recipesWip: 'Recipes on progress',
         publicRecipes: 'Public recipes',
         seePublicPage: 'View public page',
+        following: 'Following',
+        followers: 'Followers',
       },
       es: {
         welcome: 'Bienvenido',
@@ -35,6 +37,8 @@ export default defineI18nConfig(() => ({
         recipesWip: 'Recetas en curso',
         publicRecipes: 'Recetas publicas',
         seePublicPage: 'Ver página publica',
+        following: 'Siguiendo',
+        followers: 'Seguidores',
       }
     }
   }))
