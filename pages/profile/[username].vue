@@ -2,9 +2,14 @@
 import { useUserStore } from '../../store/user'
 import NKRecipesOptionsDropdown from '~/components/custom/NKRecipesOptionsDropdown.vue'
 import NKUserProfileInfo from '~/components/custom/NKUserProfileInfo.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const userStore = useUserStore()
+const route = useRoute()
 
 useHead({
-  title: 'Private profile',
+  title: t('privateProfile'),
   meta: [
     {
       name: 'description',
@@ -15,19 +20,16 @@ useHead({
 
 const items = [
     {
-        label: 'Recetas en curso',
+        label: t('recipesWip'),
         key: 'recipes-wip',
         icon: 'i-heroicons-queue-list',
     },
     {
-        label: 'Recetas publicas',
+        label: t('publicRecipes'),
         key: 'recipes-published',
         icon: 'i-heroicons-queue-list',
     }
 ]
-
-const userStore = useUserStore()
-const route = useRoute()
 
 const userProfileComp = ref(null)
 
@@ -53,7 +55,7 @@ onNuxtReady(async () => {
 <template>
     <div class="flex justify-center flex-col gap-5 pt-5">
         <div class="flex justify-end">
-            <UButton color="gray" :to="userPublicPageRoute" label="Ver página publica" />
+            <UButton color="gray" :to="userPublicPageRoute" :label="$t('seePublicPage')" />
         </div>
         <!-- Rectangulo con info del user -->
         <NKUserProfileInfo ref="userProfileComp" :public="false" />
@@ -62,7 +64,7 @@ onNuxtReady(async () => {
             <template #default="{ item, index, selected }">
                 <div class="flex items-center gap-2 relative truncate">
                     <UIcon :name="item.icon" class="w-4 h-4 flex-shrink-0" />
-                    <span class="truncate">{{ index + 1 }}. {{ item.label }}</span>
+                    <span class="truncate">{{ index + 1 }}. {{ $t(item.label) }}</span>
                     <span v-if="selected" class="absolute -right-4 w-2 h-2 rounded-full bg-primary-500 dark:bg-primary-400" />
                 </div>
             </template>

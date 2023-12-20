@@ -13,7 +13,11 @@ export default defineI18nConfig(() => ({
         signup: 'Register',
         nowYouCanStartCreatingRecipes: `Now you can start creating great recipes, let's get to it!`,
         login: 'Login',
-        forgotPassword: 'Forgot your password?'
+        forgotPassword: 'Forgot your password?',
+        privateProfile: 'Private profile',
+        recipesWip: 'Recipes on progress',
+        publicRecipes: 'Public recipes',
+        seePublicPage: 'View public page',
       },
       es: {
         welcome: 'Bienvenido',
@@ -26,7 +30,11 @@ export default defineI18nConfig(() => ({
         signup: 'Registrarse',
         nowYouCanStartCreatingRecipes: '¡Ahora ya puedes empezar a crear recetas geniales, a por ellas!',
         login: 'Iniciar sesión',
-        forgotPassword: '¿Olvidaste la contraseña?'
+        forgotPassword: '¿Olvidaste la contraseña?',
+        privateProfile: 'Perfil privado',
+        recipesWip: 'Recetas en curso',
+        publicRecipes: 'Recetas publicas',
+        seePublicPage: 'Ver página publica',
       }
     }
   }))
