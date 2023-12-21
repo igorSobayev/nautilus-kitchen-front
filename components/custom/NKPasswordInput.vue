@@ -2,9 +2,9 @@
 import { ref } from 'vue'
 
 const props = defineProps({ 
-    modelValue: string,
-    name: string,
-    label: string
+    modelValue: String,
+    name: String,
+    label: String
 })
 
 const emit = defineEmits(['update:modelValue'])
