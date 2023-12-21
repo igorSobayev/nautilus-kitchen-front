@@ -2,9 +2,7 @@
 import { useUserStore } from './../../../store/user'
 import NKFollowersList from '~/components/custom/followers/NKFollowersList.vue'
 import { onNuxtReady, ref, useRoute } from '../../../.nuxt/imports'
-import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
 const route = useRoute()
 const userStore = useUserStore()
 
