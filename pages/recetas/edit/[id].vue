@@ -4,9 +4,12 @@ import { useRecipeStore } from '../../../store/recipe'
 import { useUserStore } from '../../../store/user'
 import NKRichEditor from './../../../components/custom/NKRichEditor.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 useHead({
-  title: 'Edit recipe',
+  title: t('editRecipe'),
   meta: [
     {
       name: 'description',
@@ -81,7 +84,7 @@ const accordionVersions = ref([])
 
 const validate = (state) => {
   const errors = []
-  if (state.avgTime && state.avgTime.length >= 15) errors.push({ path: 'avgTime', message: 'The average time is to long' })
+  if (state.avgTime && state.avgTime.length >= 15) errors.push({ path: 'avgTime', message: t('avgTimeToLong') })
   return errors
 }
 
@@ -99,7 +102,7 @@ async function submit () {
     recipeStore
         .edit(state.value)
         .then(() => {
-            toast.add({ title: '¡Receta actualizada con éxito!' })
+            toast.add({ title: t('recipeSuccessfullyUpdated') })
         })
 }
 
@@ -133,9 +136,9 @@ function setVersionData () {
 
 function changeFeaturedImg (event) {
     const fileObj = event.target.files
-    // @ts-ignore comment
-    newFeaturedImage.value = new FormData() // @ts-ignore comment
-    newFeaturedImage.value.append('file', fileObj[0]) // @ts-ignore comment
+
+    newFeaturedImage.value = new FormData()
+    newFeaturedImage.value.append('file', fileObj[0])
     newFeaturedImage.value.append('path', `/recipes/${state.value._id}/featured-img`)
     
     // Set preview
@@ -163,7 +166,7 @@ async function changeAdditionalImages (event) {
 
     for (let index = 0; index < fileObj.length; index++) {
         const imageUrl = URL.createObjectURL(fileObj[index])
-        // @ts-ignore comment
+
         newAdditionalImagesPreview.value.push(imageUrl)
     }
 }
@@ -227,7 +230,7 @@ function removeIngredientRow (ingredientToRemove) {
 function addVersionRow () {
     accordionVersions.value.push(
         {
-        label: 'Nombre',
+        label: t('name'),
         advanceDescription: false,
         description: '',
         avgTime: '',
@@ -394,17 +397,17 @@ onNuxtReady(async () => {
         >
             <div class="grid grid-cols-3 gap-5">
                 <div>
-                    <UFormGroup name="username" label="Título" class="mt-3">
+                    <UFormGroup name="username" :label="$t('title')" class="mt-3">
                         <UInput v-model="state.title" />
                     </UFormGroup> 
                 </div>
                 <div>
-                    <UFormGroup name="avgTime" label="Tiempo medio" class="mt-3">
+                    <UFormGroup name="avgTime" :label="$t('avgTime')" class="mt-3">
                         <UInput v-model="state.avgTime" placeholder="1h 30min" />
                     </UFormGroup> 
                 </div>
                 <div>
-                    <UFormGroup name="difficulty" label="Dificultad" class="mt-3">
+                    <UFormGroup name="difficulty" :label="$t('difficulty')" class="mt-3">
                         <UInput disabled v-model="state.difficulty" class="hidden" />
                         <NuxtRating :read-only="false" ratingContent="🍴" activeColor="#6366f1" :ratingValue="state.difficulty" />
                     </UFormGroup> 
@@ -412,7 +415,7 @@ onNuxtReady(async () => {
             </div>
             <div class="mt-5">
                 <div class="flex gap-3 items-center pb-2">
-                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
+                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('description') }}</label>
                     <UToggle v-model="formManagement.advanceDescription" on-icon="i-heroicons-check-20-solid" off-icon="i-heroicons-x-mark-20-solid" />
                 </div>
                 <NKRichEditor v-if="formManagement.advanceDescription" v-model="state.description" />
@@ -421,12 +424,12 @@ onNuxtReady(async () => {
 
             <div class="mt-5 grid grid-cols-2 gap-5">
                 <div class="flex justify-center align-center flex-col gap-5 p-5">
-                    <UFormGroup name="username" label="Imagen destacada" class="mt-3">
+                    <UFormGroup name="username" :label="$t('featuredImg')" class="mt-3">
                         <div class="bg-contain bg-center bg-no-repeat h-52 my-5" v-if="!newFeaturedImagePreview" :style="'background-image: url(' + state.featuredImg + ');'"></div>
                         <div class="bg-contain bg-center bg-no-repeat h-52 my-5" v-else :style="'background-image: url(' + newFeaturedImagePreview + ');'"></div>
                         <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
                         <div v-if="newFeaturedImagePreview" class="flex justify-center mt-5 gap-3">
-                            <UButton label="Actualizar imagen destacada" @click="replaceFeaturedImage" icon="i-heroicons-pencil" size="sm" color="primary" square variant="outline" />
+                            <UButton :label="$t('updatedFeaturedImg')" @click="replaceFeaturedImage" icon="i-heroicons-pencil" size="sm" color="primary" square variant="outline" />
                             <UButton @click="cancelNewFeaturedImage" icon="i-heroicons-x-mark" size="sm" color="red" square variant="outline" />
                         </div>
                     </UFormGroup>
@@ -434,12 +437,12 @@ onNuxtReady(async () => {
                 <div class="grid grid-cols-1">
                     <div>
                         <div class="flex align-center items-center gap-4 mb-4">
-                            <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes adicionales</label>
+                            <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('additionalImgs') }}</label>
                             <UInput @change="changeAdditionalImages" :multiple="true" icon="i-heroicons-pencil-square" type="file" />
                         </div>
                         <div>
                             <div v-if="state.media.length > 0" class="mt-4">
-                                <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes actuales</label>
+                                <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('currentImgs') }}</label>
                                 <div class="grid grid-cols-4 gap-4">
                                     <div class="preview img relative" v-for="(media, index) in state.media">
                                         <div class="bg-contain bg-center bg-no-repeat h-12 border my-5" :style="'background-image: url(' + media + ');'"></div>
@@ -448,7 +451,7 @@ onNuxtReady(async () => {
                                 </div>
                             </div>
                             <div v-if="newAdditionalImagesPreview.length > 0" class="mt-4">
-                                <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Imagenes nuevas</label>
+                                <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('newImgs') }}</label>
                                 <div class="grid grid-cols-4 gap-4">
                                     <div class="preview img relative" v-for="(preview, index) in newAdditionalImagesPreview">
                                         <div class="bg-contain bg-center bg-no-repeat h-12 border my-5" :style="'background-image: url(' + preview + ');'"></div>
@@ -456,13 +459,13 @@ onNuxtReady(async () => {
                                     </div>
                                 </div>
                                 <div v-if="newAdditionalImagesPreview.length > 0" class="flex justify-center mt-5 gap-3">
-                                    <UButton label="Actualizar imagenes" @click="replaceAdditionalImages" icon="i-heroicons-pencil" size="sm" color="primary" square variant="outline" />
+                                    <UButton :label="$t('updateImgs')" @click="replaceAdditionalImages" icon="i-heroicons-pencil" size="sm" color="primary" square variant="outline" />
                                     <UButton @click="cancelNewAdditionalImages" icon="i-heroicons-x-mark" size="sm" color="red" square variant="outline" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <UFormGroup class="mt-5" name="notes" label="Notas adicionales">
+                    <UFormGroup class="mt-5" name="notes" :label="$t('additionalNotes')">
                         <UTextarea :rows="3" variant="outline" v-model="state.notes" />
                     </UFormGroup>
                 </div>
@@ -473,12 +476,12 @@ onNuxtReady(async () => {
             <div class="mt-5 grid grid-cols-2">
                 <div>
                     <div class="flex gap-3 items-center pb-2">
-                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
+                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('ingredients') }}</label>
                         <UButton @click="addIngredientRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                     </div>
                     <div>
                         <div class="flex align-center flex-row gap-3 justify-start p-1 mb-2 rounded-md w-[80%]" v-for="ingredient in state.ingredients">
-                            <div><UInput icon="i-material-symbols-kitchen-outline" placeholder="Tomates" v-model="ingredient.name" color="gray" variant="outline" /></div>
+                            <div><UInput icon="i-material-symbols-kitchen-outline" :placeholder="$t('tomatoes')" v-model="ingredient.name" color="gray" variant="outline" /></div>
                             <div><UInput icon="i-icon-park-outline-weight" placeholder="200 g" color="gray" v-model="ingredient.quantity" variant="outline" /></div>
                             <div class="h-full my-auto"><UButton @click="removeIngredientRow(ingredient.name)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
                         </div>
@@ -486,14 +489,14 @@ onNuxtReady(async () => {
                 </div>  
                 <div>
                     <div class="flex gap-3 items-center pb-2">
-                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Pasos</label>
+                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('steps') }}</label>
                         <UButton @click="addStepRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                     </div>
                     <div>
                         <VueDraggableNext :list="state.steps" @change="orderSteps">
                             <div class="flex align-center flex-row gap-4 justify-start p-2 mb-2 rounded-md w-[100%]" v-for="step in state.steps">
                                 <div class="h-full my-auto text-gray-400">{{ step.order }}</div>
-                                <div class="w-full"><UTextarea :rows="2" variant="outline" placeholder="Cortamos los tomates en rodajas de unos 2 cm de ...." v-model="step.description" /></div>
+                                <div class="w-full"><UTextarea :rows="2" variant="outline" :placeholder="$t('stepsPlaceholder')" v-model="step.description" /></div>
                                 <div class="h-full my-auto"><UButton @click="removeStepRow(step.order)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
                             </div>
                         </VueDraggableNext>
@@ -505,29 +508,29 @@ onNuxtReady(async () => {
 
             <div class="mt-5">
                 <div class="flex gap-3 items-center pb-2">
-                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="versions">Versiones</label>
+                    <label class="block font-medium text-gray-700 dark:text-gray-200" for="versions">{{ $t('versions') }}</label>
                     <UButton @click="addVersionRow" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                 </div>
                 <UAccordion :items="accordionVersions">
                     <template #item="{ item, index }">
                         <div>
                             <div class="flex justify-end">
-                                <UButton label="Eliminar versión" color="red" variant="outline" @click="removeVersionRow(index)" />
+                                <UButton :label="$t('deleteVersion')" color="red" variant="outline" @click="removeVersionRow(index)" />
                             </div>
                             <div class="grid grid-cols-3 gap-5">
                                 <div>
-                                    <UFormGroup name="username" label="Nombre versión" class="mt-3">
+                                    <UFormGroup name="versionName" :label="$t('versionName')" class="mt-3">
                                         <UInput v-model="item.label" />
                                     </UFormGroup> 
                                 </div>
                                 <div class="items-end flex">
-                                    <UButton label="Importar nombre e ingredientes" variant="outline" @click="importOriginalInfo(index)" />
+                                    <UButton :label="$t('importNameAndIngredients')" variant="outline" @click="importOriginalInfo(index)" />
                                 </div>
                             </div>
                             <div class="mt-5">
                                 <div>
                                     <div class="flex gap-3 items-center pb-2">
-                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Descripción</label>
+                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('description') }}</label>
                                         <UToggle v-model="item.advanceDescription" on-icon="i-heroicons-check-20-solid" off-icon="i-heroicons-x-mark-20-solid" />
                                     </div>
                                     <NKRichEditor v-if="item.advanceDescription" v-model="item.description" />
@@ -537,12 +540,12 @@ onNuxtReady(async () => {
                             <div class="grid grid-cols-2 gap-5 mt-5">
                                 <div>
                                     <div class="flex gap-3 items-center pb-2">
-                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Ingredientes</label>
+                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('ingredients') }}</label>
                                         <UButton @click="addVersionIngredientRow(index)" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                                     </div>
                                     <div>
                                         <div class="border flex align-center flex-row gap-3 justify-start p-1 mb-2 rounded-md w-[80%]" v-for="ingredient in item.ingredients">
-                                            <div><UInput icon="i-material-symbols-kitchen-outline" placeholder="Tomates" v-model="ingredient.name" color="gray" variant="outline" /></div>
+                                            <div><UInput icon="i-material-symbols-kitchen-outline" :placeholder="$t('tomatoes')" v-model="ingredient.name" color="gray" variant="outline" /></div>
                                             <div><UInput icon="i-icon-park-outline-weight" placeholder="200 g" color="gray" v-model="ingredient.quantity" variant="outline" /></div>
                                             <div class="h-full my-auto"><UButton @click="removeVersionIngredientRow(ingredient.name, index)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
                                         </div>
@@ -550,14 +553,14 @@ onNuxtReady(async () => {
                                 </div>
                                 <div>
                                     <div class="flex gap-3 items-center pb-2">
-                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">Pasos</label>
+                                        <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('steps') }}</label>
                                         <UButton @click="addVersionStepRow(index)" icon="i-heroicons-plus" size="xs" color="primary" square variant="outline" />
                                     </div>
                                     <div>
                                         <VueDraggableNext :list="state.steps" @change="orderVersionSteps">
                                             <div class="flex align-center flex-row gap-4 justify-start p-2 mb-2 rounded-md w-[100%]" v-for="step in item.steps">
                                                 <div class="h-full my-auto text-gray-400">{{ step.order }}</div>
-                                                <div class="w-full"><UTextarea :rows="2" variant="outline" placeholder="Cortamos los tomates en rodajas de unos 2 cm de ...." v-model="step.description" /></div>
+                                                <div class="w-full"><UTextarea :rows="2" variant="outline" :placeholder="$t('stepsPlaceholder')" v-model="step.description" /></div>
                                                 <div class="h-full my-auto"><UButton @click="removeVersionStepRow(step.order, index)" icon="i-heroicons-minus" size="xs" color="gray" square variant="outline" /></div>
                                             </div>
                                         </VueDraggableNext>
@@ -569,7 +572,7 @@ onNuxtReady(async () => {
                 </UAccordion>
             </div>
 
-            <UButton block class="mt-5" label="Guardar" @click="submit" />
+            <UButton block class="mt-5" :label="$t('save')" @click="submit" />
         </UForm>
     </div>
 </template>
