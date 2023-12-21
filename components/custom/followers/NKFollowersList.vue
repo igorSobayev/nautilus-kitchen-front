@@ -1,9 +1,8 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script setup>
 
-const props = defineProps<{
+const props = defineProps({
     followers: Array,
-}>()
+})
 
 </script>
 
@@ -18,7 +17,7 @@ const props = defineProps<{
                 <UIcon name="i-heroicons-users" class="text-primary" />
             </div>
             <div class="flex justify-center">
-                <UButton label="View profile" icon="i-heroicons-eye" size="md" color="primary"
+                <UButton :label="$t('viewProfile')" icon="i-heroicons-eye" size="md" color="primary"
                     :to="`/users/${follower.username}`" />
             </div>
         </div>

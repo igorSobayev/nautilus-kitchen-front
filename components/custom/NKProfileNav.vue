@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useAuthStore } from './../../store/auth'
-import { useUserStore } from '../../store/user';
+import { useUserStore } from '../../store/user'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const userMail = ref('')
@@ -30,36 +32,36 @@ onNuxtReady(async () => {
     ],
     [
       {
-        label: 'Configuración',
+        label: t('configuration'),
         icon: 'i-heroicons-cog-8-tooth',
         link: '/configuration'
       },
     ],
     [
       {
-        label: 'Mi perfil',
+        label: t('myProfile'),
         icon: 'i-heroicons-user',
         link: '/profile/' + user.value.username
       },
       {
-        label: 'Mis recetas',
+        label: t('myRecipes'),
         icon: 'i-heroicons-book-open',
         link: '/recetas'
       },
       {
-        label: 'Crear receta',
+        label: t('addRecipe'),
         icon: 'i-heroicons-folder-plus',
         link: '/recetas/crear-receta'
       },
       {
-        label: 'Siguiendo',
+        label: t('following'),
         icon: 'i-heroicons-users',
         link: `/users/${user.value.username}/followers`,
       }
     ],
     [
       {
-        label: 'Desconectar',
+        label: t('logout'),
         slot: 'logout',
         icon: 'i-heroicons-arrow-left-on-rectangle'
       }
@@ -76,7 +78,7 @@ onNuxtReady(async () => {
     <template #account="{ item }">
       <div class="text-left">
         <p>
-          Iniciado como
+          {{ $t('logedAs') }}
         </p>
         <p class="truncate font-medium text-gray-900 dark:text-white">
           {{ item.label }}

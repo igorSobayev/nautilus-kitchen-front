@@ -1,5 +1,8 @@
 <script setup>
-import { useRecipeStore } from '../../store/recipe';
+import { useRecipeStore } from '../../store/recipe'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
     recipeId: String,
@@ -11,22 +14,22 @@ const emit = defineEmits(['actionDone'])
 const optionsUnpublishedItems = [
     [
         {
-            label: 'Edit Recipe',
+            label: t('editRecipe'),
             action: 'editRecipe',
             icon: 'i-heroicons-pencil-square',
         },
         {
-            label: 'Preview Recipe',
+            label: t('previewRecipe'),
             action: 'previewRecipe',
             icon: 'i-heroicons-eye',
         },
         {
-            label: 'Publish Recipe',
+            label: t('publishRecipe'),
             action: 'publishRecipe',
             icon: 'i-heroicons-arrow-up-on-square-stack',
         },
         {
-            label: 'Delete Recipe',
+            label: t('deleteRecipe'),
             action: 'deleteRecipe',
             icon: 'i-heroicons-archive-box-x-mark',
         },
@@ -36,22 +39,22 @@ const optionsUnpublishedItems = [
 const optionsPublishedItems = [
     [
         {
-            label: 'Edit Recipe',
+            label: t('editRecipe'),
             action: 'editRecipe',
             icon: 'i-heroicons-pencil-square',
         },
         {
-            label: 'Preview Recipe',
+            label: t('previewRecipe'),
             action: 'previewRecipe',
             icon: 'i-heroicons-eye',
         },
         {
-            label: 'Unpublish Recipe',
+            label: t('unpublishRecipe'),
             action: 'unpublishRecipe',
             icon: 'i-heroicons-arrow-down-on-square-stack',
         },
         {
-            label: 'Delete Recipe',
+            label: t('deleteRecipe'),
             action: 'deleteRecipe',
             icon: 'i-heroicons-archive-box-x-mark',
         },
@@ -89,19 +92,19 @@ function editRecipe (recipeId) {
 async function publishRecipe (recipeId) {
     await recipeStore.publishRecipe(recipeId)
     emit('actionDone')
-    toast.add({ title: '¡Receta publicada!' })
+    toast.add({ title: t('recipePublished') })
 }
 
 async function unpublishRecipe (recipeId) {
     await recipeStore.unpublishRecipe(recipeId)
     emit('actionDone')
-    toast.add({ title: '¡Receta despublicada!' })
+    toast.add({ title: t('recipeUnpublished') })
 }
 
 async function deleteRecipe (recipeId) {
     await recipeStore.deleteRecipe(recipeId)
     emit('actionDone')
-    toast.add({ title: '¡Receta eliminada!' })
+    toast.add({ title: t('recipeDeleted') })
 }
 
 </script>

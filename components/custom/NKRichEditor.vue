@@ -2,7 +2,7 @@
   <div id="text-editor">
     <div class="toolbar" v-if="editor">
       <div class="align-dropdown">
-        <button class="dropbtn">Título ▼</button>
+        <button class="dropbtn">{{ $t('title') }} ▼</button>
         <div class="dropdown-content">
           <a v-for="index in 6" :class="{ active: editor.isActive('heading', { level: index }) }"
             :style="{ fontSize: 20 - index + 'px' }" @click="onHeadingClick(index)" role="button">
