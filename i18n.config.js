@@ -51,6 +51,14 @@ export default defineI18nConfig(() => ({
         newPassword: 'New password',
         repeatNewPassword: 'Repeat new password',
         changePassword: 'Change password',
+        configuration: 'Configuration',
+        passwordUpdated: 'Password successfully updated!',
+        edit: 'Edit',
+        cancel: 'Cancel',
+        recommended: 'Recommended',
+        surname: 'LastName',
+        currentPassword: 'Current Password',
+        update: 'Update',
       },
       es: {
         welcome: 'Bienvenido',
@@ -101,6 +109,14 @@ export default defineI18nConfig(() => ({
         newPassword: 'Contraseña nueva',
         repeatNewPassword: 'Repetir contraseña nueva',
         changePassword: 'Cambiar contraseña',
+        configuration: 'Configuración',
+        passwordUpdated: '¡Contraseña actualizada con éxito!',
+        edit: 'Editar',
+        cancel: 'Cancelar',
+        recommended: 'Recomendado',
+        surname: 'Apellido',
+        currentPassword: 'Contraseña actual',
+        update: 'Actualizar',
       }
     }
   }))

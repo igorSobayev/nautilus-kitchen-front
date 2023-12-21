@@ -5,9 +5,16 @@ import { useUserStore } from './../../store/user'
 import { onNuxtReady, ref } from '../../.nuxt/imports'
 import { User } from '../../store/types'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
+import { useI18n } from 'vue-i18n'
+
+const toast = useToast()
+const authStore = useAuthStore()
+const userStore = useUserStore()
+
+const { t } = useI18n()
 
 useHead({
-  title: 'Configuration',
+  title: t('configuration'),
   meta: [
     {
       name: 'description',
@@ -15,11 +22,6 @@ useHead({
     },
   ],
 })
-
-
-const toast = useToast()
-const authStore = useAuthStore()
-const userStore = useUserStore()
 
 const state = ref({
   username: '',
@@ -50,17 +52,17 @@ const changePasswordState = ref({
 
 const validate = (state: any): FormError[] => {
   const errors = []
-  if (!state.name) errors.push({ path: 'name', message: 'Requerido' })
-  if (!state.surname) errors.push({ path: 'surname', message: 'Requerido' })
+  if (!state.name) errors.push({ path: 'name', message: t('required') })
+  if (!state.surname) errors.push({ path: 'surname', message: t('required') })
   return errors
 }
 
 const validatePassword = (state: any): FormError[] => {
   const errors = []
-  if (!state.actualPassword) errors.push({ path: 'actualPassword', message: 'Requerido' })
-  if (!state.newPassword) errors.push({ path: 'newPassword', message: 'Requerido' })
-  if (!state.repeatedNewPassword) errors.push({ path: 'repeatedNewPassword', message: 'Requerido' })
-  if (state.newPassword !== state.repeatedNewPassword) errors.push({ path: 'newPassword', message: 'Las contraseñas no coinciden!' })
+  if (!state.actualPassword) errors.push({ path: 'actualPassword', message: t('required') })
+  if (!state.newPassword) errors.push({ path: 'newPassword', message: t('required') })
+  if (!state.repeatedNewPassword) errors.push({ path: 'repeatedNewPassword', message: t('required') })
+  if (state.newPassword !== state.repeatedNewPassword) errors.push({ path: 'newPassword', message: t('passwordsNotMatch') })
   return errors
 }
 
@@ -115,7 +117,7 @@ async function changePassword () {
 
     changingPassword.value = false
 
-    toast.add({ title: 'Contraseña actualizada con éxito!' })
+    toast.add({ title: t('passwordUpdated') })
 }
 
 function cancelChangePassword () {
@@ -171,9 +173,9 @@ onNuxtReady(async () => {
         >
             <div>
                 <div class="flex justify-end mb-5">
-                    <UButton v-if="!state.editing" @click="edit" icon="i-heroicons-pencil-square" size="md" label="Editar" color="primary" />
-                    <UButton v-else @click="cancelEditing" icon="i-heroicons-x-mark" size="md" label="Cancelar" color="primary" />
-                    <UButton @click="changingPassword = true" icon="i-heroicons-key" size="md" label="Cambiar contraseña" color="gray" class="ml-3" />
+                    <UButton v-if="!state.editing" @click="edit" icon="i-heroicons-pencil-square" size="md" :label="$t('edit')" color="primary" />
+                    <UButton v-else @click="cancelEditing" icon="i-heroicons-x-mark" size="md" :label="$t('cancel')" color="primary" />
+                    <UButton @click="changingPassword = true" icon="i-heroicons-key" size="md" :label="$t('changePassword')" color="gray" class="ml-3" />
                 </div>
                 <div class="grid grid-cols-3">
                     <div class="flex justify-center align-center flex-col items-center gap-5 p-5">
@@ -182,11 +184,11 @@ onNuxtReady(async () => {
                             <div v-if="state.newAvatarPreview" :style="'background-image: url(' + state.newAvatarPreview + ');'" class="bg-cover bg-center bg-no-repeat rounded-full h-36 w-36"></div>
                             <div v-else :style="'background-image: url(' + state.avatar + ');'" class="bg-cover bg-center bg-no-repeat rounded-full h-36 w-36"></div>
                             <UInput @change="changedAvatar" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
-                            <span class="text-slate-800 text-xs">Recomendado 256 x 256</span>
+                            <span class="text-slate-800 text-xs">{{ $t('recommended') }} 256 x 256</span>
                         </div>
                     </div>
                     <div class="col-span-2">
-                        <UFormGroup name="username" label="Usuario" class="mt-3">
+                        <UFormGroup name="username" :label="$t('user')" class="mt-3">
                             <UInput disabled v-model="state.username" />
                         </UFormGroup>
 
@@ -196,21 +198,21 @@ onNuxtReady(async () => {
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <UFormGroup name="name" label="Nombre" class="mt-3 w-[50%]">
+                    <UFormGroup name="name" :label="$t('name')" class="mt-3 w-[50%]">
                         <UInput :disabled="!state.editing" v-model="state.name" />
                     </UFormGroup>
 
-                    <UFormGroup name="surname" label="Apellido" class="mt-3 w-[50%]">
+                    <UFormGroup name="surname" :label="$t('surname')" class="mt-3 w-[50%]">
                         <UInput :disabled="!state.editing" v-model="state.surname" />
                     </UFormGroup>
                 </div>
                 <div class="mt-3">
-                    <UFormGroup name="description" label="Descripción">
+                    <UFormGroup name="description" :label="$t('description')">
                         <UTextarea :disabled="!state.editing" :rows="8" variant="outline" v-model="state.description" />
                     </UFormGroup>
                 </div>
 
-                <UButton v-if="state.editing" block type="submit" class="mt-5" label="Guardar" />
+                <UButton v-if="state.editing" block type="submit" class="mt-5" :label="$t('save')" />
             </div>
         </UForm>
         <!-- Change password form -->
@@ -225,13 +227,13 @@ onNuxtReady(async () => {
         >
             <div>
                 <div class="flex justify-end mb-5">
-                    <UButton type="submit" icon="i-heroicons-key" size="md" label="Actualizar" color="gray" class="ml-3" />
-                    <UButton @click="cancelChangePassword" icon="i-heroicons-x-mark" size="md" label="Cancelar" color="red" class="ml-3" />
+                    <UButton type="submit" icon="i-heroicons-key" size="md" :label="$t('update')" color="gray" class="ml-3" />
+                    <UButton @click="cancelChangePassword" icon="i-heroicons-x-mark" size="md" :label="$t('cancel')" color="red" class="ml-3" />
                 </div>
                 <div class="flex justify-center align-center flex-col items-center gap-4">
-                    <NKPasswordInput v-model="changePasswordState.actualPassword" label="Contraseña actual" class="mt-3 w-full" name="actualPassword" />
-                    <NKPasswordInput v-model="changePasswordState.newPassword" label="Nueva contraseña" class="mt-3 w-full" name="newPassword" />
-                    <NKPasswordInput v-model="changePasswordState.repeatedNewPassword" label="Repetir contraseña nueva" class="mt-3 w-full" name="repeatedNewPassword" />
+                    <NKPasswordInput v-model="changePasswordState.actualPassword" :label="$t('currentPassword')" class="mt-3 w-full" name="actualPassword" />
+                    <NKPasswordInput v-model="changePasswordState.newPassword" :label="$t('newPassword')" class="mt-3 w-full" name="newPassword" />
+                    <NKPasswordInput v-model="changePasswordState.repeatedNewPassword" :label="$t('repeatNewPassword')" class="mt-3 w-full" name="repeatedNewPassword" />
                 </div>
             </div>
         </UForm>
