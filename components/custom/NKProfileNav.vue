@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useAuthStore } from './../../store/auth'
 import { useUserStore } from '../../store/user'
 import { useI18n } from 'vue-i18n'

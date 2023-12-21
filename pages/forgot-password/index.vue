@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import type { FormError } from '@nuxt/ui/dist/runtime/types'
+<script setup>
 import { ref, useToast, useRouter } from '../../.nuxt/imports'
 import { useAuthStore } from '../../store/auth'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
@@ -33,14 +32,14 @@ const newPasswordState = ref({
 
 const resetCodeSend = ref(false)
 
-const validate = (state: any): FormError[] => {
-  const errors: any = []
+const validate = (state) => {
+  const errors = []
   if (!state.email) errors.push({ path: 'email', message: t('required') })
   return errors
 }
 
-const validateResetCode = (state: any): FormError[] => {
-  const errors: any = []
+const validateResetCode = (state) => {
+  const errors = []
   if (!state.email) errors.push({ path: 'userEmail', message: t('required') })
   if (!state.resetCode) errors.push({ path: 'resetCode', message: t('required') })
   if (!state.newPassword) errors.push({ path: 'newPassword', message: t('required') })
@@ -53,7 +52,7 @@ const form = ref()
 const formResetPass = ref()
 
 async function sendResetCode () {
-  await form.value!.validate()
+  await form.value.validate()
   authStore
     .forgotPassword(state.value.email)
     .then(() => {
@@ -63,7 +62,7 @@ async function sendResetCode () {
 }
 
 async function resetPassword () {
-  await formResetPass.value!.validate()
+  await formResetPass.value.validate()
   authStore
     .resetPassword({
       email: newPasswordState.value.email,

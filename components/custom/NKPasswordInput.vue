@@ -1,11 +1,11 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 
-const props = defineProps<{ 
+const props = defineProps({ 
     modelValue: string,
     name: string,
     label: string
-}>()
+})
 
 const emit = defineEmits(['update:modelValue'])
 

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import type { FormError } from '@nuxt/ui/dist/runtime/types'
+<script setup>
 import { useAuthStore } from '../../store/auth'
 import { ref } from 'vue'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
@@ -24,7 +23,7 @@ const state = ref({
   password: ''
 })
 
-const validate = (state: any): FormError[] => {
+const validate = (state) => {
   const errors = []
   if (!state.email) errors.push({ path: 'email', message: t('required') })
   if (!state.password) errors.push({ path: 'password', message: t('required') })
@@ -34,7 +33,7 @@ const validate = (state: any): FormError[] => {
 const form = ref()
 
 async function submit () {
-  await form.value!.validate()
+  await form.value.validate()
   authStore
     .login(state.value)
     .then((_response) => router.push("/"))

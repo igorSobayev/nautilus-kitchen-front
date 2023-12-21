@@ -1,15 +1,14 @@
-<script setup lang="ts">
-import { Recipe } from '../../../store/types'
+<script setup>
 import { useUserStore } from './../../../store/user'
 import { onNuxtReady, ref, useRoute } from '../../../.nuxt/imports'
 
 const userStore = useUserStore()
 const route = useRoute()
-const recipes = ref([] as Recipe[])
+const recipes = ref([])
 
 onNuxtReady(async () => {
-  const username = route.params.username as string
-  recipes.value = await userStore.loadPublicUserRecipes(username) as Recipe[]
+  const username = route.params.username
+  recipes.value = await userStore.loadPublicUserRecipes(username)
 })
 </script>
 
