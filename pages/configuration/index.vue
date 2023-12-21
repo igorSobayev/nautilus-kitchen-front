@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import type { FormError } from '@nuxt/ui/dist/runtime/types'
+<script setup>
 import { useAuthStore } from '../../store/auth'
 import { useUserStore } from './../../store/user'
 import { onNuxtReady, ref } from '../../.nuxt/imports'
-import { User } from '../../store/types'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
 import { useI18n } from 'vue-i18n'
 
@@ -50,14 +48,14 @@ const changePasswordState = ref({
     repeatedNewPassword: '',
 })
 
-const validate = (state: any): FormError[] => {
+const validate = (state) => {
   const errors = []
   if (!state.name) errors.push({ path: 'name', message: t('required') })
   if (!state.surname) errors.push({ path: 'surname', message: t('required') })
   return errors
 }
 
-const validatePassword = (state: any): FormError[] => {
+const validatePassword = (state) => {
   const errors = []
   if (!state.actualPassword) errors.push({ path: 'actualPassword', message: t('required') })
   if (!state.newPassword) errors.push({ path: 'newPassword', message: t('required') })
@@ -70,7 +68,7 @@ const form = ref()
 const formPassword = ref()
 
 async function submit () {
-  await form.value!.validate()
+  await form.value.validate()
 
   let newAvatar
 
@@ -107,7 +105,7 @@ async function cancelEditing () {
 
 async function changePassword () {
 
-    await formPassword.value!.validate()
+    await formPassword.value.validate()
 
     await authStore.changePassword({
         actualPassword: changePasswordState.value.actualPassword,
@@ -124,11 +122,11 @@ function cancelChangePassword () {
     changingPassword.value = false
 }
 
-async function changedAvatar (event: any) {
+async function changedAvatar (event) {
     const fileObj = event.target.files
-    // @ts-ignore comment
-    state.value.newAvatar = new FormData() // @ts-ignore comment
-    state.value.newAvatar.append('file', fileObj[0]) // @ts-ignore comment
+
+    state.value.newAvatar = new FormData()
+    state.value.newAvatar.append('file', fileObj[0])
     state.value.newAvatar.append('path', '/avatar')
     
     // Set preview
@@ -141,7 +139,7 @@ async function updatedSuccesfully () {
 }
 
 async function loadUserData () {
-    const user = await userStore.loadUserData() as User
+    const user = await userStore.loadUserData()
     originalValues.value.name = user.name
     originalValues.value.surname = user.surname
     originalValues.value.description = user.description
