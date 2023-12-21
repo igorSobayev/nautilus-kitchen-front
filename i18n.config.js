@@ -44,6 +44,13 @@ export default defineI18nConfig(() => ({
         versionName: 'Version name',
         importNameAndIngredients: 'Import name and ingredients',
         save: 'Save',
+        forgotPasswordTitle: 'Forgot password',
+        passwordRecovered: 'Password successfully retrieved',
+        getResetCode: 'Get recovery code',
+        resetCode: 'Recovery code',
+        newPassword: 'New password',
+        repeatNewPassword: 'Repeat new password',
+        changePassword: 'Change password',
       },
       es: {
         welcome: 'Bienvenido',
@@ -87,6 +94,13 @@ export default defineI18nConfig(() => ({
         versionName: 'Nombre versión',
         importNameAndIngredients: 'Importar nombre e ingredientes',
         save: 'Guardar',
+        forgotPasswordTitle: 'Contraseña olvidada',
+        passwordRecovered: '¡Contraseña recuperada con éxito!',
+        getResetCode: 'Obtener codido de recuperación',
+        resetCode: 'Codigo de recuperación',
+        newPassword: 'Contraseña nueva',
+        repeatNewPassword: 'Repetir contraseña nueva',
+        changePassword: 'Cambiar contraseña',
       }
     }
   }))

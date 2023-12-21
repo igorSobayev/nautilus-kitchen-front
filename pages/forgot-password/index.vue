@@ -3,9 +3,15 @@ import type { FormError } from '@nuxt/ui/dist/runtime/types'
 import { ref, useToast, useRouter } from '../../.nuxt/imports'
 import { useAuthStore } from '../../store/auth'
 import NKPasswordInput from '../../components/custom/NKPasswordInput.vue'
+import { useI18n } from 'vue-i18n'
+
+const toast = useToast()
+const authStore = useAuthStore()
+const router = useRouter()
+const { t } = useI18n()
 
 useHead({
-  title: 'Forgot password',
+  title: t('forgotPasswordTitle'),
   meta: [
     {
       name: 'description',
@@ -13,10 +19,6 @@ useHead({
     },
   ],
 })
-
-const toast = useToast()
-const authStore = useAuthStore()
-const router = useRouter()
 
 const state = ref({
   email: ''
@@ -33,17 +35,17 @@ const resetCodeSend = ref(false)
 
 const validate = (state: any): FormError[] => {
   const errors: any = []
-  if (!state.email) errors.push({ path: 'email', message: 'Requerido' })
+  if (!state.email) errors.push({ path: 'email', message: t('required') })
   return errors
 }
 
 const validateResetCode = (state: any): FormError[] => {
   const errors: any = []
-  if (!state.email) errors.push({ path: 'userEmail', message: 'Requerido' })
-  if (!state.resetCode) errors.push({ path: 'resetCode', message: 'Requerido' })
-  if (!state.newPassword) errors.push({ path: 'newPassword', message: 'Requerido' })
-  if (!state.repeatedNewPassword) errors.push({ path: 'repeatedNewPassword', message: 'Requerido' })
-  if (state.newPassword !== state.repeatedNewPassword) errors.push({ path: 'newPassword', message: 'Las contraseñas no coinciden!' })
+  if (!state.email) errors.push({ path: 'userEmail', message: t('required') })
+  if (!state.resetCode) errors.push({ path: 'resetCode', message: t('required') })
+  if (!state.newPassword) errors.push({ path: 'newPassword', message: t('required') })
+  if (!state.repeatedNewPassword) errors.push({ path: 'repeatedNewPassword', message: t('required') })
+  if (state.newPassword !== state.repeatedNewPassword) errors.push({ path: 'newPassword', message: t('passwordsNotMatch') })
   return errors
 }
 
@@ -69,7 +71,7 @@ async function resetPassword () {
       resetCode: newPasswordState.value.resetCode,
     })
     .then(() => {
-      toast.add({ title: 'Contraseña recuperada con éxito!' })
+      toast.add({ title: t('passwordRecovered') })
       router.push("/login")
     })
     .catch((error) => console.log("API error", error))
@@ -93,7 +95,7 @@ async function resetPassword () {
               </UFormGroup>
           
               <UButton type="submit" class="mt-4" block>
-                  Get reset code
+                  {{ $t('getResetCode') }}
               </UButton>
             </UForm>
 
@@ -109,16 +111,16 @@ async function resetPassword () {
                   <UInput type="email" name="userEmail" v-model="newPasswordState.email" />
               </UFormGroup>
 
-              <UFormGroup class="mt-4" label="Reset code" name="resetCode">
+              <UFormGroup class="mt-4" :label="$t('resetCode')" name="resetCode">
                   <UInput type="text" name="resetCode" v-model="newPasswordState.resetCode" />
               </UFormGroup>
 
-              <NKPasswordInput v-model="newPasswordState.newPassword" label="New password" name="newPassword" class="mt-4" />
+              <NKPasswordInput v-model="newPasswordState.newPassword" :label="$t('newPassword')" name="newPassword" class="mt-4" />
 
-              <NKPasswordInput v-model="newPasswordState.repeatedNewPassword" label="Repeat new password" class="mt-4 w-full" name="repeatedNewPassword" />
+              <NKPasswordInput v-model="newPasswordState.repeatedNewPassword" :label="$t('repeatNewPassword')" class="mt-4 w-full" name="repeatedNewPassword" />
 
               <UButton type="submit" class="mt-4" block>
-                  Change password
+                  {{ $t('changePassword') }}
               </UButton>
             </UForm>
         </div>
