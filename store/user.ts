@@ -147,6 +147,18 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
+  // User home recipes
+  async function followingRecipes (): Promise<any> {
+    const userId = authStore.user.id
+    
+    const recipes = await $fetch(`${baseUrl}/user/${userId}/list-following-recipes`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+
+    return recipes
+  }
+
   return {
     loadUserData,
     loadPublicUserData,
@@ -160,5 +172,6 @@ export const useUserStore = defineStore('user', () => {
     unfollowUser,
     listFollowing,
     listFollowers,
+    followingRecipes,
   }
 })
