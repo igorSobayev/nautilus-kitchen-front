@@ -6,7 +6,7 @@
             </div>
             <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[40vh] left-0 top-[-1000%] md:w-auto  w-full flex items-center px-5 z-50" :class="{ 'top-[101%]': menuOpenned }">
                 <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
-                    <NuxtLink class="hover:text-gray-500" to="/">Home</NuxtLink>
+                    <NuxtLink class="hover:text-gray-500" to="/home">Home</NuxtLink>
                     <NuxtLink class="hover:text-gray-500" to="/recetas">Recetas</NuxtLink>
                     <NuxtLink class="hover:text-gray-500" @click="addRecipe">Crear recetas</NuxtLink>
                 </ul>
