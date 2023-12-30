@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from './../../store/user'
 import { onNuxtReady } from './../../.nuxt/imports'
 
@@ -15,16 +15,62 @@ useHead({
 })
 
 const userStore = useUserStore()
+const recipes = ref([])
 
 onNuxtReady(async () => {
-    const recipes = await userStore.followingRecipes()
-    console.log(recipes)
+  recipes.value = await userStore.followingRecipes()
+  console.log(recipes)
 })
 </script>
 
 <template>
-    <div>
-        Que cosas jeje
+    <div class="flex flex-col h-dvh xl:w-1/4 bg-white border-r border-b border-l">
+        <div class="border-t px-5 py-3 text-xl">
+          Últimas recetas
+        </div>
+        <div class="border-t border-b px-5">
+          <!-- Recipe -->
+          <div v-for="recipe in recipes" :key="recipe._id">
+            <div class="grid grid-cols-12">
+              <div class="col-span-1 border-r pt-2 align-center flex">
+                <UAvatar src="https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg" />
+              </div>
+              <div class="col-span-11">
+                <div class="pl-2 pt-1 text-lg">
+                  <div class="underline underline-offset-1">
+                    {{ recipe.user.username }}
+                  </div>
+                </div>
+                <!-- Recipe container -->
+                <div class="flex flex-col pl-3">
+                  <div>
+                    {{ recipe.title }}
+                  </div>
+                  <div class="my-3">
+                    <img :src="recipe.featuredImg" alt="">
+                  </div>
+                  <div class="grid grid-cols-2">
+                    <div>
+                      <ul>
+                        <li v-for="ingredient in recipe.ingredients" :key="ingredient._id">- {{ ingredient.name }} | {{ ingredient.quantity }}</li>
+                      </ul>
+                    </div>  
+                    <div>
+                      <div class="pb-2">
+                        <NuxtRating :read-only="true" ratingContent="🍴" activeColor="#6366f1" :ratingValue="recipe.difficulty ?? 0" />
+                      </div>
+                      <div class="pl-2">{{ recipe.avgTime }}</div>
+                      <div class="pl-2">{{ recipe.steps.length }} pasos</div>
+                    </div>
+                  </div>
+                  <div class="pb-2 pt-4 flex justify-center">
+                    <UButton :to="`/recipes/${recipe._id}`" size="lg" color="primary">Ver receta</UButton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 </template>
 
