@@ -33,13 +33,15 @@ onNuxtReady(async () => {
           <div v-for="recipe in recipes" :key="recipe._id">
             <div class="grid grid-cols-12">
               <div class="col-span-1 border-r pt-2 align-center flex">
-                <UAvatar src="https://i2-prod.dailyrecord.co.uk/incoming/article8543359.ece/ALTERNATES/s1200c/CP47009989.jpg" />
+                <NuxtLink class="h-8" :to="`/users/${recipe.user.username}`">
+                  <UAvatar :alt="recipe.user.username" :src="recipe.user.avatar" />
+                </NuxtLink>
               </div>
               <div class="col-span-11">
                 <div class="pl-2 pt-1 text-lg">
-                  <div class="underline underline-offset-1">
+                  <NuxtLink class="underline underline-offset-1" :to="`/users/${recipe.user.username}`">
                     {{ recipe.user.username }}
-                  </div>
+                  </NuxtLink>
                 </div>
                 <!-- Recipe container -->
                 <div class="flex flex-col pl-3">
