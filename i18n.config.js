@@ -42,6 +42,7 @@ export default defineI18nConfig(() => ({
         ingredients: 'Ingredients',
         tomatoes: 'Tomatoes',
         steps: 'Steps',
+        stepsLower: 'steps',
         stepsPlaceholder: 'We cut the tomatoes into slices about 2 cm long...',
         versions: 'Versions',
         deleteVersion: 'Delete version',
@@ -83,6 +84,9 @@ export default defineI18nConfig(() => ({
         unfollow: 'Unfollow',
         recipes: 'Recipes',
         activeSince: 'Active since ',
+        lastRecipes: 'Last recipes',
+        home: 'Home',
+        viewRecipe: 'View recipe'
       },
       es: {
         welcome: 'Bienvenido',
@@ -120,6 +124,7 @@ export default defineI18nConfig(() => ({
         ingredients: 'Ingredientes',
         tomatoes: 'Tomates',
         steps: 'Pasos',
+        stepsLower: 'pasos',
         stepsPlaceholder: 'Cortamos los tomates en rodajas de unos 2 cm de ...',
         versions: 'Versiones',
         deleteVersion: 'Eliminar versión',
@@ -161,6 +166,9 @@ export default defineI18nConfig(() => ({
         unfollow: 'Unfollow',
         recipes: 'Recetas',
         activeSince: 'Activo desde ',
+        lastRecipes: 'Últimas recetas',
+        home: 'Inicio',
+        viewRecipe: 'Ver receta'
       }
     }
   }))

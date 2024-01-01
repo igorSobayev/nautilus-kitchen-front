@@ -36,11 +36,11 @@ const props = defineProps({
                 <NuxtRating :read-only="true" ratingContent="🍴" activeColor="#6366f1" :ratingValue="recipe.difficulty ?? 0" />
                 </div>
                 <div class="pl-2">{{ recipe.avgTime }}</div>
-                <div class="pl-2">{{ recipe.steps.length }} pasos</div>
+                <div class="pl-2">{{ recipe.steps.length }} {{ $t('stepsLower') }}</div>
             </div>
             </div>
             <div class="pb-2 pt-4 flex justify-center">
-            <UButton :to="`/recipes/${recipe._id}`" size="lg" color="primary">Ver receta</UButton>
+            <UButton :to="`/recipes/${recipe._id}`" size="lg" color="primary">{{ $t('viewRecipe') }}</UButton>
             </div>
         </div>
         </div>

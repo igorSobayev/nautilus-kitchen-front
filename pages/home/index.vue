@@ -4,9 +4,13 @@ import { ref } from 'vue'
 import { useUserStore } from './../../store/user'
 import { onNuxtReady } from './../../.nuxt/imports'
 import NKHomeRecipe from '~/components/custom/NKHomeRecipe.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const userStore = useUserStore()
 
 useHead({
-  title: 'Home pibe',
+  title: t('home'),
   meta: [
     {
       name: 'description',
@@ -15,7 +19,6 @@ useHead({
   ],
 })
 
-const userStore = useUserStore()
 const recipes = ref([])
 
 onNuxtReady(async () => {
@@ -27,7 +30,7 @@ onNuxtReady(async () => {
 <template>
     <div class="flex flex-col h-dvh xl:w-1/4 bg-white border-r border-b border-l">
         <div class="border-t px-5 py-3 text-xl">
-          Últimas recetas
+          {{ $t('lastRecipes') }}
         </div>
         <div class="border-t border-b px-5">
           <!-- Recipe -->
