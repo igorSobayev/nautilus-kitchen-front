@@ -5,7 +5,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="grid grid-cols-12 hover:bg-slate-100">
+    <div class="grid grid-cols-12 border-b px-5">
         <div class="col-span-1 pt-2 align-center flex">
             <NuxtLink class="h-8" :to="`/users/${recipe.user.username}`">
                 <UAvatar :alt="recipe.user.username" :src="recipe.user.avatar" />
