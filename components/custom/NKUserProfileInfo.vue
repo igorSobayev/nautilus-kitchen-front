@@ -2,14 +2,17 @@
 import { useUserStore } from '../../store/user'
 import { onNuxtReady, ref, useRoute } from '../../.nuxt/imports'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '~/store/auth';
 
 const { t } = useI18n()
 const toast = useToast()
 const userStore = useUserStore()
+const authStore = useAuthStore()
 const route = useRoute()
 const user = ref({})
 const userCreationDate = ref('')
 const username = ref('')
+const sameUser = ref(false)
 
 const props = defineProps({
   public: Boolean,
@@ -36,6 +39,11 @@ onNuxtReady(async () => {
 
   await updateUser()
 
+  // Enable or disable follow button looking if the public page is from the logged user
+  if (username.value === authStore.user.username) {
+    sameUser.value = true
+  }
+
   const date = new Date(user.value.creationDate)
   userCreationDate.value = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 })
@@ -47,7 +55,7 @@ defineExpose({
 
 <template>
   <div class="bg-white w-full h-auto pt-8 pb-14 px-6">
-    <div class="flex justify-end" v-if="public">
+    <div class="flex justify-end" v-if="public && !sameUser">
       <UButton v-if="!user.isFollowing" :label="$t('follow')" icon="i-heroicons-user-plus" @click="followUser" size="sm" color="primary" square />
       <UButton v-else :label="$t('unfollow')" icon="i-heroicons-user-minus" @click="unfollowUser" size="sm" color="primary" square />
     </div>
