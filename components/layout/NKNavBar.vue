@@ -6,16 +6,16 @@
             </div>
             <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[40vh] left-0 top-[-1000%] md:w-auto  w-full flex items-center px-5 z-50" :class="{ 'top-[101%]': menuOpenned }">
                 <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
-                    <NuxtLink class="hover:text-gray-500" to="/home">Home</NuxtLink>
-                    <NuxtLink class="hover:text-gray-500" to="/recetas">Recetas</NuxtLink>
-                    <NuxtLink class="hover:text-gray-500" @click="addRecipe">Crear recetas</NuxtLink>
+                    <NuxtLink class="hover:text-gray-500" to="/home">{{ $t('home') }}</NuxtLink>
+                    <NuxtLink class="hover:text-gray-500" to="/recetas/favorite-recipes">{{ $t('favoriteRecipes') }}</NuxtLink>
+                    <NuxtLink class="hover:text-gray-500" :to="`/profile/${authStore.user.username}`">{{ $t('myProfile') }}</NuxtLink>
                 </ul>
             </div>
             <div class="flex items-center gap-2">
                 <NKLang />
                 <span v-if="!authStore.isLoggedIn" class="flex items-center gap-2">
-                    <UButton to="/login" icon="i-material-symbols-login-sharp" size="md" color="primary" class="nbtn"><span class="sm:block hidden">Login</span></UButton>
-                    <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">Registrarse</span></UButton>
+                    <UButton to="/login" icon="i-material-symbols-login-sharp" size="md" color="primary" class="nbtn"><span class="sm:block hidden">{{ $t('login') }}</span></UButton>
+                    <UButton to="/signup" icon="i-mingcute-fork-line" size="md" color="gray" class="nbtn"><span class="sm:block hidden">{{ $t('signup') }}</span></UButton>
                 </span>
                 <span v-else class="flex items-center gap-2">
                     <NKProfileNav />
@@ -28,11 +28,9 @@
 
 <script setup>
 import NKProfileNav from './../custom/NKProfileNav.vue'
-import NKLang from '../components/custom/NKLang.vue';
+import NKLang from '../components/custom/NKLang.vue'
 import { useAuthStore } from './../../store/auth'
-import { useRecipeStore } from '~/store/recipe'
 
-const recipeStore = useRecipeStore()
 const authStore = useAuthStore()
 
 const menuOpenned = ref(false)
@@ -48,12 +46,5 @@ onMounted(() => {
   if(!process.client) return
   authStore.manageLoginSessionClient()
 })
-
-// Recipe management
-// On click to add new recipe, we create one clean in the backend and push the route to edit it, doing this we can
-// edit the recipe all the time
-async function addRecipe () {
-    await recipeStore.addRecipe()
-}
 </script>
   

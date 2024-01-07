@@ -86,7 +86,8 @@ export default defineI18nConfig(() => ({
         activeSince: 'Active since ',
         lastRecipes: 'Last recipes',
         home: 'Home',
-        viewRecipe: 'View recipe'
+        viewRecipe: 'View recipe',
+        favoriteRecipes: 'Favorite recipes',
       },
       es: {
         welcome: 'Bienvenido',
@@ -168,7 +169,8 @@ export default defineI18nConfig(() => ({
         activeSince: 'Activo desde ',
         lastRecipes: 'Últimas recetas',
         home: 'Inicio',
-        viewRecipe: 'Ver receta'
+        viewRecipe: 'Ver receta',
+        favoriteRecipes: 'Recetas favoritas',
       }
     }
   }))
