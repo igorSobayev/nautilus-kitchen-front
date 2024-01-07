@@ -44,11 +44,6 @@ onNuxtReady(async () => {
         link: '/profile/' + user.value.username
       },
       {
-        label: t('myRecipes'),
-        icon: 'i-heroicons-book-open',
-        link: '/recetas'
-      },
-      {
         label: t('addRecipe'),
         icon: 'i-heroicons-folder-plus',
         link: '/recetas/crear-receta'
