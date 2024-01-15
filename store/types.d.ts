@@ -24,7 +24,6 @@ export type Recipe = {
     _id: string
     title: string
     description: string
-    notes: string
     avgTime: string
     rating: number
     difficulty: number
@@ -60,7 +59,6 @@ export type EditRecipeParams = {
     _id: string
     title: string
     description: string
-    notes: string
     avgTime: string
     difficulty: number
     published: boolean

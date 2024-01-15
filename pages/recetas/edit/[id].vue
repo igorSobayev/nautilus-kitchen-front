@@ -28,7 +28,6 @@ const state = ref({
     title: '',
     slug: '',
     description: '',
-    notes: '',
     avgTime: '',
     difficulty: 2,
     published: false,
@@ -341,7 +340,6 @@ function setInitialRecipeData (recipe) {
     state.value.title = recipe.title
     state.value.slug = recipe.slug
     state.value.description = recipe.description
-    state.value.notes = recipe.notes
     state.value.avgTime = recipe.avgTime
     state.value.difficulty = recipe.difficulty
     state.value.published = recipe.published
@@ -476,9 +474,6 @@ onNuxtReady(async () => {
                             </div>
                         </div>
                     </div>
-                    <UFormGroup class="mt-5" name="notes" :label="$t('additionalNotes')">
-                        <UTextarea :rows="3" variant="outline" v-model="state.notes" />
-                    </UFormGroup>
                 </div>
             </div>
 
