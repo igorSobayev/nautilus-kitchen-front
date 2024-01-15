@@ -88,6 +88,9 @@ export default defineI18nConfig(() => ({
         home: 'Home',
         viewRecipe: 'View recipe',
         favoriteRecipes: 'Favorite recipes',
+        recipeTitleRequired: 'The recipe title is required',
+        recipeSlug: 'URL to the recipe',
+        recipeSlugDescription: 'This URL generates from the title on publish the recipe',
       },
       es: {
         welcome: 'Bienvenido',
@@ -171,6 +174,9 @@ export default defineI18nConfig(() => ({
         home: 'Inicio',
         viewRecipe: 'Ver receta',
         favoriteRecipes: 'Recetas favoritas',
+        recipeTitleRequired: 'El titulo de la receta es requerido',
+        recipeSlug: 'URL de la receta',
+        recipeSlugDescription: 'Esta URL se genera a partir del titulo de la receta cuando se publica',
       }
     }
   }))

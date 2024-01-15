@@ -26,6 +26,7 @@ const route = useRoute()
 const state = ref({
     _id: '',
     title: '',
+    slug: '',
     description: '',
     notes: '',
     avgTime: '',
@@ -85,6 +86,7 @@ const accordionVersions = ref([])
 const validate = (state) => {
   const errors = []
   if (state.avgTime && state.avgTime.length >= 15) errors.push({ path: 'avgTime', message: t('avgTimeToLong') })
+  if (!state.title) errors.push({ path: 'title', message: t('recipeTitleRequired') })
   return errors
 }
 
@@ -337,6 +339,7 @@ function orderSteps () {
 function setInitialRecipeData (recipe) {
     state.value._id = recipe._id
     state.value.title = recipe.title
+    state.value.slug = recipe.slug
     state.value.description = recipe.description
     state.value.notes = recipe.notes
     state.value.avgTime = recipe.avgTime
@@ -397,8 +400,8 @@ onNuxtReady(async () => {
         >
             <div class="grid grid-cols-3 gap-5">
                 <div>
-                    <UFormGroup name="username" :label="$t('title')" class="mt-3">
-                        <UInput v-model="state.title" />
+                    <UFormGroup name="title" :label="$t('title') + '*'" class="mt-3">
+                        <UInput v-model="state.title" :required="true" />
                     </UFormGroup> 
                 </div>
                 <div>
@@ -413,6 +416,14 @@ onNuxtReady(async () => {
                     </UFormGroup> 
                 </div>
             </div>
+            <div class="grid grid-cols-2">
+                <div>
+                    <UFormGroup name="slug" :label="$t('recipeSlug')" class="mt-3">
+                        <p class="text-xs text-slate-600 italic my-1">{{ $t('recipeSlugDescription') }}</p>
+                        <UInput v-model="state.slug" disabled />
+                    </UFormGroup> 
+                </div>
+            </div>
             <div class="mt-5">
                 <div class="flex gap-3 items-center pb-2">
                     <label class="block font-medium text-gray-700 dark:text-gray-200" for="description">{{ $t('description') }}</label>
@@ -424,7 +435,7 @@ onNuxtReady(async () => {
 
             <div class="mt-5 grid grid-cols-2 gap-5">
                 <div class="flex justify-center align-center flex-col gap-5 p-5">
-                    <UFormGroup name="username" :label="$t('featuredImg')" class="mt-3">
+                    <UFormGroup name="featuredImg" :label="$t('featuredImg')" class="mt-3">
                         <div class="bg-contain bg-center bg-no-repeat h-52 my-5" v-if="!newFeaturedImagePreview" :style="'background-image: url(' + state.featuredImg + ');'"></div>
                         <div class="bg-contain bg-center bg-no-repeat h-52 my-5" v-else :style="'background-image: url(' + newFeaturedImagePreview + ');'"></div>
                         <UInput @change="changeFeaturedImg" icon="i-heroicons-pencil-square" class="mt-3" type="file" />
